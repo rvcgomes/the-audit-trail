@@ -1,0 +1,6 @@
+# GitHub Pages (Jekyll): keep notes and tests off the public site
+exclude:
+  - CLAUDE.md
+  - CLAUDE.local.md
+  - README.md
+  - tests

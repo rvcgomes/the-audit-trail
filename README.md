@@ -9,7 +9,7 @@ Live at <https://rvcgomes.github.io/the-audit-trail/>
 Don't edit the page for each company. Open `link.html` (on the live site: `/the-audit-trail/link.html`), type the company name and, optionally, one to three sentences on why that company. It gives you a URL like:
 
 ```
-https://rvcgomes.github.io/the-audit-trail/?co=Emidat&why=...
+https://rvcgomes.github.io/the-audit-trail/?co=Acme&why=...
 ```
 
 The name and the text travel in the link, so every company sees its own version and nothing about your applications is stored in this public repository.
