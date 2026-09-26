@@ -175,7 +175,9 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 
 /* award */
 .award{padding-block:clamp(70px,12vh,120px);border-top:1px solid var(--rule);text-align:center}
-.award-photo{max-width:340px;margin:0 auto 2rem;padding:10px 10px 12px;background:var(--card);border:1px solid var(--rule);box-shadow:0 20px 40px -24px rgba(21,38,58,.45);transform:rotate(-1.5deg)}
+.award-photos{display:flex;justify-content:center;align-items:flex-start;margin:0 auto 2rem;max-width:660px}
+.award-photo{flex:1 1 0;min-width:0;max-width:320px;margin:0;padding:10px 10px 12px;background:var(--card);border:1px solid var(--rule);box-shadow:0 20px 40px -24px rgba(21,38,58,.45);transform:rotate(-2deg)}
+.award-photo+.award-photo{margin:28px 0 0 -18px;transform:rotate(1.5deg)}
 .award-photo img{display:block;width:100%;height:auto}
 .award-photo figcaption{font-family:var(--hand);color:var(--pencil);font-size:1.1rem;margin-top:8px}
 .award h3{font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.02em;line-height:1.1;margin:0 auto .75rem;max-width:22ch}
@@ -481,11 +483,17 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 </section>
 
 <section class="award wrap rev" aria-label="Award">
-  <figure class="award-photo">
-    <img src="award.jpg" width="720" height="720" loading="lazy" alt="Rui Gomes on stage with the award, next to a screen that reads: Prémios da Compensação 2025, small companies, leader in compensation transparency, winner Weezie.">
-    <figcaption>Accepting it for the Weezie team.</figcaption>
-  </figure>
-  <h3>Leader in compensation transparency, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h3>
+  <div class="award-photos">
+    <figure class="award-photo">
+      <img src="award-trophy.jpg" width="720" height="720" loading="lazy" alt="The trophy: Prémios da Compensação 2025, powered by Coverflex, Líder em transparência na compensação, Pequenas Empresas, Weezie.">
+      <figcaption>Small companies, 2025.</figcaption>
+    </figure>
+    <figure class="award-photo">
+      <img src="award.jpg" width="720" height="720" loading="lazy" alt="Rui Gomes on stage with the award, next to a screen that reads: Prémios da Compensação 2025, small companies, leader in compensation transparency, winner Weezie.">
+      <figcaption>Accepting it for the Weezie team.</figcaption>
+    </figure>
+  </div>
+  <h3>Transparency in Compensation Award, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h3>
   <p>Coverflex Compensation Awards, small-company category. Given to Weezie for the company-wide compensation framework and salary bands I designed there.</p>
 </section>
 
@@ -580,7 +588,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
       <tr id="ev-B"><td>B</td><td>€500M in transactions advised on under IFRS</td><td>PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</td></tr>
       <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td data-ev="seed">€3M round led by GED Ventures Portugal, February 2024. Runway figures on request.</td></tr>
       <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</td><td>Weezie management reporting; the attrition figure is from my <a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a>. Before-and-after figures on request.</td></tr>
-      <tr id="ev-E"><td>E</td><td>Leader in compensation transparency, 2025</td><td data-ev="award">Coverflex Compensation Awards 2025, small-company category. Photo above; announced on Weezie's LinkedIn.</td></tr>
+      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td data-ev="award">Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category. Photos above; announced on Weezie's LinkedIn.</td></tr>
       <tr id="ev-F"><td>F</td><td>Fractional finance work with VCLevel</td><td><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></td></tr>
     </tbody>
   </table>
