@@ -33,7 +33,12 @@ window.CONFIG = {
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
   cv: "",                       // e.g. "rui-gomes-cv.pdf" once the PDF is in the repo
-  evidence: { seed: "https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/", award: "" }   // public links, if any; empty = "on request"
+  // public sources for the index of evidence: [url, link text]; empty = "on request"
+  evidence: {
+    seed: ["https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/", "ECO, 6 Feb 2024"],
+    award: ["https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/", "Weezie on LinkedIn, May 2025"],
+    people: ["https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/", "my LinkedIn post, Aug 2025"]
+  }
 };
 </script>
 <style>
@@ -587,8 +592,8 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
       <tr id="ev-A"><td>A</td><td>Roles and dates, 2013 to now</td><td><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></td></tr>
       <tr id="ev-B"><td>B</td><td>€500M in transactions advised on under IFRS</td><td>PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</td></tr>
       <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td data-ev="seed">€3M round led by GED Ventures Portugal, February 2024. Runway figures on request.</td></tr>
-      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</td><td>Weezie management reporting; the attrition figure is from my <a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a>. Before-and-after figures on request.</td></tr>
-      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td data-ev="award">Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category. Photos above; announced on Weezie's LinkedIn.</td></tr>
+      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</td><td data-ev="people">Weezie management reporting; before-and-after figures on request. The attrition figure is public:</td></tr>
+      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td data-ev="award">Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category. Photos above.</td></tr>
       <tr id="ev-F"><td>F</td><td>Fractional finance work with VCLevel</td><td><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></td></tr>
     </tbody>
   </table>
@@ -635,8 +640,8 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   document.querySelectorAll('[data-link="cv"]').forEach(function(a){if(C.cv){a.href=C.cv;a.hidden=false;a.setAttribute("download","")}});
   var ev=C.evidence||{};
   document.querySelectorAll("[data-ev]").forEach(function(td){
-    var url=ev[td.dataset.ev]; if(!url) return;
-    var a=document.createElement("a");a.href=url;a.rel="noopener";a.target="_blank";a.textContent=/eco\.sapo\.pt/.test(url)?"ECO, 6 Feb 2024":"Public link";
+    var e=ev[td.dataset.ev]; if(!e) return; if(typeof e==="string") e=[e,"Public link"]; if(!e[0]) return;
+    var a=document.createElement("a");a.href=e[0];a.rel="noopener";a.target="_blank";a.textContent=e[1];
     td.appendChild(document.createTextNode(" "));td.appendChild(a);
   });
 
