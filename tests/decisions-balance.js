@@ -1,13 +1,11 @@
-// Plays every possible RUNWAY game and checks the balance rules.
+// Plays every possible DECISIONS game and checks the balance rules.
 // Run: node tests/runway-balance.js
 const fs = require("fs"), path = require("path"), vm = require("vm");
 
-const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-const src = html.match(/var Runway = \(function\(\)\{[\s\S]*?\n\}\)\(\);/);
-if (!src) throw new Error("Runway engine not found in index.html");
+const src = fs.readFileSync(path.join(__dirname, "..", "games", "decisions.js"), "utf8");
 const ctx = {};
-vm.runInNewContext(src[0] + "\nthis.Runway = Runway;", ctx);
-const R = ctx.Runway;
+vm.runInNewContext(src + "\nthis.Decisions = Decisions;", ctx);
+const R = ctx.Decisions;
 
 function perms(a, k) {
   if (k === 0) return [[]];

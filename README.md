@@ -1,6 +1,6 @@
 # The audit trail
 
-A one-page introduction for job applications: from IFRS audit at PwC to CFO and Head of HR at Weezie, fractional finance work with VCLevel, and a small game about runway.
+A one-page introduction for job applications: from IFRS audit at PwC to CFO and Head of HR at Weezie, fractional finance work with VCLevel, and a pixel-art handheld with three small games about runway.
 
 Live at <https://rvcgomes.github.io/the-audit-trail/>
 
@@ -24,15 +24,33 @@ The `CONFIG` block at the top:
 | `cv` | Path to a CV PDF committed next to `index.html`. Empty = no CV link. |
 | `evidence.seed`, `evidence.award` | Public links for the seed round and the Coverflex award. Empty = "on request". |
 
-## The game
+## The handheld
 
-The rules live in the `Runway` block inside `index.html`, with no DOM code, so they can be tested on their own. After changing a card, run:
+Three cartridges on the same console, all original art (no third-party characters):
+
+| Cartridge | Rules | Play |
+|---|---|---|
+| RUNWAY RUN | `games/runner.js` | Tap to jump, hold to jump higher. Coins are revenue, blocks are surprise costs, the papers fill the data room before the seed in month 6. Two gates ask a question: jump for the top answer, stay down for the bottom one. |
+| BOARD FIGHT | `games/fight.js` | Hold to charge, let go inside the zone for a clean hit. When the boss shows `!`, let go. Four bosses: the Burn, the Dollar, the Poacher, the Board. |
+| DECISIONS | `games/decisions.js` | Six quarters, one decision each, with the consequence shown straight away. |
+
+`games/console.js` draws the screen and handles the A/B buttons, the d-pad, the keyboard (Space, arrows, Esc) and touch. Sound is off until the visitor turns it on.
+
+The rules files have no DOM code, so they can be tested on their own. After changing any of them, run:
 
 ```
-node tests/runway-balance.js
+node tests/decisions-balance.js
+node tests/arcade-bots.js
 ```
 
-It plays every possible game (76,800) and fails if any option is always better than the other, if a choice never changes the outcome, or if the win rate leaves the 20–60% range.
+- `decisions-balance.js` plays every possible DECISIONS game (76,800) and fails if an option is always better than the other or a choice never changes the outcome.
+- `arcade-bots.js` plays 300 games of each arcade cartridge with bots of different skill and fails unless skill decides the result: a perfect player always wins, careless play (skipping the data room, holding forever, ignoring the `!`) doesn't.
+
+`?debug` in the URL exposes `window.RUNWAY_DEBUG` to step a game by hand, which is how the screenshots are taken.
+
+## Share image
+
+`og.png` (1200×630) is what LinkedIn, WhatsApp and email show when the link is pasted.
 
 ## Publishing
 
