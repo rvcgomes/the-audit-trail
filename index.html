@@ -7,7 +7,7 @@
 <meta name="description" content="Rui Gomes: from IFRS audit at PwC to CFO and Head of HR at a venture-backed startup, and fractional finance work with VCLevel.">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Rui Gomes — the audit trail">
-<meta property="og:description" content="From checking other people's numbers to owning them: audit, advisory, CFO. With three small games about runway.">
+<meta property="og:description" content="From checking other people's numbers to owning them: audit, advisory, CFO. With seven small retro games.">
 <meta property="og:url" content="https://rvcgomes.github.io/the-audit-trail/">
 <meta property="og:image" content="https://rvcgomes.github.io/the-audit-trail/og.png">
 <meta property="og:image:width" content="1200">
@@ -228,6 +228,18 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .opts button .s{display:block;font-size:1rem;color:var(--lcd-dim);margin-top:2px}
 .opts button:hover,.opts button:focus-visible{background:var(--lcd);color:var(--lcd-bg);text-shadow:none;outline:none}
 .opts button:hover .s,.opts button:focus-visible .s{color:var(--lcd-bg)}
+.opts.menu{gap:5px;margin-top:6px}
+.opts.menu button{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:5px 9px;font-size:1.15rem}
+.opts.menu .s{display:inline;margin:0;font-size:.95rem}
+.receipt{max-width:300px;margin:-4px auto 0;background:#FBFAF5;color:#23201b;font-family:"Courier New",ui-monospace,monospace;font-size:12px;line-height:1.35;padding:16px 12px 18px;box-shadow:0 14px 24px -16px rgba(0,0,0,.45);position:relative;
+  -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 6px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 6px repeat-x;
+  mask:linear-gradient(#000 0 0) top/100% calc(100% - 6px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/12px 6px repeat-x}
+.receipt pre{margin:0;white-space:pre;overflow:hidden;font:inherit}
+.receipt.print{animation:print 1.1s steps(14) both}
+@keyframes print{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.rbtns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.rbtn{font:700 12px/1 var(--sans);letter-spacing:.04em;padding:8px 12px;border:1.5px solid #23201b;border-radius:3px;background:none;color:#23201b;text-decoration:none;cursor:pointer}
+.rbtn:first-child{background:#23201b;color:#FBFAF5}
 .controls{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding:0 6px 0 2px}
 .dpad{display:grid;grid-template-columns:repeat(3,28px);grid-template-rows:repeat(3,28px)}
 .dpad button,.dpad .c{background:#15181b;border:0;color:#6b737b;font-size:.65rem;padding:0;cursor:pointer;box-shadow:inset 0 -3px 0 rgba(0,0,0,.4)}
@@ -301,6 +313,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .inter .w{opacity:1}
 }
 @media print{
+  .receipt,.ghint{display:none!important}
   body{background:#fff;color:#000;font-size:11pt}
   .progress,.quest,.go,.cta,.seal{display:none!important}
   .js .rev,.js .hi2,.js .lede,.js .ledger .foot,.js .chart .late,.js .chart .ext.draw{opacity:1!important;transform:none!important}
@@ -430,9 +443,9 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   <div class="split">
     <div class="copy rev">
       <span class="when"><b>A small side quest</b></span>
-      <h2 style="margin:.4rem 0 1.5rem">Can you survive 18 months?</h2>
-      <p>You're the CFO of a startup with eight months of cash. Get to month 18 without running out of money or losing the team.</p>
-      <p>Three cartridges, same problem. Runway Run is about timing, Board Fight about patience, Decisions about judgement. Every scenario in them has been on my desk at some point.</p>
+      <h2 style="margin:.4rem 0 1.5rem">Insert a cartridge.</h2>
+      <p>Seven small games, each built on something I've done for real: tracing a number back to its source, closing the month, keeping cash ahead of payroll, raising a seed round with eight months of runway left.</p>
+      <p>They're toys, but the rules come from the job. Turn the sound on for the music.</p>
       <div class="chess">I played federated chess for five years. Finance works the same way: the move that matters is usually three moves before the one everybody sees.</div>
     </div>
     <div class="rev">
@@ -459,7 +472,11 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
           <div class="ab"><div><button type="button" id="gB" aria-label="B: back to the menu">B</button><small>MENU</small></div><div><button type="button" id="gA" aria-label="A: jump, charge or select">A</button><small>PLAY</small></div></div>
         </div>
       </div>
-      <p class="ghint">A or Space to play · hold to jump higher or to charge · B or Esc for the menu</p>
+      <div class="receipt" id="gReceipt" hidden>
+        <pre id="gReceiptText"></pre>
+        <div class="rbtns"><a class="rbtn" id="gSend" href="#">Send to Rui</a><button type="button" class="rbtn" id="gCopy">Copy</button></div>
+      </div>
+      <p class="ghint">A or Space to play · arrows or swipe to move · B or Esc for the menu</p>
     </div>
   </div>
 </section>
@@ -667,6 +684,17 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <script src="games/decisions.js"></script>
 <script src="games/runner.js"></script>
 <script src="games/fight.js"></script>
+<script src="games/maze.js"></script>
+<script src="games/blocks.js"></script>
+<script src="games/spot.js"></script>
+<script src="games/lanes.js"></script>
+<script src="games/music.js"></script>
 <script src="games/console.js"></script>
+<script src="games/carts/classic.js"></script>
+<script src="games/carts/maze.js"></script>
+<script src="games/carts/blocks.js"></script>
+<script src="games/carts/spot.js"></script>
+<script src="games/carts/lanes.js"></script>
+<script>if(window.RUNWAY) RUNWAY.boot();</script>
 </body>
 </html>

@@ -1,56 +1,64 @@
-/* ================= RUNWAY handheld: screen, controls, cartridges =================
-   Draws RUNWAY RUN and BOARD FIGHT on a 192×120 pixel canvas and runs
-   DECISIONS as text. The rules live in runner.js, fight.js, decisions.js. */
+/* ================= RUNWAY handheld: the console =================
+   Screen, controls, sound, menu, boot screen, demo mode and the receipt.
+   Each game is a cartridge in games/carts/*.js that calls RUNWAY.register().
+   The rules of each game live in games/*.js and have no DOM code.
+
+   Arcade cartridge:
+     {id, name, sub, help, say, countdown, canvas:"press"|"tap"|"swipe",
+      create(seed), step(s, dt, inp), draw(g, s), hud(s) -> {cells, row2},
+      onEvent(e, g), result(s) -> {win, title, lines, tip, rows, realLine | real:false},
+      mood(s) -> 0..1, demo(s, mem) -> inp}
+   Text cartridge:
+     {id, name, sub, type:"text", start(ui)}
+   inp = {down, dir, press:{a, up, down, left, right}, taps:[{x, y}]} */
 (function(){
+  var carts = [], byId = {};
+  window.RUNWAY = {register:function(c){carts.push(c); byId[c.id] = c}, boot:boot};
+
+  function boot(){
   var dev = document.getElementById("device");
-  if(!dev || !window.Runner || !window.Fight || !window.Decisions) return;
+  if(!dev) return;
   var C = window.CONFIG || {};
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   function $(id){return document.getElementById(id)}
   var cv = $("gCanvas"), ctx = cv.getContext("2d"), msg = $("gMsg"), live = $("gLive"), opts = $("gOpts");
   var hud = $("gHud"), hud2 = $("gHud2"), cartEl = $("gCart"), aBtn = $("gA"), bBtn = $("gB"), sndBtn = $("gSnd");
-  var W = 192, H = 120;
+  var receipt = $("gReceipt"), receiptText = $("gReceiptText"), sendBtn = $("gSend"), copyBtn = $("gCopy");
+  var W = cv.width, H = cv.height;
   var COL = {lcd:"#FFB547", dim:"#B08A48", dark:"#1C1812", hot:"#FF7A45", faint:"#3a2e18", mid:"#5a4524"};
   var FONT = "10px VT323, monospace", BIG = "16px VT323, monospace";
 
-  /* ---------- sprites ('#' amber, 'o' hot, 'x' dark) ---------- */
+  /* ---------- sprites ('#' amber, 'd' dim, 'm' mid, 'f' faint, 'o' hot, 'x' dark) ---------- */
+  var INK = {"#":COL.lcd, d:COL.dim, m:COL.mid, f:COL.faint, o:COL.hot, x:COL.dark};
   function sprite(rows, scale){
     scale = scale || 1;
     var c = document.createElement("canvas"); c.width = rows[0].length*scale; c.height = rows.length*scale;
     var x = c.getContext("2d");
-    rows.forEach(function(r, j){for(var i=0;i<r.length;i++){var ch = r[i]; if(ch === ".") continue;
-      x.fillStyle = ch === "o" ? COL.hot : ch === "x" ? COL.dark : ch === "d" ? COL.dim : COL.lcd; x.fillRect(i*scale, j*scale, scale, scale)}});
+    rows.forEach(function(r, j){for(var i=0;i<r.length;i++){var ink = INK[r[i]]; if(!ink) continue; x.fillStyle = ink; x.fillRect(i*scale, j*scale, scale, scale)}});
     return c;
   }
   var HEAD = ["...####...","..######..","..#x##x#..","..######..","...####...","..##xx##..",".###xx###.","#..#xx#..#","...####...","...####..."];
-  var P = {
-    run1: HEAD.concat(["..##..##..",".##....##.",".#......##","##........"]),
-    run2: HEAD.concat(["...#..#...","...#..#...","..##..##..",".........."]),
-    jump: HEAD.concat(["..######..",".##....##.","..........",".........."])
-  };
   var SPR = {
-    run1:sprite(P.run1), run2:sprite(P.run2), jump:sprite(P.jump),
-    hero:sprite(P.run2, 2), heroCharge:sprite(P.jump, 2),
+    run1:sprite(HEAD.concat(["..##..##..",".##....##.",".#......##","##........"])),
+    run2:sprite(HEAD.concat(["...#..#...","...#..#...","..##..##..",".........."])),
+    jump:sprite(HEAD.concat(["..######..",".##....##.","..........",".........."])),
     coin:sprite(["..####..",".#dddd#.","#dd##dd#","#d#dddd#","#d#dddd#","#dd##dd#",".#dddd#.","..####.."]),
-    doc:sprite(["######..","#dddd##.","#d##dd##","#dddddd#","#d####d#","#dddddd#","#d####d#","#dddddd#","#d###dd#","########"]),
-    churn:sprite(["#............#","##..........##",".###......###.","..###.oo.###..","...########...","....######....",".....#..#.....",".............."]),
-    churn2:sprite(["..............","..............","..............","#####.oo.#####",".############.","....######....",".....#..#.....",".............."]),
-    bosses:[
-      sprite(["........#.......",".......##.......",".......###......","......####...#..","......#####.##..",".....######.##..","....##########..","...####.#######.","...###...######.","..###.....#####.","..###.o..o#####.","..###.....####..","...##.xxx.###...","...###...####...","....#########...","......#####....."], 2),
-      sprite([".......##.......","....########....","...##########...","..####.##..###..","..###..##.......","..####.##.......","...#########....",".....#########..",".......##.####..",".......##..###..","..###..##.####..","...##########...","....########....",".......##.......","................","................"], 2),
-      sprite(["................","..####....####..","..#oo#....#oo#..","..####....####..","..####....####..","..####....####..","..####....####..","..####....####..","..#####..#####..","..############..","...##########...","....########....",".....######.....","................","................","................"], 2),
-      sprite(["................","..##...##...##..",".####.####.####.",".#oo#.#oo#.#oo#.",".####.####.####.","..##...##...##..",".####.####.####.","################","################",".#............#.",".#............#.",".#............#.",".#............#.","................","................","................"], 2)
-    ]
+    doc:sprite(["######..","#dddd##.","#d##dd##","#dddddd#","#d####d#","#dddddd#","#d####d#","#dddddd#","#d###dd#","########"])
   };
 
-  /* ---------- sound (off by default) ---------- */
-  var snd = {on:false, ac:null};
+  /* ---------- sound: effects here, music in music.js (both off by default) ---------- */
+  var snd = {on:false, ac:null, quiet:false};
   try{snd.on = localStorage.getItem("runway-sound") === "on"}catch(e){}
+  function audio(){
+    if(!snd.ac){try{snd.ac = new (window.AudioContext || window.webkitAudioContext)()}catch(e){return null}}
+    if(snd.ac.state === "suspended") snd.ac.resume();
+    return snd.ac;
+  }
   function tone(f, d, type, vol, f2, delay){
-    if(!snd.on) return;
+    if(!snd.on || snd.quiet) return;
+    var ac = audio(); if(!ac) return;
     try{
-      if(!snd.ac) snd.ac = new (window.AudioContext || window.webkitAudioContext)();
-      var ac = snd.ac, t = ac.currentTime + (delay || 0), o = ac.createOscillator(), g = ac.createGain();
+      var t = ac.currentTime + (delay || 0), o = ac.createOscillator(), g = ac.createGain();
       o.type = type || "square"; o.frequency.setValueAtTime(f, t);
       if(f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
       g.gain.setValueAtTime(vol || 0.035, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
@@ -59,24 +67,32 @@
   }
   function arp(notes, step){notes.forEach(function(n, i){tone(n, step*1.6, "square", 0.03, 0, i*step)})}
   var SFX = {
+    blip:function(){tone(660, .05, "square", .025)}, select:function(){tone(880, .06); tone(1320, .08, "square", .03, 0, .06)},
     jump:function(){tone(520, .09, "square", .025, 780)}, coin:function(){tone(988, .05); tone(1319, .08, "square", .03, 0, .05)},
-    doc:function(){arp([660, 880, 1100], .05)}, hit:function(){tone(160, .2, "sawtooth", .05, 60)}, gate:function(){tone(440, .12, "triangle", .05)},
+    tick:function(){tone(1200, .04, "square", .02)}, doc:function(){arp([660, 880, 1100], .05)},
+    hit:function(){tone(160, .2, "sawtooth", .05, 60)}, gate:function(){tone(440, .12, "triangle", .05)},
+    good:function(){arp([660, 990], .06)}, bad:function(){tone(180, .18, "sawtooth", .045, 90)},
     seed:function(){arp([523, 659, 784, 1047], .08)}, nothing:function(){arp([392, 330, 262], .12)},
     clean:function(){tone(880, .18, "square", .04, 1760)}, strike:function(){tone(440, .1)}, fizzle:function(){tone(200, .08, "triangle")},
     windup:function(){tone(300, .12, "triangle", .04, 420)}, hurt:function(){tone(110, .25, "sawtooth", .05, 55)}, guard:function(){tone(700, .05, "triangle")},
-    ko:function(){arp([523, 784, 1047], .07)}, win:function(){arp([523, 659, 784, 1047, 1319], .09)}, lose:function(){arp([392, 311, 262, 196], .14)}
+    ko:function(){arp([523, 784, 1047], .07)}, line:function(){arp([784, 988, 1175, 1568], .05)}, drop:function(){tone(220, .06, "triangle", .04)},
+    power:function(){arp([392, 523, 659, 784, 1047], .045)}, life:function(){arp([659, 523, 392], .09)}
   };
+  function music(){return snd.on && !snd.quiet && window.Music ? window.Music : null}
   function setSound(on){
     snd.on = on; sndBtn.setAttribute("aria-pressed", on); sndBtn.textContent = on ? "♪ ON" : "♪ OFF";
     try{localStorage.setItem("runway-sound", on ? "on" : "off")}catch(e){}
+    if(window.Music){ if(on){var ac = audio(); if(ac){window.Music.init(ac); window.Music.play(theme)}} else window.Music.stop() }
   }
-  setSound(snd.on);
-  sndBtn.addEventListener("click", function(){setSound(!snd.on); if(snd.on) SFX.coin()});
+  var theme = "menu";
+  function playTheme(t){theme = t; var m = music(); if(m && seen){m.init(audio()); m.play(t)}}
+  function jingle(name){var m = music(); if(m){m.init(audio()); m.jingle(name)} else if(snd.on && !snd.quiet && SFX[name]) SFX[name]()}
+  sndBtn.addEventListener("click", function(){setSound(!snd.on); if(snd.on) SFX.select()});
 
   /* ---------- helpers ---------- */
   function fmt(k){k = Math.max(0, k); return k >= 1000 ? "€" + (k/1000).toFixed(2) + "M" : "€" + Math.round(k) + "k"}
   function sign(n, unit){return (n > 0 ? "+" : "−") + Math.abs(Math.round(n)) + (unit || "")}
-  function say(text){live.textContent = ""; setTimeout(function(){live.textContent = text.replace(/\n+/g, " ")}, 30)}
+  function say(text){live.textContent = ""; setTimeout(function(){live.textContent = String(text).replace(/\n+/g, " ")}, 30)}
   function setHud(cells, row2){
     hud.hidden = false; hud2.hidden = !row2;
     cells.forEach(function(c, i){$("gL" + (i+1)).textContent = c[0]; var v = $("gV" + (i+1)); if(v.textContent !== String(c[1])) v.textContent = c[1]});
@@ -85,51 +101,64 @@
       $("gBarI").style.width = Math.max(0, Math.min(100, row2[3])) + "%"; $("gBar").classList.toggle("low", !!row2[4]);
     }
   }
-  function flash(id, good){var el = $(id); el.classList.remove("up", "down"); void el.offsetWidth; el.classList.add(good ? "up" : "down")}
+  function flash(id, good){var el = $(id); if(!el) return; el.classList.remove("up", "down"); void el.offsetWidth; el.classList.add(good ? "up" : "down")}
   function screen(text){msg.classList.remove("line"); msg.textContent = text; say(text)}
-  function options(list, focus){
-    opts.innerHTML = "";
+  function line(text){msg.classList.add("line"); msg.textContent = text}
+  function options(list, focus, compact){
+    opts.innerHTML = ""; opts.classList.toggle("menu", !!compact);
     list.forEach(function(o){
       var b = document.createElement("button"); b.type = "button";
       var t = document.createElement("span"); t.textContent = "▸ " + o[0]; b.appendChild(t);
       if(o[1]){var s = document.createElement("span"); s.className = "s"; s.textContent = o[1]; b.appendChild(s)}
-      b.addEventListener("click", o[2]); opts.appendChild(b);
+      b.addEventListener("click", function(){SFX.select(); o[2]()}); opts.appendChild(b);
     });
     var f = opts.querySelector("button"); if(f && focus) f.focus({preventScroll:true});
   }
   function moveFocus(d){
     var bs = [].slice.call(opts.querySelectorAll("button")); if(!bs.length) return;
-    var i = bs.indexOf(document.activeElement); bs[(i + d + bs.length) % bs.length].focus({preventScroll:true});
+    var i = bs.indexOf(document.activeElement); bs[(i + d + bs.length) % bs.length].focus({preventScroll:true}); SFX.blip();
+  }
+  function text(t, x, y, color, font, align){ctx.font = font || FONT; ctx.fillStyle = color || COL.lcd; ctx.textAlign = align || "left"; ctx.fillText(t, x, y)}
+  function overlay(big, small){
+    ctx.fillStyle = "rgba(28,24,18,.75)"; ctx.fillRect(0, 0, W, H);
+    text(big, W/2, H/2 + 2, COL.lcd, BIG, "center"); if(small) text(small, W/2, H/2 + 16, COL.dim, FONT, "center");
   }
 
   /* ---------- state ---------- */
-  var mode = "menu", S = null, D = null, down = false, running = false, paused = false, raf = 0, last = 0, countdown = 0, endTimer = 0;
-  var floats = [], fx = {}, bannerText = "", hudT = 0;
+  var mode = "menu", cart = null, S = null, running = false, paused = false, raf = 0, last = 0, countdown = 0, endTimer = 0;
+  var floats = [], fx = {}, bannerText = "", hudT = 0, moodT = 0, demo = null, idleT = 0, idleTimer = 0, seen = false, booted = false;
+  var inp = {down:false, dir:null, press:{}, taps:[]}, held = {};
 
-  function stop(){running = false; if(raf) cancelAnimationFrame(raf); raf = 0; clearTimeout(endTimer); down = false; aBtn.classList.remove("on")}
+  var g = {ctx:ctx, W:W, H:H, COL:COL, FONT:FONT, BIG:BIG, SPR:SPR, fx:fx, reduce:reduce,
+    text:text, sprite:sprite, overlay:overlay, fmt:fmt, sign:sign, say:function(t){if(!demo) say(t)}, flash:flash,
+    now:function(){return performance.now()},
+    float:function(t, x, y, color){floats.push({text:t, x:x, y:y, life:0.9, color:color || COL.lcd})},
+    banner:function(t, d){bannerText = t; fx.banner = d || 1.8},
+    line:function(t){if(!demo){line(t); say(t)}},
+    sfx:function(n){if(!demo && SFX[n]) SFX[n]()}};
 
-  var CARTS = [
-    {id:"runner", name:"RUNWAY RUN", sub:"jump · about 60 seconds"},
-    {id:"fight", name:"BOARD FIGHT", sub:"charge · four bosses"},
-    {id:"decisions", name:"DECISIONS", sub:"think · six quarters"}
-  ];
-  function menu(focus){
-    stop(); mode = "menu"; cartEl.textContent = "CFO EDITION"; hud.hidden = hud2.hidden = true; cv.hidden = true;
-    screen("INSERT A CARTRIDGE\n\n€1.2M in the bank, €150k burn a month.\nReach month 18.");
-    options(CARTS.map(function(c){return [c.name, c.sub, function(){start(c.id)}]}), focus);
-    dev.classList.remove("on");
+  function stop(){
+    running = false; if(raf) cancelAnimationFrame(raf); raf = 0; clearTimeout(endTimer);
+    inp.down = false; inp.dir = null; inp.press = {}; inp.taps = []; held = {}; aBtn.classList.remove("on");
   }
-  function start(id){
-    stop(); dev.classList.add("on");
-    cartEl.textContent = CARTS.filter(function(c){return c.id === id})[0].name;
-    if(id === "decisions") return startDecisions();
-    mode = id; S = id === "runner" ? Runner.create() : Fight.create();
-    floats = []; fx = {}; opts.innerHTML = ""; cv.hidden = false;
-    msg.classList.add("line");
-    msg.textContent = id === "runner" ? "Tap A to jump, hold for higher. Grab the papers: they fill the data room." : "Hold A to charge, let go inside the zone. When the boss shows !, let go.";
-    say(id === "runner" ? "Runway Run. Tap A or Space to jump, hold to jump higher. Collect the papers to fill the data room before month 6." : "Board Fight. Hold A or Space to charge, release inside the marked zone. Release when the boss shows an exclamation mark.");
-    countdown = id === "runner" ? 1.6 : 0; paused = false;
-    dev.focus({preventScroll:true});
+  function list(){return carts.filter(function(c){return !c.hidden}).sort(function(a, b){return (a.order || 99) - (b.order || 99)})}
+  function menu(focus){
+    stop(); endDemo(); mode = "menu"; cart = null; cartEl.textContent = "CFO EDITION"; hud.hidden = hud2.hidden = true; cv.hidden = true;
+    screen("INSERT A CARTRIDGE");
+    options(list().map(function(c){return [c.name, c.sub, function(){start(c.id)}]}), focus, true);
+    dev.classList.remove("on"); playTheme("menu"); armIdle();
+  }
+  function start(id, asDemo){
+    stop(); var c = byId[id]; if(!c) return;
+    cart = c; if(!asDemo){endDemo(); receipt.hidden = true; dev.classList.add("on")}
+    cartEl.textContent = c.name;
+    if(c.type === "text"){mode = "text"; cv.hidden = true; opts.innerHTML = ""; opts.classList.remove("menu"); playTheme(c.id); c.start(ui); return}
+    mode = "play"; S = c.create(); floats = []; for(var k in fx) delete fx[k];
+    opts.innerHTML = ""; opts.classList.remove("menu"); cv.hidden = false;
+    line(asDemo ? "DEMO · press A to play" : c.help || "");
+    if(!asDemo) say(c.say || c.help || c.name);
+    countdown = asDemo ? 0 : (c.countdown == null ? 1.2 : c.countdown); paused = false;
+    if(!asDemo){dev.focus({preventScroll:true}); playTheme(c.id)}
     last = performance.now(); running = true; hudTick(true); raf = requestAnimationFrame(frame);
   }
 
@@ -139,289 +168,235 @@
     var dt = Math.min(0.05, (now - last)/1000); last = now;
     if(!paused){
       if(countdown > 0) countdown -= dt;
-      else{(mode === "runner" ? Runner : Fight).step(S, dt, down); events()}
+      else{
+        var input = demo ? cart.demo(S, demo.mem) : inp;
+        cart.step(S, dt, input); inp.press = {}; inp.taps = []; inp.swiped = null;
+        events();
+        if(demo){demo.t += dt; if(demo.t > 16){nextDemo(); return}}
+      }
       tickFx(dt);
     }
-    draw(); hudTick();
-    if(S.over || S.won){running = false; endTimer = setTimeout(endArcade, 900); return}
+    draw(); hudTick(); moodTick(dt);
+    if(S.over || S.won){running = false; if(demo){endTimer = setTimeout(nextDemo, 1200)} else endTimer = setTimeout(endArcade, 900); return}
     raf = requestAnimationFrame(frame);
   }
   function tickFx(dt){
     floats.forEach(function(f){f.life -= dt; f.y -= 22*dt}); floats = floats.filter(function(f){return f.life > 0});
     for(var k in fx){fx[k] -= dt; if(fx[k] <= 0) delete fx[k]}
   }
-  function float(text, x, y, color){floats.push({text:text, x:x, y:y, life:0.9, color:color || COL.lcd})}
   function events(){
+    if(!S.events) return;
     S.events.forEach(function(e){
-      if(SFX[e.type] && e.type !== "seed" && e.type !== "gate" && e.type !== "win") SFX[e.type]();
-      if(mode === "runner"){
-        if(e.type === "coin") float(e.text, e.x, e.y - 4);
-        else if(e.type === "doc"){float(e.text, e.x - 20, e.y - 4); flash("gV4", true)}
-        else if(e.type === "hit"){float(e.text, Runner.PX, e.y - 18, COL.hot); fx.shake = 0.18; flash("gV2", false)}
-        else if(e.type === "prompt"){var g = S.prompt; msg.textContent = g.prompt + "  ▲ jump: " + g.up.t + " · ▼ stay: " + g.down.t; say(msg.textContent)}
-        else if(e.type === "gate"){fx.banner = 1.8; bannerText = e.text.split(". ")[0]; msg.textContent = e.text; say(e.text); SFX.gate()}
-        else if(e.type === "seed"){fx.banner = 2.2; bannerText = e.text; say(e.text); if(S.raised === 0) SFX.nothing(); else SFX.seed(); flash("gV2", S.raised > 0)}
-      }else{
-        if(e.type === "round"){msg.textContent = S.boss.name + ": " + S.boss.line; say(msg.textContent)}
-        else if(e.type === "clean"){fx.beam = 0.3; fx.clean = 1; float(e.text, 104, 40, COL.lcd); fx.bossHit = 0.25}
-        else if(e.type === "strike"){fx.beam = 0.18; fx.clean = 0; float(e.text, 112, 44); fx.bossHit = 0.2}
-        else if(e.type === "fizzle") float(e.text, 14, 52, COL.dim);
-        else if(e.type === "guard"){fx.guard = 0.25; fx.wave = 0.18; float(e.text, 12, 50, COL.dim)}
-        else if(e.type === "hurt" || e.type === "backfire" || e.type === "timeout"){fx.shake = 0.25; fx.wave = e.type === "hurt" ? 0.2 : 0; float(e.text, 8, 44, COL.hot); flash("gV3", false); say(e.text)}
-        else if(e.type === "ko"){fx.ko = 1.2; say(e.text)}
-      }
+      if(cart.onEvent) cart.onEvent(e, g, S);
+      else if(SFX[e.type]) g.sfx(e.type);
     });
     S.events.length = 0;
   }
   function hudTick(force){
     hudT -= 1; if(hudT > 0 && !force) return; hudT = 5;
-    if(mode === "runner"){
-      var r = Runner.runway(S);
-      setHud([["MONTH", Math.min(18, S.month)], ["CASH", fmt(S.cash)], ["RUNWAY", Math.min(99, Math.floor(r)) + " mo"]],
-        ["DATA ROOM", S.docs + "/5", "TEAM", S.team, S.team < 30]);
-    }else if(mode === "fight"){
-      setHud([["ROUND", (S.round + 1) + "/4"], ["BOSS", S.boss.name.replace("THE ", "")], ["RUNWAY", S.runway + " mo"]],
-        ["TIME", Math.max(0, Math.ceil(Fight.ROUND_TIME - S.roundT)) + "s", "QUARTER", 100*(1 - S.roundT/Fight.ROUND_TIME), S.roundT > Fight.ROUND_TIME - 5]);
-    }
+    var h = cart.hud(S); setHud(h.cells, h.row2);
   }
-
-  /* ---------- drawing ----------
-     The canvas is 192×120. The runner's world is 256×144, seen through a
-     camera that starts 24px down, so everything reads about a third bigger. */
-  var CAM = 24;
-  function text(t, x, y, color, font, align){ctx.font = font || FONT; ctx.fillStyle = color || COL.lcd; ctx.textAlign = align || "left"; ctx.fillText(t, x, y)}
+  function moodTick(dt){
+    moodT -= dt; if(moodT > 0) return; moodT = 0.5;
+    var m = music(); if(m && cart.mood && !demo) m.setTension(cart.mood(S));
+  }
   function draw(){
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = COL.dark; ctx.fillRect(0, 0, W, H);
-    var sx = fx.shake && !reduce ? Math.round((Math.random() - .5)*4) : 0, sy = fx.shake && !reduce ? Math.round((Math.random() - .5)*3) : 0;
-    ctx.translate(sx, sy - (mode === "runner" ? CAM : 0));
-    if(mode === "runner") drawRunner(S); else drawFight(S);
+    if(fx.shake && !reduce) ctx.translate(Math.round((Math.random() - .5)*4), Math.round((Math.random() - .5)*3));
+    ctx.save(); cart.draw(g, S); ctx.restore();
     floats.forEach(function(f){ctx.globalAlpha = Math.min(1, f.life*2); text(f.text, Math.round(f.x), Math.round(f.y), f.color); ctx.globalAlpha = 1});
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    if(mode === "runner") drawMonths(S);
+    if(cart.overlay) cart.overlay(g, S);
     if(fx.banner){
       ctx.globalAlpha = Math.min(1, fx.banner*2);
       ctx.fillStyle = COL.dark; ctx.fillRect(12, 40, W - 24, 24); ctx.strokeStyle = COL.lcd; ctx.strokeRect(12.5, 40.5, W - 25, 23);
       text(bannerText, W/2, 57, COL.lcd, BIG, "center"); ctx.globalAlpha = 1;
     }
-    if(paused) overlay("PAUSED", "press A to carry on");
-    else if(countdown > 0) overlay(countdown > 0.8 ? "READY" : "GO", "");
-  }
-  function overlay(big, small){
-    ctx.fillStyle = "rgba(28,24,18,.75)"; ctx.fillRect(0, 0, W, H);
-    text(big, W/2, H/2 + 2, COL.lcd, BIG, "center"); if(small) text(small, W/2, H/2 + 16, COL.dim, FONT, "center");
-  }
-  /* months bar, in screen space, with the seed and the gates marked */
-  function drawMonths(s){
-    var total = Runner.MONTHS*Runner.MONTH, bw = W - 16;
-    ctx.fillStyle = COL.faint; ctx.fillRect(8, 3, bw, 3);
-    ctx.fillStyle = COL.lcd; ctx.fillRect(8, 3, Math.round(bw*Math.min(1, s.t/total)), 3);
-    [[6.5, "SEED"], [9, "?"], [14, "?"]].forEach(function(m){var x = 8 + Math.round(bw*m[0]/18); ctx.fillStyle = COL.hot; ctx.fillRect(x, 1, 1, 7); text(m[1], x + 2, 14, COL.dim)});
+    if(demo){ctx.fillStyle = COL.dark; ctx.fillRect(0, H - 13, W, 13); text(Math.floor(performance.now()/500) % 2 ? "DEMO · PRESS A" : "", W/2, H - 3, COL.lcd, FONT, "center")}
+    else if(paused) overlay("PAUSED", "press A to carry on");
+    else if(countdown > 0) overlay(countdown > 0.5 ? "READY" : "GO", "");
   }
 
-  function drawRunner(s){
-    var GR = Runner.GROUND, scroll = s.t*s.speed;
-    /* skyline */
-    ctx.fillStyle = COL.faint;
-    for(var i=0;i<10;i++){var span = W + 48, bx = ((i*27 - scroll*0.25) % span + span) % span - 24, bh = 12 + (i*53 % 30); ctx.fillRect(Math.round(bx), GR - bh, 16, bh)}
-    /* ground */
-    ctx.fillStyle = COL.dim; ctx.fillRect(0, GR, W, 1);
-    var off = scroll % 10; for(var x = -off; x < W; x += 10) ctx.fillRect(Math.round(x), GR + 5, 4, 1);
-    /* things */
-    s.objs.forEach(function(o){
-      var ox = Math.round(o.x), oy = Math.round(o.y);
-      if(ox > W + 20) return;
-      if(o.type === "coin" && !o.done) ctx.drawImage(SPR.coin, ox, oy);
-      else if(o.type === "doc" && !o.done) ctx.drawImage(SPR.doc, ox, oy + Math.round(Math.sin(s.t*6)*1.5));
-      else if(o.type === "churn") ctx.drawImage(Math.floor(s.t*8) % 2 ? SPR.churn : SPR.churn2, ox, oy);
-      else if(o.type === "cost"){
-        ctx.fillStyle = o.done ? COL.mid : COL.dim; ctx.fillRect(ox, oy, o.w, o.h);
-        text(o.kind === "TAX" ? "%" : o.kind === "FX" ? "$" : "€", ox + o.w/2, oy + o.h - 3, COL.dark, FONT, "center");
-      }else if(o.type === "gate"){
-        var upOn = o.choice === "up", dnOn = o.choice === "down";
-        ctx.fillStyle = COL.faint; ctx.fillRect(ox + 6, 40, 2, GR - 40);
-        ctx.fillStyle = upOn ? COL.lcd : COL.mid; ctx.fillRect(ox, 42, 14, GR - 84);
-        ctx.fillStyle = dnOn ? COL.lcd : COL.mid; ctx.fillRect(ox, GR - 30, 14, 30);
-        text("▲", ox + 7, 68, COL.dark, FONT, "center"); text("▼", ox + 7, GR - 12, COL.dark, FONT, "center");
-        if(!o.done){text(o.gate.up.t, ox - 4, 60, COL.lcd, FONT, "right"); text(o.gate.down.t, ox - 4, GR - 18, COL.lcd, FONT, "right")}
-      }
-    });
-    /* player */
-    var fr = !s.ground ? SPR.jump : (Math.floor(s.t*10) % 2 ? SPR.run1 : SPR.run2);
-    if(!(s.inv > 0 && Math.floor(s.t*20) % 2)) ctx.drawImage(fr, Runner.PX, Math.round(s.y));
-    if(s.over || s.won) text(s.won ? "MONTH 18" : s.over === "cash" ? "OUT OF CASH" : "THE TEAM LEFT", W/2, 84, s.won ? COL.lcd : COL.hot, BIG, "center");
-  }
-
-  function drawFight(s){
-    var GR = 92, b = s.boss, bx = 136, by = GR - 32, px = 24, py = GR - 28;
-    ctx.fillStyle = COL.dim; ctx.fillRect(0, GR, W, 1);
-    /* runway pips and the boss bar */
-    text("RUNWAY", 6, 10, COL.dim);
-    for(var k=0;k<Fight.RUNWAY;k++){ctx.fillStyle = k < s.runway ? COL.lcd : COL.faint; ctx.fillRect(6 + k*7, 13, 5, 4)}
-    text(b.name, W - 6, 10, COL.dim, FONT, "right");
-    ctx.fillStyle = COL.faint; ctx.fillRect(W - 76, 13, 70, 4); ctx.fillStyle = COL.hot; ctx.fillRect(W - 76, 13, Math.round(70*b.hp/b.max), 4);
-    /* boss */
-    var shakeB = (s.winding || fx.bossHit) && !reduce ? Math.round(Math.sin(performance.now()/25)*1.5) : 0;
-    var bob = reduce ? 0 : Math.round(Math.sin(performance.now()/300)*2);
-    if(!(fx.ko && Math.floor(fx.ko*12) % 2) && !(s.phase === "clear" && !fx.ko)) ctx.drawImage(SPR.bosses[s.round], bx + shakeB, by + bob);
-    if(s.winding && s.phase === "fight"){var bl = Math.floor(performance.now()/90) % 2; text("!", bx + 16, by - 6, bl ? COL.hot : COL.lcd, BIG, "center")}
-    /* hero with charge aura */
-    var inZone = s.power >= b.zone[0] && s.power <= b.zone[1];
-    if(s.charging){
-      var r = 16 + (reduce ? 0 : Math.sin(performance.now()/60)*2), c = s.power > b.zone[1] ? COL.hot : inZone ? COL.lcd : COL.dim;
-      ctx.fillStyle = c;
-      for(var a=0;a<16;a++){var an = a/16*Math.PI*2 + performance.now()/400; ctx.fillRect(Math.round(px + 10 + Math.cos(an)*r), Math.round(py + 14 + Math.sin(an)*r*0.9), 2, 2)}
-    }
-    ctx.drawImage(s.charging ? SPR.heroCharge : SPR.hero, px, py);
-    if(fx.guard){ctx.fillStyle = COL.lcd; ctx.fillRect(px + 24, py - 2, 2, 32)}
-    /* attacks */
-    if(fx.beam){
-      var th = fx.clean ? 8 + Math.round(Math.sin(performance.now()/30)*2) : 3, y0 = py + 12 - th/2;
-      ctx.fillStyle = COL.lcd; ctx.fillRect(px + 22, y0, bx - px - 20, th);
-      ctx.fillStyle = COL.dark; if(fx.clean) ctx.fillRect(px + 22, y0 + th/2 - 1, bx - px - 20, 2);
-    }
-    if(fx.wave){var wx = bx - Math.round((1 - fx.wave/0.2)*(bx - px - 24)); ctx.fillStyle = COL.hot; ctx.fillRect(wx, GR - 16, 4, 16); ctx.fillRect(wx + 6, GR - 10, 3, 10)}
-    /* power meter */
-    var mx = 10, my = 108, mw = W - 20, scale = mw/Fight.BACKFIRE;
-    ctx.fillStyle = COL.faint; ctx.fillRect(mx, my, mw, 7);
-    ctx.fillStyle = COL.mid; ctx.fillRect(mx + Math.round(b.zone[0]*scale), my - 2, Math.round((b.zone[1] - b.zone[0])*scale), 11);
-    ctx.fillStyle = s.power > b.zone[1] ? COL.hot : COL.lcd; ctx.fillRect(mx, my + 1, Math.round(Math.min(Fight.BACKFIRE, s.power)*scale), 5);
-    ctx.fillStyle = COL.dim; ctx.fillRect(mx + Math.round(Fight.MIN_HIT*scale), my + 7, 1, 3); ctx.fillRect(mx + Math.round(100*scale), my - 3, 1, 13);
-    text("POWER", mx, my - 4, COL.dim);
-    /* round intro and results */
-    if(s.phase === "intro"){ctx.fillStyle = "rgba(28,24,18,.85)"; ctx.fillRect(0, 30, W, 36); text("ROUND " + (s.round + 1), W/2, 44, COL.dim, FONT, "center"); text(b.name, W/2, 60, COL.lcd, BIG, "center")}
-    if(fx.ko) text(b.name + " DOWN", W/2, 48, COL.lcd, BIG, "center");
-    if(s.over) text("OUT OF RUNWAY", W/2, 52, COL.hot, BIG, "center");
-    if(s.won) text("SEED CLOSED", W/2, 52, COL.lcd, BIG, "center");
-  }
-
-  /* ---------- endings ---------- */
+  /* ---------- endings and the receipt ---------- */
   function talk(){return C.email ? [["TALK TO THE REAL CFO", "", function(){var cta = $("cta"); location.href = cta ? cta.href : "mailto:" + C.email}]] : []}
   function again(id){return [["PLAY AGAIN", "", function(){start(id)}], ["MENU", "", function(){menu(true)}]]}
-  function endArcade(){
-    if(mode !== "runner" && mode !== "fight") return;
-    var s = S, t, win = !!s.won;
+  function showEnd(c, r){
     cv.hidden = true;
-    if(mode === "runner"){
-      if(win){
-        var verdict = s.team < 30 ? "The cash made it. The team barely did." : s.cash >= 1500 ? "Room to plan the next round calmly." : "You made it, with not much left.";
-        t = "MONTH 18. YOU MADE IT.\n\nCash " + fmt(s.cash) + " · team " + Math.round(s.team) + "%\nData room " + s.docs + "/5 · " + s.hits + " surprises hit\n" + verdict + "\n\nIn 2024 I did this for real:\n€3M raised, 18 months added.";
-      }else{
-        var why = s.over === "team" ? "Every surprise cost team trust too." : s.docs < Runner.DOCS_FULL ? "The data room had " + s.docs + " of 5 papers. Hold A to jump higher." : "Too many surprises. Jump earlier.";
-        t = (s.over === "team" ? "THE TEAM WALKED OUT\nIN MONTH " : "OUT OF CASH IN MONTH ") + Math.min(18, s.month) + ".\n\n" + why;
-      }
-    }else{
-      if(win) t = "SEED CLOSED. FOUR BOSSES DOWN.\n\nClean hits " + s.clean + " · runway left " + s.runway + " months\n\nIn 2024 I did this for real:\n€3M raised, 18 months added.";
-      else{
-        var tip = s.clean < s.hits/2 ? "Let go inside the marked zone: a clean hit does three times the damage." : "When the boss shows !, let go. Getting caught charging costs two months.";
-        t = "OUT OF RUNWAY AGAINST\n" + s.boss.name + ".\n\n" + tip;
-      }
-    }
-    (win ? SFX.win : SFX.lose)();
-    screen(t); options(again(mode).concat(win ? talk() : []), true);
-    dev.classList.toggle("on", win);
+    var real = r.realLine || (r.real === false ? "" : "In 2024 I did this for real:\n€3M raised, 18 months added.");
+    var t = r.title + "\n\n" + (r.lines || []).join("\n") + (r.tip ? "\n\n" + r.tip : "") + (r.win && real ? "\n\n" + real : "");
+    jingle(r.win ? "win" : "lose");
+    screen(t); options(again(c.id).concat(r.win ? talk() : []), true);
+    dev.classList.toggle("on", !!r.win);
+    printReceipt(c, r);
+  }
+  function endArcade(){if(mode !== "play" || demo) return; mode = "end"; showEnd(cart, cart.result(S))}
+  function pad(a, b, w){a = String(a); b = String(b); w = w || 32; var n = Math.max(1, w - a.length - b.length); return a + new Array(n + 1).join(" ") + b}
+  function center(t, w){w = w || 32; t = String(t); var n = Math.max(0, Math.floor((w - t.length)/2)); return new Array(n + 1).join(" ") + t}
+  function printReceipt(c, r){
+    var d = new Date(), date = ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+    var rule = new Array(33).join("-"), rows = [center("RUNWAY · CFO EDITION"), center("the audit trail"), rule, pad("CARTRIDGE", c.name), pad("DATE", date), rule];
+    (r.rows || []).forEach(function(x){rows.push(pad(x[0], x[1]))});
+    rows.push(rule, pad("RESULT", r.win ? "PASSED ✓" : "NOT THIS TIME"), rule);
+    rows.push(center(r.win ? "Clean opinion. Well played." : "Every trail has a next attempt."), center("Thanks for playing."));
+    var body = rows.join("\n");
+    receiptText.textContent = body; receipt.hidden = false;
+    receipt.classList.remove("print"); void receipt.offsetWidth; receipt.classList.add("print");
+    var url = location.href.split("#")[0];
+    if(C.email){
+      sendBtn.hidden = false;
+      sendBtn.href = "mailto:" + C.email + "?subject=" + encodeURIComponent("RUNWAY: " + c.name + (r.win ? ", passed" : ", my attempt")) +
+        "&body=" + encodeURIComponent(body + "\n\n" + url + "\n");
+    }else sendBtn.hidden = true;
+    copyBtn.onclick = function(){
+      var done = function(){copyBtn.textContent = "Copied"; setTimeout(function(){copyBtn.textContent = "Copy"}, 1500)};
+      try{navigator.clipboard.writeText(body + "\n" + url).then(done, function(){})}catch(e){}
+    };
   }
 
-  /* ---------- DECISIONS (text cartridge) ---------- */
-  function decHud(){
-    var r = Decisions.runway(D);
-    setHud([["MONTH", D.m], ["CASH", fmt(D.cash)], ["RUNWAY", r === Infinity ? "PROFIT" : Math.min(99, Math.floor(Math.max(0, r))) + " mo"]],
-      ["REVENUE", "€" + Math.round(D.rev) + "k/mo", "TEAM", D.trust, D.trust < 35]);
+  /* ---------- text cartridges get this ---------- */
+  var ui = {screen:screen, options:function(l, f){options(l, f === undefined ? true : f)}, setHud:setHud, flash:flash, fmt:fmt, sign:sign,
+    sfx:function(n){if(SFX[n]) SFX[n]()},
+    end:function(r){mode = "end"; showEnd(cart, r)}};
+
+  /* ---------- boot screen and demo mode ---------- */
+  function bootScreen(){
+    if(booted) return; booted = true;
+    if(reduce){menu(false); return}
+    mode = "boot"; cv.hidden = false; hud.hidden = hud2.hidden = true; opts.innerHTML = ""; line("");
+    var t0 = performance.now(), dinged = false;
+    (function b(now){
+      if(mode !== "boot") return;
+      var t = (now - t0)/1000;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = COL.dark; ctx.fillRect(0, 0, W, H);
+      var y = Math.min(56, -10 + t*90);
+      text("RUNWAY", W/2, y, COL.lcd, "24px VT323, monospace", "center");
+      if(t > 0.8){
+        if(!dinged){dinged = true; if(snd.on){tone(1568, .5, "square", .03); tone(2093, .6, "square", .02, 0, .08)}}
+        text("CFO EDITION", W/2, 72, COL.dim, FONT, "center"); text("© 2026 RUI GOMES", W/2, 84, COL.dim, FONT, "center");
+      }
+      if(t > 2.1){menu(false); return}
+      requestAnimationFrame(b);
+    })(t0);
   }
-  function snap(s){return {cash:s.cash, rev:s.rev, trust:s.trust}}
-  function delta(b, a){
-    var out = ["cash " + sign(a.cash - b.cash, "k")];
-    if(a.rev !== b.rev) out.push("revenue " + sign(a.rev - b.rev, "k/mo"));
-    if(a.trust !== b.trust) out.push("team " + sign(a.trust - b.trust));
-    return out.join(" · ");
+  function armIdle(){
+    clearTimeout(idleTimer);
+    if(reduce) return;
+    idleTimer = setTimeout(function(){ if(mode === "menu" && seen && !dev.contains(document.activeElement)) startDemo() }, 10000);
   }
-  function startDecisions(){
-    mode = "decisions"; D = Decisions.newGame(Math.random); cv.hidden = true; opts.innerHTML = "";
-    decHud(); decCard(["€1.2M in the bank, €150k burn a month. Reach month 18."]);
+  var demoIdx = 0;
+  function demoCarts(){return list().filter(function(c){return c.demo && c.type !== "text"})}
+  function startDemo(){
+    var dc = demoCarts(); if(!dc.length) return;
+    snd.quiet = true; if(window.Music) window.Music.stop();
+    demo = {mem:{}, t:0}; var c = dc[demoIdx++ % dc.length];
+    start(c.id, true); mode = "play";
   }
-  function decCard(pre){
-    var card = D.deck[D.q];
-    if(card === "raise"){
-      var b = snap(D), r = Decisions.raise(D), ok = Decisions.quarter(D);
-      decHud(); flash("gV2", D.raised > 0);
-      pre = pre.concat(["Q3 · " + r.replace(/\n/g, " ") + " (" + delta(b, D) + ")"]);
-      if(!ok) return decEnd(pre);
-      card = D.deck[D.q];
-    }
-    if(D.q >= 6) return decEnd(pre);
-    screen(pre.map(function(l){return "» " + l}).join("\n") + "\n\nQ" + (D.q + 1) + ": " + card.q);
-    options(Decisions.shuffle(card.o, Math.random).map(function(o, i){
-      return [o.t, "", function(){
-        var b = snap(D), r = Decisions.choose(D, o, Math.random), ok = Decisions.quarter(D);
-        decHud(); flash("gV2", D.cash >= b.cash);
-        var lines = [r.replace(/\n/g, " "), delta(b, D)];
-        if(!ok) return decEnd(lines);
-        decCard(lines);
-      }];
-    }), true);
-  }
-  function decEnd(pre){
-    var t, head = pre.map(function(l){return "» " + l}).join("\n") + "\n\n";
-    if(D.over === "cash") t = "OUT OF CASH IN MONTH " + D.m + ".\nRunway ends a few moves before the money does.";
-    else if(D.over === "trust") t = "MONTH " + D.m + ". THE TEAM WALKED OUT.\nCash is half of runway. People are the other half.";
-    else{
-      var r = Decisions.runway(D), left = r === Infinity ? "profitable" : Math.floor(r) + " months";
-      var verdict = r === Infinity ? "Profitable. Investors will call you." : r >= 12 ? "Room to plan the next round calmly." : r >= 6 ? "You'll be raising again within months." : "You made it, with almost nothing left.";
-      t = "MONTH 18. YOU MADE IT.\nCash " + fmt(D.cash) + " · runway " + left + " · team " + D.trust + "%\n" + verdict;
-    }
-    (D.over ? SFX.lose : SFX.win)();
-    screen(head + t); options(again("decisions").concat(D.over ? [] : talk()), true);
-  }
+  function nextDemo(){ if(!demo) return; if(mode === "play" && seen){demo = {mem:{}, t:0}; var dc = demoCarts(); start(dc[demoIdx++ % dc.length].id, true)} else menu(false) }
+  function endDemo(){ if(!demo) return; demo = null; snd.quiet = false; }
+  function wake(){ if(demo){menu(true); return true} idleT = 0; if(mode === "menu") armIdle(); return false }
 
   /* ---------- controls ---------- */
-  function press(on){
-    if(mode === "runner" || mode === "fight"){
-      if(!running) return;
-      if(paused){if(on){paused = false; last = performance.now()} down = false; return}
-      down = on; aBtn.classList.toggle("on", on);
-    }
+  var DIRS = {ArrowUp:"up", ArrowDown:"down", ArrowLeft:"left", ArrowRight:"right", w:"up", s:"down", a:"left", d:"right", W:"up", S:"down", A:"left", D:"right"};
+  function dirDown(d){
+    if(!running || paused){ if(paused) return unpause(); return }
+    held[d] = true; inp.dir = d; inp.press[d] = true;
   }
+  function dirUp(d){delete held[d]; inp.dir = held[inp.dir] ? inp.dir : (Object.keys(held)[0] || null)}
+  function aDown(){
+    if(!running) return false;
+    if(paused){unpause(); return true}
+    inp.down = true; inp.press.a = true; aBtn.classList.add("on"); return true;
+  }
+  function aUp(){inp.down = false; aBtn.classList.remove("on")}
+  function unpause(){paused = false; last = performance.now(); inp.down = false}
   function activate(){
-    if(running) return;
     var f = opts.contains(document.activeElement) ? document.activeElement : opts.querySelector("button");
     if(f) f.click();
   }
-  aBtn.addEventListener("pointerdown", function(e){e.preventDefault(); if(running) press(true); else activate()});
-  ["pointerup", "pointercancel", "pointerleave"].forEach(function(t){aBtn.addEventListener(t, function(){press(false)})});
-  aBtn.addEventListener("click", function(e){if(e.detail === 0) activate()});
-  cv.addEventListener("pointerdown", function(e){e.preventDefault(); press(true)});
-  ["pointerup", "pointercancel", "pointerleave"].forEach(function(t){cv.addEventListener(t, function(){press(false)})});
+  function canvasPoint(e){var r = cv.getBoundingClientRect(); return {x:(e.clientX - r.left)*W/r.width, y:(e.clientY - r.top)*H/r.height}}
+
+  aBtn.addEventListener("pointerdown", function(e){e.preventDefault(); if(wake()) return; if(!aDown()) activate()});
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function(t){aBtn.addEventListener(t, aUp)});
+  aBtn.addEventListener("click", function(e){if(e.detail === 0 && !running) activate()});
   bBtn.addEventListener("click", function(){menu(true)});
   document.querySelectorAll("#device [data-dir]").forEach(function(b){
-    b.addEventListener("click", function(){var d = b.dataset.dir; if(running){ if(d === "up"){press(true); setTimeout(function(){press(false)}, 120)} } else moveFocus(d === "up" || d === "left" ? -1 : 1)});
+    var d = b.dataset.dir;
+    b.addEventListener("pointerdown", function(e){e.preventDefault(); if(wake()) return; if(running) dirDown(d); else moveFocus(d === "up" || d === "left" ? -1 : 1)});
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function(t){b.addEventListener(t, function(){dirUp(d)})});
+    b.addEventListener("click", function(e){if(e.detail === 0 && !running) moveFocus(d === "up" || d === "left" ? -1 : 1)});
   });
-  var ACT = {" ":1, "Spacebar":1, "ArrowUp":1, "w":1, "W":1};
+  var swipe = null;
+  cv.addEventListener("pointerdown", function(e){
+    e.preventDefault(); if(wake()) return; if(!running) return;
+    if(paused){unpause(); return}
+    var kind = cart && cart.canvas || "press";
+    if(kind === "press") aDown();
+    else if(kind === "tap"){inp.taps.push(canvasPoint(e))}
+    else swipe = {x:e.clientX, y:e.clientY, t:performance.now()};
+  });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function(t){cv.addEventListener(t, function(e){
+    var kind = cart && cart.canvas || "press";
+    if(kind === "press") aUp();
+    if(kind === "swipe" && swipe && t === "pointerup"){
+      var dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
+      if(Math.max(Math.abs(dx), Math.abs(dy)) < 14){inp.press.a = true}
+      else{var d = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up"); inp.press[d] = true; inp.swiped = d}
+      swipe = null;
+    }
+  })});
   dev.addEventListener("keydown", function(e){
+    if(wake()){e.preventDefault(); return}
     if(e.key === "Escape" || e.key === "Backspace"){e.preventDefault(); menu(true); return}
     if(running){
-      if(ACT[e.key]){e.preventDefault(); if(!e.repeat) press(true)}
+      if(DIRS[e.key]){e.preventDefault(); if(!e.repeat) dirDown(DIRS[e.key]); return}
+      if(e.key === " " || e.key === "Enter" || e.key === "z" || e.key === "Z"){e.preventDefault(); if(!e.repeat) aDown(); return}
       return;
     }
     if(e.key === "ArrowDown" || e.key === "ArrowRight"){e.preventDefault(); moveFocus(1)}
     else if(e.key === "ArrowUp" || e.key === "ArrowLeft"){e.preventDefault(); moveFocus(-1)}
     else if((e.key === " " || e.key === "Enter") && !opts.contains(document.activeElement) && e.target === dev){e.preventDefault(); activate()}
   });
-  dev.addEventListener("keyup", function(e){if(ACT[e.key]) press(false)});
-  window.addEventListener("blur", function(){press(false)});
+  dev.addEventListener("keyup", function(e){
+    if(DIRS[e.key]) dirUp(DIRS[e.key]);
+    if(e.key === " " || e.key === "Enter" || e.key === "z" || e.key === "Z") aUp();
+  });
+  window.addEventListener("blur", function(){aUp(); held = {}; inp.dir = null});
+  dev.addEventListener("focusin", function(){if(demo) menu(true)});
 
-  /* pause when the console leaves the screen or the tab is hidden */
-  function pause(){if(running && !paused && countdown <= 0){paused = true; down = false; draw()}}
+  /* pause when the console leaves the screen or the tab is hidden; boot on first sight */
+  function pause(){if(running && !paused && !demo && countdown <= 0){paused = true; inp.down = false; draw()}}
   document.addEventListener("visibilitychange", function(){if(document.hidden) pause()});
-  new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting) pause()})}, {threshold:0.35}).observe(cv);
+  new IntersectionObserver(function(es){es.forEach(function(e){
+    seen = e.isIntersecting;
+    if(!e.isIntersecting){pause(); if(demo) menu(false); if(window.Music) window.Music.stop()}
+    else{ if(!booted) bootScreen(); else if(mode === "menu") armIdle(); if(music() && !demo) playTheme(theme) }
+  })}, {threshold:0.4}).observe(dev);
 
-  /* ?debug: step the game by hand (for screenshots and testing) */
+  /* ?debug: step a game by hand (for screenshots and testing) */
   if(/[?&]debug\b/.test(location.search)) window.RUNWAY_DEBUG = {
-    start:start, state:function(){return S},
-    step:function(sec, hold){
-      running = false; countdown = 0;
-      for(var i=0;i<sec*60;i++){(mode === "runner" ? Runner : Fight).step(S, 1/60, !!(hold && hold(S))); events(); tickFx(1/60)}
+    carts:carts, start:function(id){booted = true; start(id)}, state:function(){return S}, menu:menu,
+    step:function(sec, bot){
+      running = false; countdown = 0; var mem = {};
+      for(var i=0;i<sec*60 && !(S.over || S.won);i++){cart.step(S, 1/60, bot ? bot(S, mem) : {down:false, dir:null, press:{}, taps:[]}); events(); tickFx(1/60)}
       draw(); hudTick(true);
     }
   };
-  menu(false);
+  /* ?debug&shot=runner:20[&end] opens a cartridge at a moment, for headless screenshots */
+  var shot = /[?&]shot=([a-z]+):?([\d.]*)/.exec(location.search);
+  if(shot && window.RUNWAY_DEBUG){
+    booted = true;
+    var st = document.createElement("style"); st.textContent = "*{transition:none!important;animation:none!important}main>section:not(#quest),footer,#quest .copy,.progress{display:none!important}#quest{padding:12px 0!important;border:0!important}"; document.head.appendChild(st);
+    document.querySelectorAll(".rev").forEach(function(e){e.classList.add("in")});
+    setTimeout(function(){
+      dev.scrollIntoView({block:"start"}); var c = byId[shot[1]];
+      window.RUNWAY_DEBUG.start(shot[1]);
+      if(c && c.type !== "text" && +shot[2]){
+        window.RUNWAY_DEBUG.step(+shot[2], c.demo);
+        if(/[?&]end\b/.test(location.search) && (S.over || S.won)){mode = "play"; endArcade()}
+      }
+    }, 300);
+  }
+  menu(false); mode = "idle";
+  }
 })();

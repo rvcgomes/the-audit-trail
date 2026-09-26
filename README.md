@@ -1,6 +1,6 @@
 # The audit trail
 
-A one-page introduction for job applications: from IFRS audit at PwC to CFO and Head of HR at Weezie, fractional finance work with VCLevel, and a pixel-art handheld with three small games about runway.
+A one-page introduction for job applications: from IFRS audit at PwC to CFO and Head of HR at Weezie, fractional finance work with VCLevel, and a pixel-art handheld with seven small retro games.
 
 Live at <https://rvcgomes.github.io/the-audit-trail/>
 
@@ -26,27 +26,36 @@ The `CONFIG` block at the top:
 
 ## The handheld
 
-Three cartridges on the same console, all original art (no third-party characters):
+Seven cartridges on one console, all original art and music (no third-party characters or tunes):
 
-| Cartridge | Rules | Play |
-|---|---|---|
-| RUNWAY RUN | `games/runner.js` | Tap to jump, hold to jump higher. Coins are revenue, blocks are surprise costs, the papers fill the data room before the seed in month 6. Two gates ask a question: jump for the top answer, stay down for the bottom one. |
-| BOARD FIGHT | `games/fight.js` | Hold to charge, let go inside the zone for a clean hit. When the boss shows `!`, let go. Four bosses: the Burn, the Dollar, the Poacher, the Board. |
-| DECISIONS | `games/decisions.js` | Six quarters, one decision each, with the consequence shown straight away. |
+| Cartridge | Rules | Cartridge file | Play |
+|---|---|---|---|
+| THE AUDIT TRAIL | `games/maze.js` | `games/carts/maze.js` | Maze. Tick every line while four findings chase you; a source document turns the tables for a few seconds. |
+| RUNWAY RUN | `games/runner.js` | `games/carts/classic.js` | Runner. Tap to jump, hold to jump higher; fill the data room before the seed in month 6; two gates ask a question. |
+| CASH FLOW | `games/blocks.js` | `games/carts/blocks.js` | Falling blocks. + is money in, − is money out; each full row closes a week; payroll is due every 9 s; a red week pays a fee. |
+| SPOT THE ERROR | `games/spot.js` | `games/carts/spot.js` | Ledger lines scroll up; tap the wrong ones (sums, VAT, dates, duplicates). False flags and misses cost credibility. |
+| CLOSE THE MONTH | `games/lanes.js` | `games/carts/lanes.js` | Lane crossing. Dodge the deadlines, ride the sign-offs, close five tasks. |
+| BOARD FIGHT | `games/fight.js` | `games/carts/classic.js` | Hold to charge, let go inside the zone; let go when the boss shows `!`. |
+| DECISIONS | `games/decisions.js` | `games/carts/classic.js` | Six quarters, one decision each, consequence shown straight away. |
 
-`games/console.js` draws the screen and handles the A/B buttons, the d-pad, the keyboard (Space, arrows, Esc) and touch. Sound is off until the visitor turns it on.
+`games/console.js` is the console: screen, A/B buttons, d-pad, keyboard (Space, arrows, Esc), touch and swipe, the boot screen, demo mode after 10 s idle, and the receipt printed at the end of each game (with "Send to Rui"). The cartridge contract is documented at the top of that file.
 
-The rules files have no DOM code, so they can be tested on their own. After changing any of them, run:
+`games/music.js` is original chiptune synthesised with WebAudio, one theme per cartridge. `setTension()` speeds it up and, above 0.6, turns a major theme minor; above 0.75 a heartbeat kick joins. Sound and music stay off until the visitor presses ♪.
+
+The rules files have no DOM code, so they can be tested on their own. After changing any of them, run the matching test:
 
 ```
 node tests/decisions-balance.js
-node tests/arcade-bots.js
+node tests/arcade-bots.js      # RUNWAY RUN and BOARD FIGHT
+node tests/maze-bots.js
+node tests/blocks-bots.js
+node tests/spot-bots.js
+node tests/lanes-bots.js
 ```
 
-- `decisions-balance.js` plays every possible DECISIONS game (76,800) and fails if an option is always better than the other or a choice never changes the outcome.
-- `arcade-bots.js` plays 300 games of each arcade cartridge with bots of different skill and fails unless skill decides the result: a perfect player always wins, careless play (skipping the data room, holding forever, ignoring the `!`) doesn't.
+Each plays hundreds of seeded games with bots of different skill and fails unless skill decides the result (a careful player wins, careless play loses, no game gets stuck). The arcade tests also draw every frame of a few demo games against a fake canvas.
 
-`?debug` in the URL exposes `window.RUNWAY_DEBUG` to step a game by hand, which is how the screenshots are taken.
+`?debug` in the URL exposes `window.RUNWAY_DEBUG` to step a game by hand. `?debug&shot=maze:20` opens a cartridge 20 seconds in (add `&end` to jump to the ending and receipt), for screenshots with headless Chrome.
 
 ## Share image
 
