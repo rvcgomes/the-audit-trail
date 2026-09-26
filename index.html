@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rui Gomes — the audit trail</title>
+<meta name="description" content="Rui Gomes: from IFRS audit at PwC to CFO and Head of HR at a venture-backed startup, and fractional finance work with VCLevel.">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Rui Gomes — the audit trail">
+<meta property="og:description" content="From checking other people's numbers to owning them: audit, advisory, CFO. With a small game about runway.">
+<meta property="og:url" content="https://rvcgomes.github.io/the-audit-trail/">
+<link rel="canonical" href="https://rvcgomes.github.io/the-audit-trail/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2315263A'/%3E%3Cpath d='M8 17l5 5 11-12' fill='none' stroke='%23F0685B' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Kalam:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+<script>
+document.documentElement.className = "js";
+/* ============================================================
+   Defaults. For a specific application, don't edit this:
+   build a link with link.html (?co=…&why=…), so every company
+   gets its own URL and nobody sees someone else's name.
+   ============================================================ */
+window.CONFIG = {
+  company: "",
+  why: "",
+  email: "ruimcamposgomes@gmail.com",
+  linkedin: "https://www.linkedin.com/in/ruimcgomes/",
+  vclevel: "https://vclevel.pt",
+  cv: "",                       // e.g. "rui-gomes-cv.pdf" once the PDF is in the repo
+  evidence: { seed: "", award: "" }   // public links, if any; empty = "on request"
+};
+</script>
+<style>
+:root{
+  --paper:#E8EEF1; --ink:#15263A; --muted:#566777; --rule:#C6D5DE;
+  --pencil:#C2372C; --onPencil:#fff; --pencilOnDeep:#F0685B;
+  --card:#F4F7F9; --deep:#15263A; --onDeep:#E8EEF1;
+  --lcd-bg:#1C1812; --lcd:#FFB547; --lcd-dim:#B08A48;
+  --sans:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --hand:"Kalam","Bradley Hand","Comic Sans MS",cursive;
+  --lcdf:"VT323","Courier New",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#122130; --ink:#E6EDF2; --muted:#93A5B4; --rule:#22364A;
+    --pencil:#F0685B; --onPencil:#0C1722; --pencilOnDeep:#F0685B;
+    --card:#172A3B; --deep:#0C1722; --onDeep:#E6EDF2; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#122130; --ink:#E6EDF2; --muted:#93A5B4; --rule:#22364A;
+  --pencil:#F0685B; --onPencil:#0C1722; --pencilOnDeep:#F0685B;
+  --card:#172A3B; --deep:#0C1722; --onDeep:#E6EDF2; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased;
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  overflow-x:hidden;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--pencil);outline-offset:3px;border-radius:3px}
+img,svg{max-width:100%}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* progress */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:20;pointer-events:none}
+.progress i{display:block;height:3px;width:100%;background:var(--pencil);transform-origin:left;transform:scaleX(0)}
+.no-js .progress{display:none}
+
+/* hero */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:calc(80px + env(safe-area-inset-top,0px)) 60px}
+.meta{font-size:.9375rem;color:var(--muted);margin:0 0 2rem;line-height:1.5}
+.meta strong{color:var(--ink);font-weight:500}
+.hi{font-size:clamp(2.6rem,8.5vw,5.6rem);line-height:1;letter-spacing:-.03em;font-weight:800;margin:0;min-height:1em}
+.hi .typed::after{content:"";display:inline-block;width:.06em;height:.85em;background:var(--pencil);margin-left:.06em;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
+.hi .typed.done::after{animation:none;opacity:0}
+.hi2{font-size:clamp(1.9rem,5.5vw,3.6rem);line-height:1.06;letter-spacing:-.02em;font-weight:700;margin:.4rem 0 1.75rem;max-width:18ch}
+.ul{position:relative;display:inline-block;white-space:nowrap}
+.ul svg{position:absolute;left:-2%;bottom:-.22em;width:104%;height:.45em;overflow:visible}
+.ul path{fill:none;stroke:var(--pencil);stroke-width:3.2;stroke-linecap:round}
+.lede{font-size:clamp(1.1rem,2.2vw,1.35rem);line-height:1.5;max-width:46ch;margin:0 0 2rem}
+.go{display:inline-flex;align-items:center;gap:.8rem;font-size:.9375rem;color:var(--ink);text-decoration:none}
+.go span.c{width:44px;height:44px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;animation:bob 2s ease-in-out infinite}
+.js .hi2,.js .lede,.js .go{opacity:0;transform:translateY(10px);transition:opacity .6s,transform .6s}
+.js .lede{transition-delay:.4s}.js .go{transition-delay:.7s}
+.js .hi2 .ul path{stroke-dasharray:420;stroke-dashoffset:420;transition:stroke-dashoffset 1s .3s cubic-bezier(.6,.1,.3,1)}
+.js .shown .hi2,.js .shown .lede,.js .shown .go{opacity:1;transform:none}
+.js .shown .hi2 .ul path{stroke-dashoffset:0}
+@keyframes blink{50%{opacity:0}}
+@keyframes bob{50%{transform:translateY(5px)}}
+
+/* chapters */
+.chap{padding-block:clamp(80px,14vh,140px);border-top:1px solid var(--rule)}
+.chap-head{display:grid;gap:.4rem;margin-bottom:2.5rem}
+.when{font-size:.9375rem;color:var(--muted)}
+.when b{color:var(--pencil);font-weight:700}
+h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;font-weight:800;margin:0;max-width:16ch}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(28px,5vw,72px);align-items:start}
+.copy p{margin:0 0 1rem;max-width:52ch}
+.copy .role{font-weight:700;margin-bottom:.25rem}
+.copy .where{color:var(--muted);margin-bottom:1.25rem}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.25rem;padding:0;list-style:none}
+.stack li{font-size:.875rem;padding:4px 10px;border:1px solid var(--rule);border-radius:999px;background:var(--card)}
+.js .rev{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .rev.in{opacity:1;transform:none}
+
+/* evidence refs */
+.ref{display:inline-grid;place-items:center;width:1.35em;height:1.35em;margin-left:.2em;border:1.5px solid var(--pencil);border-radius:50%;font-family:var(--hand);font-weight:700;font-size:.8em;line-height:1;color:var(--pencil);text-decoration:none;vertical-align:.15em}
+.ref:hover{background:var(--pencil);color:var(--onPencil)}
+.bign .ref,.kpi .ref{font-size:.35em;vertical-align:.9em}
+.bign .ref{border-color:var(--pencilOnDeep);color:var(--pencilOnDeep)}
+
+/* ledger visual */
+.ledger{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:18px 18px 12px;box-shadow:0 20px 40px -24px rgba(21,38,58,.35);transform:rotate(-1.2deg)}
+.ledger h4{margin:0 0 .75rem;font-size:.9375rem;display:flex;justify-content:space-between;color:var(--muted);font-weight:500}
+.ledger table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.9375rem}
+.ledger td{padding:9px 4px;border-bottom:1px solid var(--rule)}
+.ledger td.n{text-align:right;white-space:nowrap;color:var(--muted)}
+.ledger td.t{width:34px;text-align:center;font-family:var(--hand);color:var(--pencil);font-size:1.35rem;font-weight:700;line-height:1}
+.ledger td.t span{display:inline-block;transform:rotate(-8deg)}
+.js .ledger td.t span{transform:scale(0) rotate(-30deg);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.js .ledger.in td.t span{transform:scale(1) rotate(-8deg)}
+.ledger .foot{font-family:var(--hand);color:var(--pencil);font-size:1.15rem;margin:.75rem 0 0}
+.js .ledger .foot{opacity:0;transition:opacity .5s 1.6s}
+.js .ledger.in .foot{opacity:1}
+
+/* big number */
+.bign{background:var(--deep);color:var(--onDeep);border-radius:8px;padding:clamp(24px,4vw,40px)}
+.bign .num{font-size:clamp(3.4rem,11vw,6.5rem);font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.bign .lbl{opacity:.85;margin:.5rem 0 1.5rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font-size:.875rem;padding:6px 12px;border:1px solid rgba(232,238,241,.35);border-radius:4px;transition:background .3s,color .3s,border-color .3s}
+.chips span.on{background:var(--pencilOnDeep);border-color:var(--pencilOnDeep);color:#0C1722}
+
+/* interlude */
+.inter{padding:clamp(90px,16vh,160px) 0;background:var(--deep);color:var(--onDeep)}
+.inter p{font-size:clamp(1.9rem,5.2vw,3.6rem);line-height:1.12;letter-spacing:-.02em;font-weight:700;margin:0;max-width:20ch}
+.inter .w{opacity:.3;transition:opacity .25s}
+.inter .w.lit{opacity:1}
+
+/* runway chart */
+.chart{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:18px}
+.chart svg{display:block;width:100%;height:auto}
+.chart .ax{stroke:var(--muted);stroke-width:1;opacity:.5}
+.chart .cash{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}
+.chart .ext{fill:none;stroke:var(--muted);stroke-width:2;stroke-dasharray:5 5}
+.chart .zero{fill:var(--card);stroke-width:2}
+.chart text{font-family:var(--sans);font-size:14px;fill:var(--muted)}
+.chart .ann{font-family:var(--hand);fill:var(--pencil);font-size:19px;font-weight:700}
+.chart .brk{fill:none;stroke:var(--pencil);stroke-width:2;stroke-linecap:round}
+.js .chart .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:stroke-dashoffset 1.6s cubic-bezier(.5,.1,.3,1)}
+.js .chart.in .draw{stroke-dashoffset:0}
+.js .chart .ext.draw{stroke-dasharray:5 5;stroke-dashoffset:0;opacity:0;transition:opacity .6s 1.2s}
+.js .chart.in .ext.draw{opacity:1}
+.js .chart .late{opacity:0;transition:opacity .5s 1.8s}
+.js .chart.in .late{opacity:1}
+.chart .cap{font-size:.8125rem;color:var(--muted);margin:.5rem 0 0}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-top:18px}
+.kpi{background:var(--card);padding:18px}
+.kpi .v{font-size:clamp(1.9rem,4.5vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:.9375rem;color:var(--muted);margin-top:.4rem;line-height:1.4}
+
+/* award */
+.award{padding-block:clamp(70px,12vh,120px);border-top:1px solid var(--rule);text-align:center}
+.seal{width:150px;height:150px;margin:0 auto 1.5rem;position:relative}
+.seal svg{width:100%;height:100%;animation:spin 24s linear infinite}
+.seal .core{position:absolute;inset:30px;border-radius:50%;background:var(--pencil);color:var(--onPencil);display:grid;place-items:center;font-size:2.1rem;font-weight:800}
+.seal text{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;fill:var(--ink);font-weight:700}
+.award h3{font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.02em;line-height:1.1;margin:0 auto .75rem;max-width:22ch}
+.award p{color:var(--muted);max-width:52ch;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* VCLevel sectors */
+.sectors{margin-top:.25rem}
+.tabs{display:none;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.js .tabs{display:flex}
+.tabs button{font:inherit;font-size:.9375rem;padding:7px 14px;border:1px solid var(--rule);border-radius:999px;background:var(--card);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.wp{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:20px 20px 16px;box-shadow:0 20px 40px -24px rgba(21,38,58,.35);margin-bottom:14px;position:relative}
+.js .wp{margin-bottom:0}
+.wp h4{margin:0 0 .9rem;font-size:.9375rem;color:var(--muted);font-weight:500;display:flex;justify-content:space-between;gap:1rem}
+.wp .k{font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+.wp .q{font-size:clamp(1.25rem,2.6vw,1.55rem);font-weight:700;line-height:1.25;letter-spacing:-.01em;margin:.2rem 0 1rem}
+.wp .b{margin:.2rem 0 0}
+.wp .note{font-family:var(--hand);color:var(--pencil);font-size:1.15rem;margin:1rem 0 0;line-height:1.3}
+
+/* game */
+.quest{padding-block:clamp(80px,14vh,140px);border-top:1px solid var(--rule)}
+.quest .split{align-items:center}
+.device{background:linear-gradient(160deg,#3A3F46,#23272C);border-radius:18px;padding:22px 22px 26px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);max-width:440px;margin:0 auto;width:100%}
+.device .brand{display:flex;justify-content:space-between;color:#9AA3AD;font-size:.75rem;letter-spacing:.08em;margin:0 4px 10px}
+.device .brand i{width:8px;height:8px;border-radius:50%;background:#555;display:inline-block;vertical-align:middle;margin-right:6px}
+.device.on .brand i{background:#FF7A45;box-shadow:0 0 8px #FF7A45}
+.screen{background:var(--lcd-bg);color:var(--lcd);font-family:var(--lcdf);border-radius:6px;padding:14px 14px 16px;min-height:400px;display:flex;flex-direction:column;box-shadow:inset 0 0 30px rgba(0,0,0,.7);text-shadow:0 0 6px rgba(255,181,71,.45);font-size:1.3rem;line-height:1.15}
+.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.hud div{font-size:1rem;color:var(--lcd-dim)}
+.hud b{display:block;color:var(--lcd);font-weight:400;font-size:1.45rem}
+.hud2{display:grid;grid-template-columns:1fr 2fr;gap:6px;border-bottom:1px dashed var(--lcd-dim);padding:6px 0 8px;margin-bottom:10px;font-size:1rem;color:var(--lcd-dim)}
+.hud2 b{display:block;color:var(--lcd);font-weight:400;font-size:1.3rem}
+.bar{height:8px;background:#3a2e18;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--lcd);transition:width .5s}
+.bar.low i{background:#FF7A45}
+.msg{flex:1;white-space:pre-wrap;min-height:6.5em}
+.opts{display:grid;gap:8px;margin-top:10px}
+.opts button{font-family:var(--lcdf);font-size:1.25rem;text-align:left;background:transparent;color:var(--lcd);border:1px solid var(--lcd-dim);padding:8px 10px;cursor:pointer;border-radius:3px;line-height:1.1}
+.opts button:hover,.opts button:focus-visible{background:var(--lcd);color:var(--lcd-bg);text-shadow:none;outline:none}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.keys span{background:#15181b;color:#8C949C;font-size:.7rem;letter-spacing:.1em;text-align:center;padding:10px 0;border-radius:5px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.4)}
+.nogame{font-family:var(--lcdf);color:var(--lcd);font-size:1.3rem}
+.js .nogame{display:none}
+.no-js .screen .hud,.no-js .screen .hud2,.no-js .screen .msg,.no-js .screen .opts{display:none}
+.chess{margin-top:1.5rem;padding:16px 18px;border-left:3px solid var(--pencil);background:var(--card);max-width:48ch}
+
+/* why */
+.why{padding:clamp(80px,14vh,140px) 0;background:var(--deep);color:var(--onDeep)}
+.why .when b{color:var(--pencilOnDeep)}
+.why h2{color:var(--onDeep);margin:.4rem 0 1.75rem}
+.why .lead{font-size:clamp(1.15rem,2.4vw,1.5rem);line-height:1.45;max-width:46ch;margin:0 0 2.5rem}
+.why h3{font-size:1.125rem;margin:0 0 1rem}
+.fit{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px 32px;max-width:900px}
+.fit li{padding-left:1.8rem;position:relative;opacity:.9}
+.fit li::before{content:"✓";position:absolute;left:0;top:-.1em;font-family:var(--hand);font-weight:700;font-size:1.3rem;color:var(--pencilOnDeep)}
+
+/* evidence index */
+.evidence{padding-block:clamp(70px,12vh,120px);border-top:1px solid var(--rule)}
+.evidence h2{font-size:clamp(1.8rem,4.5vw,2.8rem);margin:.4rem 0 .75rem}
+.evidence .intro{color:var(--muted);max-width:56ch;margin:0 0 2rem}
+.ev{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--rule);border-radius:6px;font-size:.9375rem}
+.ev th{text-align:left;font-weight:500;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--rule)}
+.ev td{padding:12px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+.ev tr:last-child td{border-bottom:0}
+.ev td:first-child{width:3rem;font-family:var(--hand);font-weight:700;font-size:1.3rem;color:var(--pencil);line-height:1.1}
+.ev td:nth-child(2){font-weight:500;width:40%}
+.ev td:last-child{color:var(--muted)}
+.ev tr:target{background:color-mix(in srgb,var(--pencil) 10%,var(--card))}
+
+/* close */
+.close{padding-block:clamp(90px,16vh,160px) 60px;text-align:center}
+.close h2{margin:0 auto;max-width:18ch}
+.close .sub{color:var(--muted);font-size:clamp(1.1rem,2.2vw,1.35rem);margin:1rem auto 2rem}
+.cta{display:inline-flex;align-items:center;gap:.6rem;padding:18px 30px;background:var(--pencil);color:var(--onPencil);text-decoration:none;font-weight:700;font-size:1.25rem;border-radius:4px;transition:transform .2s}
+.cta:hover{transform:translateY(-2px)}
+.links{margin-top:1.25rem;color:var(--muted);font-size:.9375rem}
+.links a{margin:0 .6rem;display:inline-block}
+.ai{max-width:56ch;margin:4rem auto 0;font-size:.875rem;color:var(--muted)}
+footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+[hidden]{display:none!important}
+
+@media (max-width:760px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  .ledger{transform:none}
+  .ev td:nth-child(2){width:auto}
+  .ev th:last-child,.ev td:last-child{display:block;border-bottom:0;padding-top:0}
+  .ev tr{display:grid;grid-template-columns:3rem 1fr;border-bottom:1px solid var(--rule)}
+  .ev tr:last-child{border-bottom:0}
+  .ev td,.ev th{border-bottom:0}
+  .ev td:last-child,.ev th:last-child{grid-column:2}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .js .rev,.js .hi2,.js .lede,.js .go{opacity:1!important;transform:none!important}
+  .js .hi2 .ul path,.js .chart .draw{stroke-dashoffset:0!important}
+  .js .ledger td.t span{transform:rotate(-8deg)!important}
+  .js .ledger .foot,.js .chart .late,.js .chart .ext.draw{opacity:1!important}
+  .inter .w{opacity:1}
+}
+@media print{
+  body{background:#fff;color:#000;font-size:11pt}
+  .progress,.quest,.go,.cta,.seal{display:none!important}
+  .js .rev,.js .hi2,.js .lede,.js .ledger .foot,.js .chart .late,.js .chart .ext.draw{opacity:1!important;transform:none!important}
+  .js .ledger td.t span{transform:rotate(-8deg)!important}
+  .js .chart .draw,.js .hi2 .ul path{stroke-dashoffset:0!important}
+  .hero{min-height:0;padding-block:0 24px}
+  .chap,.award,.evidence,.why,.inter{padding-block:24px;break-inside:avoid}
+  .inter,.why,.bign{background:none!important;color:#000!important}
+  .why h2{color:#000}
+  .inter .w{opacity:1!important}
+  .ledger{transform:none;box-shadow:none}
+  .js .wp[hidden]{display:block!important}
+  .js .tabs{display:none}
+  .links a[href^="mailto"]::after{content:""}
+  .links a[href^="http"]::after{content:" (" attr(href) ")"}
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+<main>
+<section class="wrap hero" id="hero" aria-label="Introduction">
+  <p class="meta">From <strong>Rui Gomes</strong> (V.N. Famalicão, PT)<span id="toLine" hidden><br>To <strong data-co></strong></span></p>
+  <h1 class="hi"><span class="sr" id="greetSr">Hi there,</span><span class="typed" id="typed" aria-hidden="true">Hi there,</span></h1>
+  <p class="hi2">here's the <span class="ul">audit trail<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 50 6, 120 18, 198 8"/></svg></span> behind my CV.</p>
+  <p class="lede">I'm Rui. I started in audit in 2013, checking other people's numbers. Today I'm CFO and Head of HR at a venture-backed startup, and through VCLevel I do the same job for smaller companies.</p>
+  <a class="go" href="#c1"><span class="c" aria-hidden="true">↓</span>Follow the trail</a>
+</section>
+
+<section class="chap wrap" id="c1">
+  <div class="chap-head rev">
+    <span class="when"><b>2013 – 2017</b>, Lisbon</span>
+    <h2>It started with reading the numbers.</h2>
+  </div>
+  <div class="split">
+    <div class="copy rev">
+      <p class="role">Financial audit at PwC, then Claranet and ITEN<a class="ref" href="#ev-A" aria-label="Evidence A">A</a></p>
+      <p class="where">Banks, insurers and venture capital funds</p>
+      <p>At PwC I audited some of the most regulated balance sheets there are, under IFRS. It gave me the habit I still work by: before you trust a number, find out where it came from.</p>
+      <p>At Claranet and ITEN I moved into the business itself: operational finance, reporting and change management. The new part was working with clients and other teams until a report changed what someone did on Monday.</p>
+      <ul class="stack"><li>IFRS audit</li><li>Reporting</li><li>Change management</li><li>Stakeholders</li></ul>
+    </div>
+    <div class="ledger rev" id="ledger" role="img" aria-label="Illustration: an audit working paper with five items ticked">
+      <h4><span>Working paper</span><span>Tested</span></h4>
+      <table>
+        <tr><td>Loans to customers</td><td class="n">agreed to source</td><td class="t"><span>✓</span></td></tr>
+        <tr><td>Technical provisions</td><td class="n">recalculated</td><td class="t"><span>✓</span></td></tr>
+        <tr><td>Fund valuations</td><td class="n">confirmed</td><td class="t"><span>✓</span></td></tr>
+        <tr><td>Operating budget</td><td class="n">owned</td><td class="t"><span>✓</span></td></tr>
+        <tr><td>Client relationship</td><td class="n">built</td><td class="t"><span>✓</span></td></tr>
+      </table>
+      <p class="foot">Note: a number only matters once someone acts on it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="chap wrap" id="c2">
+  <div class="chap-head rev">
+    <span class="when"><b>2018 – 2022</b>, Porto</span>
+    <h2>Then, the cases without a template.</h2>
+  </div>
+  <div class="split">
+    <div class="copy rev">
+      <p class="role">Associate Manager, Capital Markets &amp; Accounting Advisory, PwC</p>
+      <p class="where">A task force serving the whole of PwC Portugal</p>
+      <p>I went back to PwC to work on the analyses nobody in the firm had a precedent for yet.</p>
+      <p>I advised on IFRS accounting for transactions, ran cost of capital studies, supported prospectus and deal documentation, built valuation and impairment models, and did due diligence on hedge fund investments.</p>
+      <ul class="stack"><li>IFRS 3 / 9 / 15 / 16</li><li>Valuation</li><li>Impairment</li><li>Due diligence</li></ul>
+    </div>
+    <div class="bign rev" id="bign">
+      <div class="num"><span data-count="500" data-prefix="€" data-suffix="M">€500M</span><a class="ref" href="#ev-B" aria-label="Evidence B">B</a></div>
+      <p class="lbl">in transactions advised on under IFRS</p>
+      <div class="chips" id="chips"><span>IFRS 3</span><span>IFRS 9</span><span>IFRS 15</span><span>IFRS 16</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="inter" aria-label="Interlude">
+  <div class="wrap"><p id="inter">Every step moved me closer to where decisions get made. Then I stopped advising and took the seat.</p></div>
+</section>
+
+<section class="chap wrap" id="c3">
+  <div class="chap-head rev">
+    <span class="when"><b>2022 – now</b>, Porto</span>
+    <h2>From checking to owning.</h2>
+  </div>
+  <div class="split">
+    <div class="copy rev">
+      <p class="role">CFO &amp; Head of HR, Weezie<a class="ref" href="#ev-A" aria-label="Evidence A">A</a></p>
+      <p class="where">Venture-backed tech</p>
+      <p>For the first time the numbers weren't someone else's to review. I built the 12-month rolling forecast and the 36-month model, tied OKRs to unit economics, and set up quarterly board and investor reporting.</p>
+      <p>In 2024 I led our €3M seed round<a class="ref" href="#ev-C" aria-label="Evidence C">C</a>: the model, the data room and the investor materials. It added 18 months of runway and paid for the go-to-market and hiring plan.</p>
+      <p>I also run people. Salary bands, the hiring plan and the payroll forecast end up in the same spreadsheet, so it made sense to own all three.</p>
+      <ul class="stack"><li>FP&amp;A</li><li>Fundraising</li><li>Treasury</li><li>Compensation</li><li>Power BI</li></ul>
+    </div>
+    <div class="rev">
+      <div class="chart" id="chart">
+        <svg viewBox="0 0 400 234" role="img" aria-label="Illustrative runway: without the round, cash reaches zero around month 14; with the €3M seed it lasts 18 months longer.">
+          <line class="ax" x1="30" y1="190" x2="392" y2="190"/>
+          <line class="ax" x1="30" y1="22" x2="30" y2="190"/>
+          <text x="38" y="30">Cash</text>
+          <path class="ext draw" d="M107 150 L184 190"/>
+          <path class="cash draw" d="M30 110 L107 150 L107 44 L382 190"/>
+          <line x1="107" y1="38" x2="107" y2="190" stroke="var(--pencil)" stroke-width="1" stroke-dasharray="3 4" class="late"/>
+          <text class="late" x="115" y="36" style="fill:var(--ink);font-weight:700">€3M seed, 2024</text>
+          <circle class="zero late" cx="184" cy="190" r="4" style="stroke:var(--muted)"/>
+          <circle class="zero late" cx="382" cy="190" r="4" style="stroke:var(--ink)"/>
+          <text class="late" x="194" y="182">without the round</text>
+          <path class="brk late" d="M184 201 v6 H382 v-6"/>
+          <text class="ann late" x="283" y="228" text-anchor="middle">+18 months</text>
+        </svg>
+        <p class="cap">Illustrative shape, not company figures.</p>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="v"><span data-count="3" data-prefix="€" data-suffix="M">€3M</span><a class="ref" href="#ev-C" aria-label="Evidence C">C</a></div><div class="d">seed round raised, 2024</div></div>
+        <div class="kpi"><div class="v"><span data-count="34" data-prefix="−" data-suffix="%">−34%</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">time to close the month</div></div>
+        <div class="kpi"><div class="v"><span data-count="28" data-prefix="−" data-suffix="%">−28%</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">FX exposure, after a new liquidity policy</div></div>
+        <div class="kpi"><div class="v"><span data-count="20" data-suffix=" mo">20 mo</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">with zero team turnover</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="award wrap rev" aria-label="Award">
+  <div class="seal" aria-hidden="true">
+    <svg viewBox="0 0 150 150"><defs><path id="circ" d="M75,75 m-60,0 a60,60 0 1,1 120,0 a60,60 0 1,1 -120,0"/></defs>
+      <text><textPath href="#circ">TRANSPARENCY IN COMPENSATION · 2025 · COVERFLEX ·</textPath></text></svg>
+    <div class="core">✓</div>
+  </div>
+  <h3>Transparency in Compensation Award, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h3>
+  <p>Given by Coverflex for the company-wide compensation framework and salary bands I designed at Weezie.</p>
+</section>
+
+<section class="chap wrap" id="c4">
+  <div class="chap-head rev">
+    <span class="when"><b>Alongside</b>, with VCLevel<a class="ref" href="#ev-F" aria-label="Evidence F">F</a></span>
+    <h2>The same job, in other people's industries.</h2>
+  </div>
+  <div class="split">
+    <div class="copy rev">
+      <p class="role">Fractional finance, VCLevel</p>
+      <p class="where">Clinics, wine, food and drink, PR agencies, and others</p>
+      <p>VCLevel puts senior finance, operations and people work into companies that don't need a full-time CFO yet. I take the finance seat: the model, the pricing, the cash forecast, the conversation with the bank.</p>
+      <p>Most of these businesses have never had a finance person look at them from the inside. A clinic doesn't run like a SaaS company, and a winery that holds stock for three years has a cash problem no startup playbook covers. That's the part I like.</p>
+      <ul class="stack"><li>Viability models</li><li>Pricing</li><li>Cash forecasting</li><li>Working capital</li></ul>
+    </div>
+    <div class="sectors rev" id="sectors">
+      <div class="tabs" role="tablist" aria-label="Sectors">
+        <button role="tab" id="t-health" aria-controls="p-health" aria-selected="true">Health</button>
+        <button role="tab" id="t-wine" aria-controls="p-wine" aria-selected="false" tabindex="-1">Wine</button>
+        <button role="tab" id="t-fb" aria-controls="p-fb" aria-selected="false" tabindex="-1">Food &amp; drink</button>
+        <button role="tab" id="t-pr" aria-controls="p-pr" aria-selected="false" tabindex="-1">PR</button>
+        <button role="tab" id="t-other" aria-controls="p-other" aria-selected="false" tabindex="-1">Others</button>
+      </div>
+      <div class="wp" role="tabpanel" id="p-health" aria-labelledby="t-health">
+        <h4><span>Health &amp; clinics</span><span>Working paper</span></h4>
+        <p class="k">The question on the table</p>
+        <p class="q">Will a second clinic pay for itself before the loan does?</p>
+        <p class="k">What I build</p>
+        <p class="b">A viability model month by month, with the loan, the hiring and the tax in it, and a price per chair-hour the team can actually use.</p>
+        <p class="note">Start with what an hour costs.</p>
+      </div>
+      <div class="wp" role="tabpanel" id="p-wine" aria-labelledby="t-wine">
+        <h4><span>Wine</span><span>Working paper</span></h4>
+        <p class="k">The question on the table</p>
+        <p class="q">How much cash is ageing in the cellar, and what does one more year cost?</p>
+        <p class="k">What I build</p>
+        <p class="b">A stock and working capital model by vintage, so the bank conversation starts from the right number.</p>
+        <p class="note">Inventory is cash with a cork in it.</p>
+      </div>
+      <div class="wp" role="tabpanel" id="p-fb" aria-labelledby="t-fb">
+        <h4><span>Food &amp; drink</span><span>Working paper</span></h4>
+        <p class="k">The question on the table</p>
+        <p class="q">Which dishes and which locations actually pay the rent?</p>
+        <p class="k">What I build</p>
+        <p class="b">Margin by product and break-even by location, from the till data the business already has.</p>
+        <p class="note">Busy isn't the same as profitable.</p>
+      </div>
+      <div class="wp" role="tabpanel" id="p-pr" aria-labelledby="t-pr">
+        <h4><span>PR &amp; agencies</span><span>Working paper</span></h4>
+        <p class="k">The question on the table</p>
+        <p class="q">Which retainers are still profitable once the hours are counted?</p>
+        <p class="k">What I build</p>
+        <p class="b">Client profitability from timesheets and fees, and a pricing rule for the next proposal.</p>
+        <p class="note">The loudest client is rarely the best one.</p>
+      </div>
+      <div class="wp" role="tabpanel" id="p-other" aria-labelledby="t-other">
+        <h4><span>Startups &amp; small companies</span><span>Working paper</span></h4>
+        <p class="k">The question on the table</p>
+        <p class="q">How many months do we really have?</p>
+        <p class="k">What I build</p>
+        <p class="b">A 13-week cash forecast, a board pack that fits on one page, and a model investors can open without a guided tour.</p>
+        <p class="note">Same question as Weezie, smaller spreadsheet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quest wrap" id="quest">
+  <div class="split">
+    <div class="copy rev">
+      <span class="when"><b>A small side quest</b></span>
+      <h2 style="margin:.4rem 0 1.5rem">Can you survive 18 months?</h2>
+      <p>You're the CFO of a startup with eight months of cash. Six quarters, one decision each. Reach month 18 with money in the bank and a team that stayed.</p>
+      <p>It's a toy. Every scenario in it has been on my desk at some point.</p>
+      <div class="chess">I played federated chess for five years. Finance works the same way: the move that matters is usually three moves before the one everybody sees.</div>
+    </div>
+    <div class="rev">
+      <div class="device" id="device">
+        <div class="brand"><span><i></i>RUNWAY</span><span>CFO EDITION</span></div>
+        <div class="screen">
+          <p class="nogame">RUNWAY needs JavaScript.<br><br>The rest of the page doesn't.</p>
+          <div class="hud" aria-hidden="true">
+            <div>MONTH<b id="gMonth">0</b></div>
+            <div>CASH<b id="gCash">€1.20M</b></div>
+            <div>RUNWAY<b id="gRun">8 mo</b></div>
+          </div>
+          <div class="hud2" aria-hidden="true">
+            <div>REVENUE<b id="gRev">€40k/mo</b></div>
+            <div>TEAM<div class="bar" id="gTrustBar"><i id="gTrust" style="width:55%"></i></div></div>
+          </div>
+          <div class="msg" id="gMsg" aria-hidden="true"></div>
+          <p class="sr" id="gLive" aria-live="polite"></p>
+          <div class="opts" id="gOpts"></div>
+        </div>
+        <div class="keys" aria-hidden="true"><span>CASH</span><span>BURN</span><span>TEAM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="wrap">
+    <span class="when rev"><b id="whyLabel">What I'm looking for</b></span>
+    <h2 class="rev" id="whyTitle">Finance close to the decisions.</h2>
+    <p class="lead rev" id="whyText">A finance leadership role where the CFO is in the room when the plan gets made, and where people and pay are part of the job rather than someone else's department.</p>
+    <h3 class="rev">You'll probably want to talk to me if</h3>
+    <ul class="fit rev">
+      <li>you're raising in the next twelve months and the model isn't ready</li>
+      <li>closing the month still takes weeks</li>
+      <li>you're hiring faster than you can decide what to pay</li>
+      <li>your business isn't SaaS, and most finance people you meet have only seen SaaS</li>
+    </ul>
+  </div>
+</section>
+
+<section class="evidence wrap" id="evidence">
+  <span class="when rev"><b>Index of evidence</b></span>
+  <h2 class="rev">Where each number comes from.</h2>
+  <p class="intro rev">An audit trail is only useful if you can follow it. Each circled letter on this page points here.</p>
+  <table class="ev rev">
+    <thead><tr><th scope="col">Ref</th><th scope="col">Claim</th><th scope="col">Where to check</th></tr></thead>
+    <tbody>
+      <tr id="ev-A"><td>A</td><td>Roles and dates, 2013 to now</td><td><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></td></tr>
+      <tr id="ev-B"><td>B</td><td>€500M in transactions advised on under IFRS</td><td>PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</td></tr>
+      <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td data-ev="seed">Weezie, 2024. Details on request.</td></tr>
+      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero team turnover</td><td>Weezie management reporting. Before-and-after figures on request.</td></tr>
+      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td data-ev="award">Coverflex, 2025.</td></tr>
+      <tr id="ev-F"><td>F</td><td>Fractional finance work with VCLevel</td><td><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="close wrap">
+  <h2 class="rev">That's my trail. I'd like to hear where yours is going.</h2>
+  <p class="sub rev">Portuguese, English and Italian. Based in the north of Portugal, open to remote.</p>
+  <a class="cta rev" id="cta" href="mailto:ruimcamposgomes@gmail.com">Let's talk <span aria-hidden="true">↗</span></a>
+  <p class="links" id="links"><a data-link="email" href="mailto:ruimcamposgomes@gmail.com">ruimcamposgomes@gmail.com</a><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a><a data-link="cv" href="#" hidden>CV (PDF)</a></p>
+  <p class="ai">I built this page with AI, the same way I now build most client models: the tool writes the first draft, and I check every number. The index of evidence is there so you can check them too.</p>
+</section>
+</main>
+
+<footer class="wrap">
+  <span>Rui Gomes © 2026</span>
+  <span id="disclaim" hidden>A personal introduction, not affiliated with <span data-co></span>.</span>
+</footer>
+
+<script>
+/* ================= RUNWAY: game rules (no DOM) =================
+   Money in €k. A quarter burns 3 × (cost − revenue).
+   The raise in Q3 depends on preparation and traction.
+   Losing: cash runs out, or team trust drops below WALKOUT. */
+var Runway = (function(){
+  var START = {cash:1200, cost:190, rev:40, trust:55, ready:0};
+  var WALKOUT = 20, SEED = 3000, SMALL = 1500;
+  var EARLY = [
+    {q:"Month-end close takes three weeks. The board wants numbers by day five.", o:[
+      {t:"Automate the close", fx:{cash:-30, ready:1}, r:"Two rough months. Then the close takes eight days."},
+      {t:"Leave it, keep selling", fx:{rev:6}, r:"More deals. Board packs still late."}]},
+    {q:"Marketing wants to double spend next quarter.", o:[
+      {t:"Only where payback is under a year", fx:{cost:10, rev:8}, r:"Slower growth, but every euro comes back."},
+      {t:"Approve all of it", fx:{cost:35, rev:18, trust:5}, r:"Growth jumps. So does burn."}]},
+    {q:"Fundraising in six months. There's no data room.", o:[
+      {t:"Build it now", fx:{ready:1, trust:-5}, r:"Every contract and KPI in one place. The team hated the document chase."},
+      {t:"Ship the release first", fx:{rev:5}, r:"The release lands. The data room doesn't exist."}]},
+    {q:"Your biggest client will renew, bigger, on 90-day payment terms.", o:[
+      {t:"Accept the terms", fx:{rev:8, cash:-200}, r:"Bigger contract. The cash arrives a quarter late."},
+      {t:"Hold at 30 days", fx:{rev:-4}, r:"They renew, smaller. The cash is on time."}]},
+    {q:"An investor wants a 36-month model before a first call.", o:[
+      {t:"Build it properly", fx:{ready:1, cash:-5}, r:"Model done. You know your burn to the euro."},
+      {t:"Send the budget, close a deal instead", fx:{rev:4}, r:"Polite reply from the investor. The deal signs."}]}
+  ];
+  var LATE = [
+    {q:"Your best engineer has an offer 30% higher.", o:[
+      {t:"Salary bands for everyone", fx:{cost:8, trust:20}, r:"Pay is visible and fair. Nobody leaves."},
+      {t:"Counter-offer her quietly", fx:{cost:3, trust:-25}, r:"She stays. Three others find out."}]},
+    {q:"A third of revenue is in USD and the euro is moving.", o:[
+      {t:"Hedge and set an FX policy", fx:{cash:-15}, r:"The swing barely touches you."},
+      {t:"Let it ride", luck:{p:.5,
+        win:{fx:{cash:40}, r:"Lucky this time: +€40k."},
+        lose:{fx:{cash:-150}, r:"The dollar drops. €150k gone."}}}]},
+    {q:"A supplier offers 60-day terms for a 3% price rise.", o:[
+      {t:"Take the 60 days", fx:{cash:70, cost:3}, r:"Cash freed up now. Costs a little more every month."},
+      {t:"Pay on time, ask for a discount", fx:{cost:-4}, r:"Cheaper, and the cash leaves on schedule."}]},
+    {q:"The hiring plan says five people this quarter.", o:[
+      {t:"Hire two, three on milestones", fx:{cost:16, rev:4, trust:-5}, r:"The runway is safe. The team is stretched thin."},
+      {t:"Hire all five now", fx:{cost:42, rev:26, cash:-40, trust:10}, r:"Energy is high. So is payroll."}]},
+    {q:"Two launches in a row. The team is running on fumes.", o:[
+      {t:"Four-day weeks for the summer", fx:{rev:-3, trust:15}, r:"Output dips. People come back rested."},
+      {t:"Push through the quarter", fx:{rev:4, trust:-30}, r:"Targets hit. Two resignations on your desk."}]}
+  ];
+  function clone(o){var c={};for(var k in o)c[k]=o[k];return c}
+  function shuffle(a,rnd){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+  function apply(s,fx){for(var k in fx)s[k]+=fx[k];s.trust=Math.max(0,Math.min(100,s.trust))}
+  function net(s){return s.cost-s.rev}
+  function newGame(rnd){
+    var s=clone(START);s.m=0;s.q=0;s.over=null;s.raised=0;
+    s.deck=shuffle(EARLY,rnd).slice(0,2).concat(["raise"]).concat(shuffle(LATE,rnd).slice(0,3));
+    return s;
+  }
+  function choose(s,opt,rnd){
+    if(opt.luck){var out=rnd()<opt.luck.p?opt.luck.win:opt.luck.lose;apply(s,out.fx);return out.r}
+    apply(s,opt.fx);return opt.r;
+  }
+  function raise(s){
+    var traction=Math.max(0,Math.floor((s.rev-START.rev)/12)), score=s.ready+traction;
+    if(score>=2){s.cash+=SEED;s.raised=SEED;return "Seed closed: €3M.\nThe numbers did the talking."}
+    if(score===1){s.cash+=SMALL;s.raised=SMALL;return "Investors want more proof.\nA smaller round: €1.5M."}
+    return "No term sheet.\nThere wasn't enough to believe in yet.";
+  }
+  function quarter(s){
+    var n=net(s);
+    if(n>0&&s.cash<3*n){s.m+=Math.floor(Math.max(0,s.cash)/n);s.cash=0;s.over="cash";return false}
+    s.cash-=3*n;s.m+=3;s.q++;
+    if(s.trust<WALKOUT){s.over="trust";return false}
+    return true;
+  }
+  function runway(s){var n=net(s);return n<=0?Infinity:s.cash/n}
+  return {START:START,EARLY:EARLY,LATE:LATE,WALKOUT:WALKOUT,newGame:newGame,choose:choose,raise:raise,quarter:quarter,runway:runway,net:net,shuffle:shuffle};
+})();
+
+(function(){
+  var C = window.CONFIG||{}, qs = new URLSearchParams(location.search);
+  var co = (qs.get("co")||C.company||"").trim().slice(0,60);
+  var why = (qs.get("why")||C.why||"").trim().slice(0,600);
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function $(id){return document.getElementById(id)}
+
+  /* personalisation (textContent only) */
+  document.querySelectorAll("[data-co]").forEach(function(e){e.textContent=co});
+  if(co){
+    $("toLine").hidden=false; $("disclaim").hidden=false;
+    document.title="Rui Gomes, for "+co;
+    $("whyLabel").textContent="Why "+co;
+    $("whyTitle").textContent="Why "+co+".";
+  }
+  if(why) $("whyText").textContent=why;
+
+  /* links */
+  var cta=$("cta");
+  document.querySelectorAll('[data-link="email"]').forEach(function(a){if(C.email){a.href="mailto:"+C.email;a.textContent=C.email}else a.hidden=true});
+  if(C.email) cta.href="mailto:"+C.email+(co?"?subject="+encodeURIComponent("Hello from "+co):""); else cta.hidden=true;
+  document.querySelectorAll('[data-link="linkedin"]').forEach(function(a){if(C.linkedin)a.href=C.linkedin});
+  document.querySelectorAll('[data-link="vclevel"]').forEach(function(a){if(C.vclevel)a.href=C.vclevel});
+  document.querySelectorAll('[data-link="cv"]').forEach(function(a){if(C.cv){a.href=C.cv;a.hidden=false;a.setAttribute("download","")}});
+  var ev=C.evidence||{};
+  document.querySelectorAll("[data-ev]").forEach(function(td){
+    var url=ev[td.dataset.ev]; if(!url) return;
+    var a=document.createElement("a");a.href=url;a.rel="noopener";a.target="_blank";a.textContent="Public link";
+    td.appendChild(document.createTextNode(" "));td.appendChild(a);
+  });
+
+  /* typed greeting */
+  var hero=$("hero"), greet=co?"Hey "+co+",":"Hi there,", typed=$("typed");
+  $("greetSr").textContent=greet;
+  function finishType(){typed.classList.add("done");hero.classList.add("shown")}
+  if(reduce){typed.textContent=greet;finishType()}
+  else{typed.textContent="";var i=0;setTimeout(function t(){typed.textContent=greet.slice(0,++i);if(i<greet.length)setTimeout(t,70+Math.random()*60);else setTimeout(finishType,250)},400)}
+
+  /* progress + word highlight */
+  var bar=$("bar"), inter=$("inter");
+  inter.innerHTML=inter.textContent.split(" ").map(function(w){return '<span class="w">'+w+'</span>'}).join(" ");
+  var words=inter.querySelectorAll(".w");
+  function onScroll(){
+    var h=document.documentElement, p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+    bar.style.transform="scaleX("+p+")";
+    var r=inter.getBoundingClientRect(), vh=innerHeight;
+    var k=Math.max(0,Math.min(1,(vh*0.85-r.top)/(r.height+vh*0.35))), n=Math.round(k*words.length);
+    words.forEach(function(w,j){w.classList.toggle("lit",j<n)});
+  }
+  addEventListener("scroll",onScroll,{passive:true});
+
+  /* counters: the HTML already holds the final value; animation only replays it */
+  function count(el){
+    if(reduce)return;
+    var to=+el.dataset.count, pre=el.dataset.prefix||"", suf=el.dataset.suffix||"", t0=null;
+    requestAnimationFrame(function s(t){t0=t0||t;var k=Math.min(1,(t-t0)/1400),e=1-Math.pow(1-k,3);
+      el.textContent=pre+Math.round(to*e)+suf; if(k<1)requestAnimationFrame(s)});
+  }
+  function chips(){document.querySelectorAll("#chips span").forEach(function(s,k){setTimeout(function(){s.classList.add("on")},reduce?0:400+k*350)})}
+  document.querySelectorAll("#ledger td.t span").forEach(function(s,k){s.style.transitionDelay=(0.3+k*0.25)+"s"});
+  document.querySelectorAll("#chart .cash.draw").forEach(function(p){p.style.setProperty("--len",Math.ceil(p.getTotalLength()))});
+
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return; var el=e.target; el.classList.add("in"); io.unobserve(el);
+    el.querySelectorAll("[data-count]").forEach(count);
+    if(el.id==="bign")chips();
+  })},{threshold:.2,rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){io.observe(el)});
+  addEventListener("beforeprint",function(){document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){el.classList.add("in")})});
+  onScroll();
+
+  /* sector tabs */
+  var tabs=[].slice.call(document.querySelectorAll('#sectors [role="tab"]'));
+  function select(tab,focus){
+    tabs.forEach(function(t){var on=t===tab;t.setAttribute("aria-selected",on);t.tabIndex=on?0:-1;$(t.getAttribute("aria-controls")).hidden=!on});
+    if(focus)tab.focus();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener("click",function(){select(t)});
+    t.addEventListener("keydown",function(e){
+      var j=e.key==="ArrowRight"?i+1:e.key==="ArrowLeft"?i-1:e.key==="Home"?0:e.key==="End"?tabs.length-1:null;
+      if(j===null)return; e.preventDefault(); select(tabs[(j+tabs.length)%tabs.length],true);
+    });
+  });
+  select(tabs[0]);
+
+  /* ================= RUNWAY: interface ================= */
+  var S, msgEl=$("gMsg"), liveEl=$("gLive"), optEl=$("gOpts"), dev=$("device"), typing=null;
+  function fmt(k){k=Math.max(0,k);return k>=1000?"€"+(k/1000).toFixed(2)+"M":"€"+Math.round(k)+"k"}
+  function hud(){
+    $("gMonth").textContent=S.m;
+    $("gCash").textContent=fmt(S.cash);
+    var r=Runway.runway(S);
+    $("gRun").textContent=r===Infinity?"PROFIT":Math.min(99,Math.floor(Math.max(0,r)))+" mo";
+    $("gRev").textContent="€"+Math.round(S.rev)+"k/mo";
+    $("gTrust").style.width=S.trust+"%";
+    $("gTrustBar").classList.toggle("low",S.trust<35);
+  }
+  function show(text,opts){
+    clearTimeout(typing); optEl.innerHTML=""; liveEl.textContent=text.replace(/\n+/g," ");
+    function addOpts(){
+      opts.forEach(function(o){var b=document.createElement("button");b.type="button";b.textContent="▸ "+o[0];b.onclick=o[1];optEl.appendChild(b)});
+      var f=optEl.querySelector("button"); if(f&&S.started)f.focus({preventScroll:true});
+    }
+    if(reduce){msgEl.textContent=text;addOpts();return}
+    var i=0;(function t(){msgEl.textContent=text.slice(0,i+=2);if(i<text.length)typing=setTimeout(t,18);else addOpts()})();
+  }
+  function start(focus){
+    S=Runway.newGame(Math.random);S.started=!!focus;
+    dev.classList.remove("on"); hud();
+    show("RUNWAY\n\nYou have €1.2M and burn €150k a month.\nReach month 18 with cash left\nand a team that stayed.",[["Start",function(){S.started=true;dev.classList.add("on");turn()}]]);
+  }
+  function turn(){
+    var card=S.deck[S.q];
+    if(card==="raise"){
+      return show("Q3: time to raise.\nInvestors look at your numbers and your traction.",[["Open the data room",function(){resolve(Runway.raise(S))}]]);
+    }
+    var opts=Runway.shuffle(card.o,Math.random).map(function(o){return[o.t,function(){resolve(Runway.choose(S,o,Math.random))}]});
+    show("Q"+(S.q+1)+": "+card.q,opts);
+  }
+  function resolve(text){
+    var ok=Runway.quarter(S); hud();
+    if(!ok) return end();
+    show(text,[[S.q>=6?"See month 18":"Next quarter",S.q>=6?end:turn]]);
+  }
+  function end(){
+    var t;
+    if(S.over==="cash") t="OUT OF CASH IN MONTH "+S.m+".\n\nRunway ends a few moves\nbefore the money does.";
+    else if(S.over==="trust") t="MONTH "+S.m+". THE TEAM WALKED OUT.\n\nCash is half of runway.\nPeople are the other half.";
+    else{
+      var r=Runway.runway(S), left=r===Infinity?"profitable":Math.floor(r)+" months";
+      var verdict=r===Infinity?"Profitable. Investors will call you.":r>=12?"Room to plan the next round calmly.":r>=6?"You'll be raising again within months.":"You made it, with almost nothing left.";
+      t="MONTH 18. YOU MADE IT.\n\nCash "+fmt(S.cash)+" · runway "+left+"\nRevenue €"+Math.round(S.rev)+"k/mo · team "+S.trust+"%\n"+verdict+"\n\nIn 2024 I did this for real:\n€3M raised, 18 months added.";
+    }
+    var opts=[["Play again",function(){start(true)}]];
+    if(C.email&&!S.over) opts.push(["Talk to the real CFO",function(){location.href=cta.href}]);
+    show(t,opts);
+  }
+  start();
+})();
+</script>
+</body>
+</html>
