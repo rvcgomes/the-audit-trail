@@ -200,6 +200,7 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .wp .k{font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
 .wp .q{font-size:clamp(1.25rem,2.6vw,1.55rem);font-weight:700;line-height:1.25;letter-spacing:-.01em;margin:.2rem 0 1rem}
 .wp .b{margin:.2rem 0 0}
+.anon{font-size:.8125rem;color:var(--muted);margin:.75rem 0 0}
 .wp .note{font-family:var(--hand);color:var(--pencil);font-size:1.15rem;margin:1rem 0 0;line-height:1.3}
 
 /* game */
@@ -510,59 +511,69 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   <div class="split">
     <div class="copy rev">
       <p class="role">Fractional finance, VCLevel</p>
-      <p class="where">Clinics, wine, food and drink, PR agencies, and others</p>
+      <p class="where">Clinics and health practices, wine, food and drink, PR agencies, and others</p>
       <p>VCLevel puts senior finance, operations and people work into companies that don't need a full-time CFO yet. I take the finance seat: the model, the pricing, the cash forecast, the conversation with the bank.</p>
-      <p>Most of these businesses have never had a finance person look at them from the inside. A clinic doesn't run like a SaaS company, and a winery that holds stock for three years has a cash problem no startup playbook covers. That's the part I like.</p>
-      <ul class="stack"><li>Viability models</li><li>Pricing</li><li>Cash forecasting</li><li>Working capital</li></ul>
+      <p>Most of these businesses have never had a finance person look at them from the inside. The first question they bring is rarely the one that matters, so the work usually starts with a diagnosis.</p>
+      <ul class="stack"><li>Diagnosis</li><li>Pricing</li><li>Company structure</li><li>Break-even</li><li>EU funding</li></ul>
     </div>
     <div class="sectors rev" id="sectors">
-      <div class="tabs" role="tablist" aria-label="Sectors">
-        <button role="tab" id="t-health" aria-controls="p-health" aria-selected="true">Health</button>
-        <button role="tab" id="t-wine" aria-controls="p-wine" aria-selected="false" tabindex="-1">Wine</button>
-        <button role="tab" id="t-fb" aria-controls="p-fb" aria-selected="false" tabindex="-1">Food &amp; drink</button>
+      <div class="tabs" role="tablist" aria-label="Client cases">
+        <button role="tab" id="t-therapy" aria-controls="p-therapy" aria-selected="true">Therapy</button>
+        <button role="tab" id="t-physio" aria-controls="p-physio" aria-selected="false" tabindex="-1">Physio</button>
+        <button role="tab" id="t-dental" aria-controls="p-dental" aria-selected="false" tabindex="-1">Dental</button>
+        <button role="tab" id="t-clinic" aria-controls="p-clinic" aria-selected="false" tabindex="-1">New clinic</button>
         <button role="tab" id="t-pr" aria-controls="p-pr" aria-selected="false" tabindex="-1">PR</button>
-        <button role="tab" id="t-other" aria-controls="p-other" aria-selected="false" tabindex="-1">Others</button>
+        <button role="tab" id="t-wine" aria-controls="p-wine" aria-selected="false" tabindex="-1">Wine</button>
       </div>
-      <div class="wp" role="tabpanel" id="p-health" aria-labelledby="t-health">
-        <h4><span>Health &amp; clinics</span><span>Working paper</span></h4>
+      <div class="wp" role="tabpanel" id="p-therapy" aria-labelledby="t-therapy">
+        <h4><span>Therapy practice</span><span>Case 1 of 6</span></h4>
         <p class="k">The question on the table</p>
-        <p class="q">Will a second clinic pay for itself before the loan does?</p>
-        <p class="k">What I build</p>
-        <p class="b">A viability model month by month, with the loan, the hiring and the tax in it, and a price per chair-hour the team can actually use.</p>
-        <p class="note">Start with what an hour costs.</p>
+        <p class="q">“We need to bill more.”</p>
+        <p class="k">What the numbers showed</p>
+        <p class="b">Billing wasn't the problem. Diary occupancy and the price per session were. We started with a performance diagnosis, not a sales push.</p>
+        <p class="note">Know what an hour is worth first.</p>
       </div>
-      <div class="wp" role="tabpanel" id="p-wine" aria-labelledby="t-wine">
-        <h4><span>Wine</span><span>Working paper</span></h4>
+      <div class="wp" role="tabpanel" id="p-physio" aria-labelledby="t-physio">
+        <h4><span>Physiotherapy clinic</span><span>Case 2 of 6</span></h4>
         <p class="k">The question on the table</p>
-        <p class="q">How much cash is ageing in the cellar, and what does one more year cost?</p>
-        <p class="k">What I build</p>
-        <p class="b">A stock and working capital model by vintage, so the bank conversation starts from the right number.</p>
-        <p class="note">Inventory is cash with a cork in it.</p>
+        <p class="q">Sole trader or a company, before the first patient?</p>
+        <p class="k">What the numbers showed</p>
+        <p class="b">The right answer came from the three-year plan, not from the tax saved in year one.</p>
+        <p class="note">Choose the structure for year three.</p>
       </div>
-      <div class="wp" role="tabpanel" id="p-fb" aria-labelledby="t-fb">
-        <h4><span>Food &amp; drink</span><span>Working paper</span></h4>
+      <div class="wp" role="tabpanel" id="p-dental" aria-labelledby="t-dental">
+        <h4><span>Dental clinic with insurer agreements</span><span>Case 3 of 6</span></h4>
         <p class="k">The question on the table</p>
-        <p class="q">Which dishes and which locations actually pay the rent?</p>
-        <p class="k">What I build</p>
-        <p class="b">Margin by product and break-even by location, from the till data the business already has.</p>
-        <p class="note">Busy isn't the same as profitable.</p>
+        <p class="q">Are our prices right for agreement patients?</p>
+        <p class="k">What the numbers showed</p>
+        <p class="b">The prices assumed about seven times as many agreement patients as the clinic actually had. No-shows were a second leak in the margin.</p>
+        <p class="note">Check the data before the price.</p>
+      </div>
+      <div class="wp" role="tabpanel" id="p-clinic" aria-labelledby="t-clinic">
+        <h4><span>Opening a first clinic</span><span>Case 4 of 6</span></h4>
+        <p class="k">The question on the table</p>
+        <p class="q">What do we need to know before signing the lease?</p>
+        <p class="k">What the numbers showed</p>
+        <p class="b">Two numbers: where break-even is, and how many months you can last until you reach it. For a doctor moving back from abroad to open outside the big cities, add the incentives for the interior and a company that can take in partners later.</p>
+        <p class="note">The lease is the first big decision.</p>
       </div>
       <div class="wp" role="tabpanel" id="p-pr" aria-labelledby="t-pr">
-        <h4><span>PR &amp; agencies</span><span>Working paper</span></h4>
+        <h4><span>PR agency, eight months old</span><span>Case 5 of 6</span></h4>
         <p class="k">The question on the table</p>
-        <p class="q">Which retainers are still profitable once the hours are counted?</p>
-        <p class="k">What I build</p>
-        <p class="b">Client profitability from timesheets and fees, and a pricing rule for the next proposal.</p>
-        <p class="note">The loudest client is rarely the best one.</p>
+        <p class="q">The partners still invoice as freelancers. When do they become a company?</p>
+        <p class="k">What the numbers showed</p>
+        <p class="b">When to incorporate, and how to pay out profit without starving growth. At this stage a bank of hours worked better for clients than a monthly retainer.</p>
+        <p class="note">Sell hours before retainers.</p>
       </div>
-      <div class="wp" role="tabpanel" id="p-other" aria-labelledby="t-other">
-        <h4><span>Startups &amp; small companies</span><span>Working paper</span></h4>
+      <div class="wp" role="tabpanel" id="p-wine" aria-labelledby="t-wine">
+        <h4><span>Small premium wine producer</span><span>Case 6 of 6</span></h4>
         <p class="k">The question on the table</p>
-        <p class="q">How many months do we really have?</p>
-        <p class="k">What I build</p>
-        <p class="b">A 13-week cash forecast, a board pack that fits on one page, and a model investors can open without a guided tour.</p>
-        <p class="note">Same question as Weezie, smaller spreadsheet.</p>
+        <p class="q">Can we apply for EU funding?</p>
+        <p class="k">What the numbers showed</p>
+        <p class="b">The application asked for management numbers the business had never had. Building them was the real gain, whatever the grant decided.</p>
+        <p class="note">The form was the business plan nobody had written.</p>
       </div>
+      <p class="anon">Real cases, anonymised: no names, no places, and ratios rather than amounts.</p>
     </div>
   </div>
 </section>
