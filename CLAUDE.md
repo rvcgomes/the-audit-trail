@@ -41,12 +41,13 @@ O Node não está no PATH: está em `C:\Users\Rui\tools\node\node.exe` (em Git B
 ## Por fazer (conteúdo que só o Rui pode dar)
 
 - Autorização dos clientes para os seis casos VCLevel publicados (terapia, fisioterapia, dentária, nova clínica, agência de PR, vinho) e um caso real de Food & drink, se houver.
-- O papel do Rui na VCLevel (fundador, sócio, consultor…).
 - O CV em PDF (`CONFIG.cv`).
 - Confirmar que os −34% e −28% da Weezie podem ser públicos.
 - A dificuldade dos jogos para pessoas reais, sobretudo o labirinto e o CASH FLOW no telemóvel.
 
 ## Evidências já confirmadas (26.09.2026)
+
+- O Rui é sócio fundador da VCLevel ("founding partner" na página).
 
 - Casos VCLevel: vêm do Rui, anonimizados com as regras dele (sem nomes nem locais, rácios em vez de valores, o foco é a lição). Não acrescentar pormenores que identifiquem o cliente.
 - A ronda de €3M é tratada como "seed" (confirmado pelo Rui).
