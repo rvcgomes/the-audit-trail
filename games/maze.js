@@ -230,7 +230,7 @@ var Maze = (function(){
     if(s.over || s.won) return s;
     var P = s.player, pr = (inp && inp.press) || {};
     for(var i=0;i<4;i++) if(pr[DIRS[i]]) P.want = DIRS[i];
-    if(inp && inp.dir) P.want = inp.dir;
+    if(inp && inp.dir && !P.want) P.want = inp.dir;
     s.t += dt;
     if(s.phase !== "play"){
       s.wait -= dt;

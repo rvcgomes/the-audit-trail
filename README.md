@@ -16,13 +16,12 @@ The name and the text travel in the link, so every company sees its own version 
 
 ## What to edit in `index.html`
 
-The `CONFIG` block at the top:
+The `CONFIG` block at the top (the evidence links are written straight into the index of evidence):
 
 | Key | What it does |
 |---|---|
 | `email`, `linkedin`, `vclevel` | Contact and evidence links |
 | `cv` | Path to a CV PDF committed next to `index.html`. Empty = no CV link. |
-| `evidence.seed`, `evidence.award` | Public links for the seed round and the Coverflex award. Empty = "on request". |
 
 ## The handheld
 
@@ -32,7 +31,7 @@ Seven cartridges on one console, all original art and music (no third-party char
 |---|---|---|---|
 | THE AUDIT TRAIL | `games/maze.js` | `games/carts/maze.js` | Maze. Tick every line while four findings chase you; a source document turns the tables for a few seconds. |
 | RUNWAY RUN | `games/runner.js` | `games/carts/classic.js` | Runner. Tap to jump, hold to jump higher; fill the data room before the seed in month 6; two gates ask a question. |
-| CASH FLOW | `games/blocks.js` | `games/carts/blocks.js` | Falling blocks. + is money in, − is money out; each full row closes a week; payroll is due every 9 s; a red week pays a fee. |
+| CASH FLOW | `games/blocks.js` | `games/carts/blocks.js` | Falling blocks. + is money in, − is money out; each full row closes a week; payroll is due every 13 s; a red week pays a fee. |
 | SPOT THE ERROR | `games/spot.js` | `games/carts/spot.js` | Ledger lines scroll up; tap the wrong ones (sums, VAT, dates, duplicates). False flags and misses cost credibility. |
 | CLOSE THE MONTH | `games/lanes.js` | `games/carts/lanes.js` | Lane crossing. Dodge the deadlines, ride the sign-offs, close five tasks. |
 | BOARD FIGHT | `games/fight.js` | `games/carts/classic.js` | Hold to charge, let go inside the zone; let go when the boss shows `!`. |
@@ -51,6 +50,7 @@ node tests/maze-bots.js
 node tests/blocks-bots.js
 node tests/spot-bots.js
 node tests/lanes-bots.js
+node tests/input.js          # real keyboard, touch and swipe in headless Chrome; needs `python -m http.server 8765`
 ```
 
 Each plays hundreds of seeded games with bots of different skill and fails unless skill decides the result (a careful player wins, careless play loses, no game gets stuck). The arcade tests also draw every frame of a few demo games against a fake canvas.

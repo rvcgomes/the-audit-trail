@@ -7,7 +7,7 @@
 <title>Link builder</title>
 <style>
 :root{--paper:#E8EEF1;--ink:#15263A;--muted:#566777;--rule:#C6D5DE;--pencil:#C2372C;--card:#F4F7F9}
-@media (prefers-color-scheme:dark){:root{--paper:#122130;--ink:#E6EDF2;--muted:#93A5B4;--rule:#22364A;--pencil:#F0685B;--card:#172A3B}}
+@media (prefers-color-scheme:dark){:root{--paper:#122130;--ink:#E6EDF2;--muted:#93A5B4;--rule:#22364A;--pencil:#F0685B;--card:#172A3B}button{color:#0C1722!important}}
 body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 main{max-width:640px;margin:0 auto;padding:48px 16px}
 h1{font-size:1.5rem;margin:0 0 .25rem}
@@ -35,7 +35,7 @@ a.b{background:none;color:var(--pencil)}
   <div class="row"><button type="button" id="copy">Copy link</button><a class="b" id="open" target="_blank" rel="noopener">Open</a></div>
 </main>
 <script>
-var base = new URL("./", location.href).href;
+var base = "https://rvcgomes.github.io/the-audit-trail/";
 function build(){
   var q = new URLSearchParams(), co = document.getElementById("co").value.trim(), why = document.getElementById("why").value.trim();
   if (co) q.set("co", co);

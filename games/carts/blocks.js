@@ -6,7 +6,7 @@
    that week is heading: amber in the black, orange in the red. The well
    ends at y 107 so the demo band never covers it. */
 (function(){
-  if(!window.RUNWAY) return;
+  if(!window.RUNWAY || !window.Blocks) return;
 
   var X0 = 8, Y0 = 3, CELL = 8, PX = 96, SP = null;
   function sprites(g){
@@ -78,14 +78,14 @@
   RUNWAY.register({
     id:"blocks", order:3, name:"CASH FLOW", sub:"stack", countdown:1.2, canvas:"swipe", real:false,
     help:"◀ ▶ move · ▲ rotate · ▼ faster · A drop. Close rows with more + than −.",
-    say:"Cash Flow. Falling blocks: left and right move, up or a tap rotates, down drops faster, A drops. Plus blocks are money in, minus blocks are money out. Each full row closes a week, and a week with more minus than plus pays an overdraft fee. Payroll is due every 9 seconds. Close 13 weeks.",
+    say:"Cash Flow. Falling blocks: left and right move, up or a tap rotates, down drops faster, A drops. Plus blocks are money in, minus blocks are money out. Each full row closes a week, and a week with more minus than plus pays an overdraft fee. Payroll is due every 13 seconds. Close 13 weeks.",
     create:function(){return Blocks.create()},
     step:function(s, dt, inp){
       var p = inp.press || {}, sw = inp.swiped;
       if(sw) inp.swiped = null;
       Blocks.step(s, dt, {dir:inp.dir, left:p.left, right:p.right,
-        rotate:p.up || (p.a && !inp.down),
-        drop:(p.a && inp.down) || (p.down && sw === "down" && inp.dir !== "down")});
+        rotate:p.up || p.tap,
+        drop:(p.a && !p.tap) || (p.down && sw === "down" && inp.dir !== "down")});
     },
     demo:function(s, mem){return demoBot(s, mem)},
     mood:function(s){
@@ -103,13 +103,13 @@
       if(e.type === "drop") g.sfx("drop");
       else if(e.type === "line"){
         g.sfx("line");
-        var n = e.rows.length, first = Math.min(Blocks.WEEKS, s.weeks - n + 1);
-        var head = e.bonus ? "BATCH RUN" : n > 1 ? "WEEKS " + first + "–" + e.week : "WEEK " + e.week;
+        var n = e.rows.length, first = Math.min(e.week, s.weeks - n + 1), span = first < e.week ? "Weeks " + first + "–" + e.week : "Week " + e.week;
+        var head = e.bonus ? "BATCH RUN" : span.toUpperCase();
         g.banner(head + " " + signed(e.net), 1.1);
         var detail = "+" + e.ins + " in, −" + e.outs + " out";
-        if(e.fee) g.line((n > 1 ? "Weeks " + first + "–" + e.week : "Week " + e.week) + " in the red: " + detail + ", €" + e.fee + "k overdraft fee.");
+        if(e.fee) g.line(span + " in the red: " + detail + ", €" + e.fee + "k overdraft fee" + (e.bonus ? ", batch bonus on the rest" : "") + ".");
         else if(e.bonus) g.line("Batch run: " + detail + ", ×" + Blocks.BATCH + " on the net. " + signed(e.net) + ".");
-        else g.line((n > 1 ? "Weeks " + first + "–" + e.week : "Week " + e.week) + ": " + detail + " = " + signed(e.net) + ".");
+        else g.line(span + ": " + detail + " = " + signed(e.net) + ".");
       }
       else if(e.type === "good"){g.flash("gV2", true); g.float(signed(e.net), X0 + 30, ry, C.lcd)}
       else if(e.type === "bad"){

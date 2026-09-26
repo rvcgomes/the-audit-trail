@@ -66,7 +66,7 @@ const g = { ctx: fakeCtx, W: 192, H: 120, COL, FONT: "10px VT323, monospace", BI
   text: noop, sprite: () => ({ width: 8, height: 8 }), overlay: noop, fmt: String, sign: String, say: noop, flash: noop, now: () => 0,
   float: noop, banner: noop, line: noop, sfx: noop };
 const RUNWAY = { register: c => { cart = c; } };
-const cctx = { Maze, RUNWAY, window: { RUNWAY }, Math };
+const cctx = { Maze, RUNWAY, window: { RUNWAY, Maze }, Math };
 try {
   vm.runInNewContext(read("carts/maze.js"), cctx);
   if (!cart) throw new Error("the cartridge did not register");

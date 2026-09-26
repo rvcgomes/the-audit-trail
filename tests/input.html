@@ -1,0 +1,130 @@
+<!doctype html><meta charset="utf-8"><title>RUNWAY input test</title>
+<!-- Loaded by tests/input.js in headless Chrome (real time). Plays the page with real
+     keyboard, pointer and swipe events and writes PASS/FAIL lines into #out. -->
+<iframe id="f" src="../index.html?debug" width="520" height="900"></iframe>
+<pre id="out">pending</pre>
+<script>
+var R = [];
+function log(name, ok, info){R.push((ok ? "PASS " : "FAIL ") + name + (info ? "  " + info : ""))}
+function sleep(ms){return new Promise(function(r){setTimeout(r, ms)})}
+function run(){
+  var w = f.contentWindow, d = w.document, dev = d.getElementById("device"), cv = d.getElementById("gCanvas");
+  function key(type, k, rep){dev.dispatchEvent(new w.KeyboardEvent(type, {key:k, bubbles:true, repeat:!!rep}))}
+  async function tap(k, ms){key("keydown", k); await sleep(ms || 60); key("keyup", k)}
+  function btn(text){return [].slice.call(d.querySelectorAll("#gOpts button")).filter(function(b){return b.textContent.indexOf(text) >= 0})[0]}
+  function S(){return w.RUNWAY_DEBUG.state()}
+  function menuCount(){return d.querySelectorAll("#gOpts button").length}
+  function pd(el, t, x, y){el.dispatchEvent(new w.PointerEvent(t, {bubbles:true, clientX:x || 0, clientY:y || 0, pointerId:1}))}
+  async function open(name){var b = btn(name); if(!b) return false; b.click(); await sleep(1500); return true}
+  async function menu(){d.getElementById("gB").click(); await sleep(150)}
+  return (async function(){
+    d.documentElement.style.scrollBehavior = "auto";
+
+    /* 1. starting a game before the console has booted: boot must not take over */
+    w.scrollTo(0, 0); await sleep(300);
+    var early = btn("RUNWAY RUN"); if(early) early.click(); await sleep(200);
+    dev.scrollIntoView({block:"start", behavior:"instant"}); await sleep(2600);
+    log("boot does not replace a game already started", menuCount() === 0 && /RUNWAY RUN/.test(d.getElementById("gCart").textContent), "menu buttons " + menuCount());
+    await menu();
+    log("menu has seven cartridges", menuCount() === 7);
+
+    /* 2. runner: jump, quick tap, pause during READY */
+    await open("RUNWAY RUN");
+    var ta = S().t; await sleep(400);
+    log("runner: clock advances", S().t > ta, ta.toFixed(2) + " → " + S().t.toFixed(2));
+    key("keydown", " "); await sleep(100); var air = !S().ground; key("keyup", " ");
+    log("runner: Space jumps", air);
+    await sleep(700);
+    key("keydown", " "); key("keyup", " "); await sleep(80);
+    log("runner: a tap inside one frame still jumps", !S().ground);
+    await menu(); b = btn("RUNWAY RUN"); b.click(); await sleep(100);
+    w.scrollTo(0, 0); await sleep(1800); var tr = S().t;
+    dev.scrollIntoView({block:"start", behavior:"instant"}); await sleep(300);
+    log("runner: pauses if scrolled away during READY", tr === 0 && S().t === 0, "t " + tr);
+    await menu();
+
+    /* 3. fight: hold charges */
+    await open("BOARD FIGHT"); await sleep(1200);
+    S().next = 5; key("keydown", " "); await sleep(500); var ch = S().charging, pw = S().power; key("keyup", " "); await sleep(60);
+    log("fight: hold charges, release strikes", ch && pw > 20 && !S().charging, "power " + Math.round(pw));
+    await menu();
+
+    /* 4. maze: arrows, d-pad, and a turn pressed while another arrow is held */
+    await open("THE AUDIT TRAIL");
+    var p0 = JSON.stringify(S().player); key("keydown", "ArrowLeft"); await sleep(500); key("keyup", "ArrowLeft");
+    log("maze: arrow moves the auditor", JSON.stringify(S().player) !== p0);
+    var rt = d.querySelector('[data-dir="right"]'), q0 = JSON.stringify(S().player);
+    pd(rt, "pointerdown"); await sleep(400); pd(rt, "pointerup");
+    log("maze: d-pad ▶ held moves the auditor", JSON.stringify(S().player) !== q0);
+    await menu(); await open("THE AUDIT TRAIL");
+    key("keydown", "ArrowLeft"); await sleep(40); key("keydown", "ArrowUp"); await sleep(50); key("keyup", "ArrowUp");
+    var turned = false;
+    for(var k=0;k<30 && !turned;k++){await sleep(40); if(S().player.dir === "up" || S().player.face === "up") turned = true}
+    key("keyup", "ArrowLeft");
+    log("maze: a turn tapped while holding another arrow is kept", turned, JSON.stringify(S().player));
+    await menu();
+
+    /* 5. blocks: keys, canvas tap rotates, A drops, keys released when focus leaves */
+    await open("CASH FLOW");
+    var x0 = S().piece.x; await tap("ArrowLeft"); await sleep(40);
+    log("blocks: ← moves the piece", S().piece.x === x0 - 1, x0 + " → " + S().piece.x);
+    var r0 = S().piece.r, rc = cv.getBoundingClientRect(), cx = rc.left + rc.width/2, cy = rc.top + rc.height/2;
+    pd(cv, "pointerdown", cx, cy); pd(cv, "pointerup", cx, cy); await sleep(60);
+    log("blocks: a tap on the screen rotates", S().piece && S().piece.r !== r0, r0 + " → " + (S().piece && S().piece.r));
+    var n0 = S().pieces, A = d.getElementById("gA");
+    pd(A, "pointerdown"); pd(A, "pointerup"); await sleep(400);
+    log("blocks: A hard-drops", S().pieces > n0, n0 + " → " + S().pieces);
+    key("keydown", "ArrowRight"); await sleep(60);
+    /* headless windows never have focus, so send the focusout a real click elsewhere would cause */
+    dev.dispatchEvent(new w.FocusEvent("focusout", {bubbles:true, relatedTarget:null})); await sleep(50);
+    var xs = S().piece ? S().piece.x : -1, ts = S().t; await sleep(600);
+    log("blocks: focus leaving the console releases keys and pauses", S().t === ts && (!S().piece || S().piece.x === xs), "t " + ts.toFixed(2) + " → " + S().t.toFixed(2));
+    dev.focus(); await menu();
+
+    /* 6. spot: tapping a row flags it */
+    await open("SPOT THE ERROR"); await sleep(2500);
+    var row = S().rows.filter(function(r){return r.y > 20 && r.y < 100 && !r.flagged && !r.judged && !r.copied})[0], rs = cv.getBoundingClientRect();
+    if(row){
+      var ry = rs.top + (row.y + 6)*rs.height/120, f0 = S().found + S().falses;
+      pd(cv, "pointerdown", rs.left + rs.width/2, ry); pd(cv, "pointerup", rs.left + rs.width/2, ry); await sleep(80);
+      log("spot: a tap flags the tapped row", row.flagged && S().found + S().falses === f0 + 1, "'" + row.text + "'");
+    }else log("spot: a tap flags the tapped row", false, "no row on screen");
+    await menu();
+
+    /* 7. lanes: key hop and swipe hop */
+    await open("CLOSE THE MONTH");
+    var l0 = S().row; await tap("ArrowUp"); await sleep(200);
+    log("lanes: ▲ hops one row", S().row === l0 - 1 || S().dead, l0 + " → " + S().row);
+    await menu(); await open("CLOSE THE MONTH");
+    var l1 = S().row, rl = cv.getBoundingClientRect(), sx = rl.left + rl.width/2, sy = rl.top + rl.height*0.8;
+    pd(cv, "pointerdown", sx, sy); pd(cv, "pointerup", sx, sy - 60); await sleep(200);
+    log("lanes: swipe up hops", S().row === l1 - 1 || S().dead, l1 + " → " + S().row);
+    key("keydown", "Escape"); await sleep(100);
+    log("Esc returns to the menu", menuCount() === 7);
+
+    /* 8. decisions: ending, receipt, short mail link, held keys can't restart */
+    await open("DECISIONS");
+    for(var i=0;i<8;i++){var o = d.querySelector("#gOpts button"); if(!o || /PLAY AGAIN/.test(o.textContent)) break; o.click(); await sleep(40)}
+    var again = btn("PLAY AGAIN"); if(again) again.click(); await sleep(50);
+    log("an ending ignores clicks for a moment (held A or Enter)", !!btn("PLAY AGAIN") && !d.getElementById("gReceipt").hidden);
+    var href = d.getElementById("gSend").href;
+    log("receipt mail link is short", /^mailto:/.test(href) && href.length < 700, href.length + " chars");
+    await menu();
+
+    /* 9. demo after 10 s idle; any key plays the cartridge on screen */
+    d.activeElement && d.activeElement.blur(); await sleep(10800);
+    log("demo starts after 10 s idle", /DEMO/.test(d.getElementById("gMsg").textContent));
+    var showing = d.getElementById("gCart").textContent; key("keydown", "ArrowDown"); await sleep(1500);
+    log("a key during the demo plays that cartridge", d.getElementById("gCart").textContent === showing && menuCount() === 0 && !/DEMO/.test(d.getElementById("gMsg").textContent), showing);
+    await menu();
+
+    /* 10. a returning visitor with sound on sees ♪ ON */
+    w.localStorage.setItem("runway-sound", "on");
+    f.onload = null; w.location.reload(); await sleep(2500);
+    var w2 = f.contentWindow, lbl = w2.document.getElementById("gSnd");
+    log("sound button shows the saved state", lbl.textContent.indexOf("ON") >= 0 && lbl.getAttribute("aria-pressed") === "true", lbl.textContent);
+    w2.localStorage.removeItem("runway-sound");
+  })().catch(function(e){log("harness error", false, e.message)});
+}
+f.onload = function(){f.onload = null; run().then(function(){out.textContent = R.join("\n")})};
+</script>

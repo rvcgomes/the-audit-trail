@@ -114,6 +114,7 @@ var Spot = (function(){
 
   function flag(s, row){
     if(!row || row.flagged || row.judged) return false;
+    if(!row.err && row.copied){ev(s, "hint", "That's the original. Flag the copy further down.", row); return false}
     row.flagged = true;
     if(row.err){s.found++; ev(s, "found", "FOUND", row)}
     else{s.falses++; s.cred--; ev(s, "false", row.copied ? "The first booking is fine. Flag the copy." : "That line was right.", row)}

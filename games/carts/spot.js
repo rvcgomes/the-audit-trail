@@ -2,7 +2,7 @@
    Drawing and wording only; the rules are in spot.js.
    A light-gun game where the target is a ledger: tap a wrong line to flag it. */
 (function(){
-  if(!window.RUNWAY) return;
+  if(!window.RUNWAY || !window.Spot) return;
 
   var SP = null;
   function sprites(g){
@@ -45,6 +45,7 @@
     onEvent:function(e, g, s){
       var C = g.COL;
       if(e.type === "found"){g.sfx("good"); g.float("FOUND", 150, e.y, C.lcd); g.line("Found. " + e.why); g.flash("gV1", true)}
+      else if(e.type === "hint"){g.sfx("blip"); g.line(e.text)}
       else if(e.type === "false"){g.sfx("bad"); g.fx.shake = 0.2; g.float("−1", 170, e.y, C.hot); g.line(e.text + (e.why ? " " + e.why : "")); g.flash("gV4", false)}
       else if(e.type === "miss"){g.sfx("hurt"); g.fx.shake = 0.2; g.float("MISSED", 150, Spot.TOP + 8, C.hot); g.line("Missed. " + e.why); g.flash("gV2", false)}
       else if(e.type === "move") g.sfx("blip");

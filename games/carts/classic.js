@@ -35,12 +35,12 @@
     };
   }
 
-  RUNWAY.register({
+  if(window.Runner) RUNWAY.register({
     id:"runner", order:2, name:"RUNWAY RUN", sub:"jump", countdown:1.4, canvas:"press",
     help:"Tap A to jump, hold for higher. Grab the papers: they fill the data room.",
     say:"Runway Run. Tap A or Space to jump, hold to jump higher. Collect the papers to fill the data room before month 6.",
     create:function(){return Runner.create()},
-    step:function(s, dt, inp){Runner.step(s, dt, inp.down)},
+    step:function(s, dt, inp){Runner.step(s, dt, inp.down || !!inp.press.a)},
     demo:function(s, mem){if(!mem.bot) mem.bot = runnerBot(); return mem.bot(s, mem)},
     mood:function(s){return Math.max(0, Math.min(1, 1 - Runner.runway(s)/8))},
     hud:function(s){
@@ -112,12 +112,12 @@
       return inp;
     };
   }
-  RUNWAY.register({
+  if(window.Fight) RUNWAY.register({
     id:"fight", order:6, name:"BOARD FIGHT", sub:"charge", countdown:0, canvas:"press",
     help:"Hold A to charge, let go inside the zone. When the boss shows !, let go.",
     say:"Board Fight. Hold A or Space to charge, release inside the marked zone. Release when the boss shows an exclamation mark.",
     create:function(){return Fight.create()},
-    step:function(s, dt, inp){Fight.step(s, dt, inp.down)},
+    step:function(s, dt, inp){Fight.step(s, dt, inp.down || !!inp.press.a)},
     demo:function(s, mem){if(!mem.bot) mem.bot = fightBot(); return mem.bot(s, mem)},
     mood:function(s){return Math.max(0, Math.min(1, 1 - s.runway/Fight.RUNWAY + (s.round >= 3 ? 0.3 : 0)))},
     hud:function(s){
@@ -182,7 +182,7 @@
 
   /* ---------------- DECISIONS (text) ---------------- */
   function fmtK(k){k = Math.max(0, k); return k >= 1000 ? "€" + (k/1000).toFixed(2) + "M" : "€" + Math.round(k) + "k"}
-  RUNWAY.register({
+  if(window.Decisions) RUNWAY.register({
     id:"decisions", order:7, name:"DECISIONS", sub:"think", type:"text",
     start:function(ui){
       var D = Decisions.newGame(Math.random);

@@ -8,7 +8,7 @@ var Music = (function(){
   /* 16th-note steps; "." is a rest */
   var THEMES = {
     menu:{bpm:112, key:0,
-      lead:"E5 . G5 . C6 . G5 . A5 . G5 . E5 . D5 . C5 . D5 . E5 . G5 . E5 . D5 . C5 . . . G4 .",
+      lead:"E5 . G5 . C6 . G5 . A5 . G5 . E5 . D5 . C5 . D5 . E5 . G5 . E5 . D5 . C5 . G4 .",
       bass:"C3 . . . C3 . . . A2 . . . A2 . . . F2 . . . F2 . . . G2 . . . G2 . . .",
       drum:"k . h . s . h . k . h . s . h h k . h . s . h . k . h . s . h ."},
     runner:{bpm:140, key:2,
@@ -81,6 +81,7 @@ var Music = (function(){
   function stepDur(th){return 60/th.bpm/4/(1 + 0.3*tension)}
   function sched(){
     if(!ac || !cur) return;
+    if(nextT < ac.currentTime) nextT = ac.currentTime + 0.02;
     while(nextT < ac.currentTime + 0.12){
       var i = step % cur.len, d = stepDur(cur), l = darken(cur.lead[i], cur), b = cur.bass[i], k = cur.drum[i];
       if(l != null) voice("square", hz(l), nextT, d*1.6, 0.16);

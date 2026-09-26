@@ -3,7 +3,7 @@
    The maze is 23×13 tiles of 8px, drawn 4px in and 14px down,
    so the strip at the top holds the level, the document timer and the score. */
 (function(){
-  if(!window.RUNWAY) return;
+  if(!window.RUNWAY || !window.Maze) return;
 
   var T = 8, OX = 4, OY = 14, SP = null;
   var RESOLVED = {

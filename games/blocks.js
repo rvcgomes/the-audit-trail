@@ -3,7 +3,7 @@
    A full row is a week closed: its cash effect is (+ cells − − cells) × €8k.
    A week that closes with more − than + also pays a €20k overdraft fee, and
    closing 2+ rows at once is a batch run (×1.5 when the net is positive).
-   Payroll (€30k) comes due every 9 seconds of play. Close 13 weeks without
+   Payroll (€30k) comes due every 13 seconds of play. Close 13 weeks without
    running out of cash or jamming the stack. The lesson: it is not only how
    much comes in, it is which week it lands in. Spread the − so no week
    closes in the red.
@@ -11,10 +11,12 @@
    (left/right/rotate/drop are edges; dir is what is held). */
 var Blocks = (function(){
   var COLS = 10, ROWS = 13, WEEKS = 13;
-  var START = 130, PAYROLL = 30, PAY_EVERY = 9, PER_CELL = 8, BATCH = 1.5, FEE = 20;
+  var START = 150, PAYROLL = 30, PAY_EVERY = 13, PER_CELL = 8, BATCH = 1.5, FEE = 20;
   var G0 = 1.0, G1 = 0.45, SOFT = 0.04, LOCK = 0.4, RESETS = 12, DAS = 0.18, ARR = 0.07, ARE = 0.15, CLEAR = 0.35;
   var IN = 1, OUT = 2, SIGN_BAG = [1, 1, 1, 1, 1, 1, 2, 2, 2, 2];
   var NAMES = ["I", "O", "T", "S", "Z", "J", "L"];
+  /* sideways first, then up one row (a floor kick), then two columns for the I */
+  var KICKS = [[[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1]], [[0,0],[-1,0],[1,0],[-2,0],[2,0],[0,-1],[0,-2]]];
   var BOXES = [
     ["....", "####", "....", "...."], ["##", "##"], [".#.", "###", "..."],
     [".##", "##.", "..."], ["##.", ".##", "..."], ["#..", "###", "..."], ["..#", "###", "..."]
@@ -79,8 +81,11 @@ var Blocks = (function(){
     p.x += dx; nudge(s); return true;
   }
   function rotate(s){
-    var p = s.piece, r = (p.r + 1) & 3, kicks = [0, -1, 1];
-    for(var i=0;i<kicks.length;i++) if(fits(s.grid, p.k, r, p.x + kicks[i], p.y)){p.r = r; p.x += kicks[i]; nudge(s); return true}
+    var p = s.piece, r = (p.r + 1) & 3, kicks = KICKS[NAMES[p.k] === "I" ? 1 : 0];
+    for(var i=0;i<kicks.length;i++){
+      var dx = kicks[i][0], dy = kicks[i][1];
+      if(fits(s.grid, p.k, r, p.x + dx, p.y + dy)){p.r = r; p.x += dx; p.y += dy; nudge(s); return true}
+    }
     return false;
   }
 

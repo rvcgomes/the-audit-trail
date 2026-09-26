@@ -4,13 +4,16 @@
    The rules of each game live in games/*.js and have no DOM code.
 
    Arcade cartridge:
-     {id, name, sub, help, say, countdown, canvas:"press"|"tap"|"swipe",
-      create(seed), step(s, dt, inp), draw(g, s), hud(s) -> {cells, row2},
-      onEvent(e, g), result(s) -> {win, title, lines, tip, rows, realLine | real:false},
+     {id, order, name, sub, help, say, countdown, canvas:"press"|"tap"|"swipe", hidden,
+      create(), step(s, dt, inp), draw(g, s), overlay(g, s), hud(s) -> {cells, row2},
+      onEvent(e, g, s), result(s) -> {win, title, lines, tip, rows, realLine | real:false},
       mood(s) -> 0..1, demo(s, mem) -> inp}
    Text cartridge:
-     {id, name, sub, type:"text", start(ui)}
-   inp = {down, dir, press:{a, up, down, left, right}, taps:[{x, y}]} */
+     {id, order, name, sub, type:"text", start(ui)}
+     ui = {screen, options, setHud, flash, fmt, sign, sfx, end(result)}
+   inp = {down, dir, press:{a, tap, up, down, left, right}, taps:[{x, y}], swiped}
+     press.a is A, Space, Enter or Z; press.tap is a short tap on a "swipe" canvas
+     (it also sets press.a). Presses made during READY are dropped. */
 (function(){
   var carts = [], byId = {};
   window.RUNWAY = {register:function(c){carts.push(c); byId[c.id] = c}, boot:boot};
@@ -47,9 +50,10 @@
   };
 
   /* ---------- sound: effects here, music in music.js (both off by default) ---------- */
-  var snd = {on:false, ac:null, quiet:false};
+  var snd = {on:false, ac:null, quiet:false, unlocked:false};
   try{snd.on = localStorage.getItem("runway-sound") === "on"}catch(e){}
   function audio(){
+    if(!snd.unlocked) return null;
     if(!snd.ac){try{snd.ac = new (window.AudioContext || window.webkitAudioContext)()}catch(e){return null}}
     if(snd.ac.state === "suspended") snd.ac.resume();
     return snd.ac;
@@ -80,25 +84,39 @@
   };
   function music(){return snd.on && !snd.quiet && window.Music ? window.Music : null}
   function setSound(on){
-    snd.on = on; sndBtn.setAttribute("aria-pressed", on); sndBtn.textContent = on ? "♪ ON" : "♪ OFF";
+    snd.on = on; soundLabel();
     try{localStorage.setItem("runway-sound", on ? "on" : "off")}catch(e){}
-    if(window.Music){ if(on){var ac = audio(); if(ac){window.Music.init(ac); window.Music.play(theme)}} else window.Music.stop() }
+    if(window.Music){ if(on){var m = music(), ac = audio(); if(m && ac && seen){m.init(ac); m.play(theme)}} else window.Music.stop() }
   }
+  function soundLabel(){sndBtn.setAttribute("aria-pressed", snd.on); sndBtn.textContent = snd.on ? "♪ ON" : "♪ OFF"}
+  soundLabel();
+  /* browsers only allow audio after a user gesture: unlock on the first one inside the console */
+  function unlock(){
+    if(snd.unlocked) return; snd.unlocked = true;
+    var m = music(), ac = audio(); if(m && ac){m.init(ac); if(seen) m.play(theme)}
+  }
+  ["pointerup", "keydown", "click"].forEach(function(t){dev.addEventListener(t, unlock, true)});
   var theme = "menu";
-  function playTheme(t){theme = t; var m = music(); if(m && seen){m.init(audio()); m.play(t)}}
-  function jingle(name){var m = music(); if(m){m.init(audio()); m.jingle(name)} else if(snd.on && !snd.quiet && SFX[name]) SFX[name]()}
-  sndBtn.addEventListener("click", function(){setSound(!snd.on); if(snd.on) SFX.select()});
+  function playTheme(t){theme = t; var m = music(), ac = audio(); if(m && ac && seen){m.init(ac); m.play(t)}}
+  function jingle(name){var m = music(), ac = audio(); if(m && ac){m.init(ac); m.jingle(name)} else if(snd.on && !snd.quiet && SFX[name]) SFX[name]()}
+  sndBtn.addEventListener("click", function(){wake(); setSound(!snd.on); if(snd.on) SFX.select()});
 
   /* ---------- helpers ---------- */
   function fmt(k){k = Math.max(0, k); return k >= 1000 ? "€" + (k/1000).toFixed(2) + "M" : "€" + Math.round(k) + "k"}
   function sign(n, unit){return (n > 0 ? "+" : "−") + Math.abs(Math.round(n)) + (unit || "")}
-  function say(text){live.textContent = ""; setTimeout(function(){live.textContent = String(text).replace(/\n+/g, " ")}, 30)}
+  var sayQ = "", sayT = 0;
+  function say(text){
+    sayQ = (sayQ ? sayQ + " " : "") + String(text).replace(/\n+/g, " ");
+    clearTimeout(sayT); sayT = setTimeout(function(){live.textContent = ""; live.textContent = sayQ; sayQ = ""}, 60);
+  }
+  function put(id, v){var el = $(id); v = String(v); if(el.textContent !== v) el.textContent = v}
   function setHud(cells, row2){
-    hud.hidden = false; hud2.hidden = !row2;
-    cells.forEach(function(c, i){$("gL" + (i+1)).textContent = c[0]; var v = $("gV" + (i+1)); if(v.textContent !== String(c[1])) v.textContent = c[1]});
+    if(hud.hidden) hud.hidden = false; if(hud2.hidden !== !row2) hud2.hidden = !row2;
+    cells.forEach(function(c, i){put("gL" + (i+1), c[0]); put("gV" + (i+1), c[1])});
     if(row2){
-      $("gL4").textContent = row2[0]; $("gV4").textContent = row2[1]; $("gL5").textContent = row2[2];
-      $("gBarI").style.width = Math.max(0, Math.min(100, row2[3])) + "%"; $("gBar").classList.toggle("low", !!row2[4]);
+      put("gL4", row2[0]); put("gV4", row2[1]); put("gL5", row2[2]);
+      var w = Math.round(Math.max(0, Math.min(100, row2[3]))) + "%", bi = $("gBarI");
+      if(bi.style.width !== w) bi.style.width = w; $("gBar").classList.toggle("low", !!row2[4]);
     }
   }
   function flash(id, good){var el = $(id); if(!el) return; el.classList.remove("up", "down"); void el.offsetWidth; el.classList.add(good ? "up" : "down")}
@@ -110,7 +128,7 @@
       var b = document.createElement("button"); b.type = "button";
       var t = document.createElement("span"); t.textContent = "▸ " + o[0]; b.appendChild(t);
       if(o[1]){var s = document.createElement("span"); s.className = "s"; s.textContent = o[1]; b.appendChild(s)}
-      b.addEventListener("click", function(){SFX.select(); o[2]()}); opts.appendChild(b);
+      b.addEventListener("click", function(){if(performance.now() < guardUntil) return; SFX.select(); o[2]()}); opts.appendChild(b);
     });
     var f = opts.querySelector("button"); if(f && focus) f.focus({preventScroll:true});
   }
@@ -127,7 +145,7 @@
   /* ---------- state ---------- */
   var mode = "menu", cart = null, S = null, running = false, paused = false, raf = 0, last = 0, countdown = 0, endTimer = 0;
   var floats = [], fx = {}, bannerText = "", hudT = 0, moodT = 0, demo = null, idleT = 0, idleTimer = 0, seen = false, booted = false;
-  var inp = {down:false, dir:null, press:{}, taps:[]}, held = {};
+  var inp = {down:false, dir:null, press:{}, taps:[]}, held = {}, guardUntil = 0;
 
   var g = {ctx:ctx, W:W, H:H, COL:COL, FONT:FONT, BIG:BIG, SPR:SPR, fx:fx, reduce:reduce,
     text:text, sprite:sprite, overlay:overlay, fmt:fmt, sign:sign, say:function(t){if(!demo) say(t)}, flash:flash,
@@ -144,7 +162,7 @@
   function list(){return carts.filter(function(c){return !c.hidden}).sort(function(a, b){return (a.order || 99) - (b.order || 99)})}
   function menu(focus){
     stop(); endDemo(); mode = "menu"; cart = null; cartEl.textContent = "CFO EDITION"; hud.hidden = hud2.hidden = true; cv.hidden = true;
-    screen("INSERT A CARTRIDGE");
+    msg.classList.remove("line"); msg.textContent = "INSERT A CARTRIDGE"; if(seen) say("Insert a cartridge.");
     options(list().map(function(c){return [c.name, c.sub, function(){start(c.id)}]}), focus, true);
     dev.classList.remove("on"); playTheme("menu"); armIdle();
   }
@@ -152,25 +170,32 @@
     stop(); var c = byId[id]; if(!c) return;
     cart = c; if(!asDemo){endDemo(); receipt.hidden = true; dev.classList.add("on")}
     cartEl.textContent = c.name;
-    if(c.type === "text"){mode = "text"; cv.hidden = true; opts.innerHTML = ""; opts.classList.remove("menu"); playTheme(c.id); c.start(ui); return}
-    mode = "play"; S = c.create(); floats = []; for(var k in fx) delete fx[k];
+    if(c.type === "text"){
+      mode = "text"; cv.hidden = true; opts.innerHTML = ""; opts.classList.remove("menu"); playTheme(c.id);
+      try{c.start(ui)}catch(err){fail(err)} return;
+    }
+    try{S = c.create()}catch(err){return fail(err)}
+    mode = "play"; floats = []; for(var k in fx) delete fx[k];
     opts.innerHTML = ""; opts.classList.remove("menu"); cv.hidden = false;
-    line(asDemo ? "DEMO · press A to play" : c.help || "");
+    line(asDemo ? "DEMO · press A to play this one" : c.help || "");
     if(!asDemo) say(c.say || c.help || c.name);
     countdown = asDemo ? 0 : (c.countdown == null ? 1.2 : c.countdown); paused = false;
     if(!asDemo){dev.focus({preventScroll:true}); playTheme(c.id)}
     last = performance.now(); running = true; hudTick(true); raf = requestAnimationFrame(frame);
   }
 
+  function fail(err){if(window.console) console.error("RUNWAY cartridge failed:", err); endDemo(); menu(true)}
+
   /* ---------- loop ---------- */
   function frame(now){
     raf = 0; if(!running) return;
     var dt = Math.min(0.05, (now - last)/1000); last = now;
     if(!paused){
-      if(countdown > 0) countdown -= dt;
+      if(countdown > 0){countdown -= dt; inp.press = {}; inp.taps = []; inp.swiped = null; inp.down = false}
       else{
         var input = demo ? cart.demo(S, demo.mem) : inp;
-        cart.step(S, dt, input); inp.press = {}; inp.taps = []; inp.swiped = null;
+        try{cart.step(S, dt, input)}catch(err){return fail(err)}
+        inp.press = {}; inp.taps = []; inp.swiped = null;
         events();
         if(demo){demo.t += dt; if(demo.t > 16){nextDemo(); return}}
       }
@@ -225,7 +250,8 @@
     cv.hidden = true;
     var real = r.realLine || (r.real === false ? "" : "In 2024 I did this for real:\n€3M raised, 18 months added.");
     var t = r.title + "\n\n" + (r.lines || []).join("\n") + (r.tip ? "\n\n" + r.tip : "") + (r.win && real ? "\n\n" + real : "");
-    jingle(r.win ? "win" : "lose");
+    jingle(r.win ? "win" : "lose"); theme = "menu";
+    guardUntil = performance.now() + 600;
     screen(t); options(again(c.id).concat(r.win ? talk() : []), true);
     dev.classList.toggle("on", !!r.win);
     printReceipt(c, r);
@@ -242,11 +268,14 @@
     var body = rows.join("\n");
     receiptText.textContent = body; receipt.hidden = false;
     receipt.classList.remove("print"); void receipt.offsetWidth; receipt.classList.add("print");
-    var url = location.href.split("#")[0];
+    var co = new URLSearchParams(location.search).get("co");
+    var url = location.origin + location.pathname + (co ? "?co=" + encodeURIComponent(co) : "");
+    var mail = ["RUNWAY · " + c.name, "Date: " + date].concat((r.rows || []).map(function(x){return x[0] + ": " + x[1]}))
+      .concat(["Result: " + (r.win ? "passed" : "not this time"), "", url]).join("\n");
     if(C.email){
       sendBtn.hidden = false;
       sendBtn.href = "mailto:" + C.email + "?subject=" + encodeURIComponent("RUNWAY: " + c.name + (r.win ? ", passed" : ", my attempt")) +
-        "&body=" + encodeURIComponent(body + "\n\n" + url + "\n");
+        "&body=" + encodeURIComponent(mail);
     }else sendBtn.hidden = true;
     copyBtn.onclick = function(){
       var done = function(){copyBtn.textContent = "Copied"; setTimeout(function(){copyBtn.textContent = "Copy"}, 1500)};
@@ -262,6 +291,7 @@
   /* ---------- boot screen and demo mode ---------- */
   function bootScreen(){
     if(booted) return; booted = true;
+    if(mode !== "idle") return;
     if(reduce){menu(false); return}
     mode = "boot"; cv.hidden = false; hud.hidden = hud2.hidden = true; opts.innerHTML = ""; line("");
     var t0 = performance.now(), dinged = false;
@@ -294,7 +324,10 @@
   }
   function nextDemo(){ if(!demo) return; if(mode === "play" && seen){demo = {mem:{}, t:0}; var dc = demoCarts(); start(dc[demoIdx++ % dc.length].id, true)} else menu(false) }
   function endDemo(){ if(!demo) return; demo = null; snd.quiet = false; }
-  function wake(){ if(demo){menu(true); return true} idleT = 0; if(mode === "menu") armIdle(); return false }
+  function wake(){
+    if(demo){var id = cart && cart.id; endDemo(); if(id) start(id); else menu(true); return true}
+    if(mode === "menu") armIdle(); return false;
+  }
 
   /* ---------- controls ---------- */
   var DIRS = {ArrowUp:"up", ArrowDown:"down", ArrowLeft:"left", ArrowRight:"right", w:"up", s:"down", a:"left", d:"right", W:"up", S:"down", A:"left", D:"right"};
@@ -316,19 +349,21 @@
   }
   function canvasPoint(e){var r = cv.getBoundingClientRect(); return {x:(e.clientX - r.left)*W/r.width, y:(e.clientY - r.top)*H/r.height}}
 
-  aBtn.addEventListener("pointerdown", function(e){e.preventDefault(); if(wake()) return; if(!aDown()) activate()});
+  function hold(){if(running && !dev.contains(document.activeElement)) dev.focus({preventScroll:true})}
+  aBtn.addEventListener("pointerdown", function(e){e.preventDefault(); if(wake()) return; hold(); if(!aDown()) activate()});
   ["pointerup", "pointercancel", "pointerleave"].forEach(function(t){aBtn.addEventListener(t, aUp)});
   aBtn.addEventListener("click", function(e){if(e.detail === 0 && !running) activate()});
   bBtn.addEventListener("click", function(){menu(true)});
   document.querySelectorAll("#device [data-dir]").forEach(function(b){
     var d = b.dataset.dir;
-    b.addEventListener("pointerdown", function(e){e.preventDefault(); if(wake()) return; if(running) dirDown(d); else moveFocus(d === "up" || d === "left" ? -1 : 1)});
+    b.addEventListener("pointerdown", function(e){e.preventDefault(); if(wake()) return; hold(); if(running) dirDown(d); else moveFocus(d === "up" || d === "left" ? -1 : 1)});
     ["pointerup", "pointercancel", "pointerleave"].forEach(function(t){b.addEventListener(t, function(){dirUp(d)})});
     b.addEventListener("click", function(e){if(e.detail === 0 && !running) moveFocus(d === "up" || d === "left" ? -1 : 1)});
   });
   var swipe = null;
   cv.addEventListener("pointerdown", function(e){
     e.preventDefault(); if(wake()) return; if(!running) return;
+    hold(); try{cv.setPointerCapture(e.pointerId)}catch(err){}
     if(paused){unpause(); return}
     var kind = cart && cart.canvas || "press";
     if(kind === "press") aDown();
@@ -340,7 +375,7 @@
     if(kind === "press") aUp();
     if(kind === "swipe" && swipe && t === "pointerup"){
       var dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
-      if(Math.max(Math.abs(dx), Math.abs(dy)) < 14){inp.press.a = true}
+      if(Math.max(Math.abs(dx), Math.abs(dy)) < 14){inp.press.a = true; inp.press.tap = true}
       else{var d = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up"); inp.press[d] = true; inp.swiped = d}
       swipe = null;
     }
@@ -348,6 +383,7 @@
   dev.addEventListener("keydown", function(e){
     if(wake()){e.preventDefault(); return}
     if(e.key === "Escape" || e.key === "Backspace"){e.preventDefault(); menu(true); return}
+    if(!running && e.repeat){e.preventDefault(); return}
     if(running){
       if(DIRS[e.key]){e.preventDefault(); if(!e.repeat) dirDown(DIRS[e.key]); return}
       if(e.key === " " || e.key === "Enter" || e.key === "z" || e.key === "Z"){e.preventDefault(); if(!e.repeat) aDown(); return}
@@ -361,12 +397,21 @@
     if(DIRS[e.key]) dirUp(DIRS[e.key]);
     if(e.key === " " || e.key === "Enter" || e.key === "z" || e.key === "Z") aUp();
   });
-  window.addEventListener("blur", function(){aUp(); held = {}; inp.dir = null});
+  window.addEventListener("blur", function(){aUp(); held = {}; inp.dir = null; pause()});
   dev.addEventListener("focusin", function(){if(demo) menu(true)});
+  dev.addEventListener("pointermove", function(){if(mode === "menu") armIdle()});
+  /* focus leaving the console releases every key and pauses */
+  dev.addEventListener("focusout", function(e){
+    if(e.relatedTarget && dev.contains(e.relatedTarget)) return;
+    aUp(); held = {}; inp.dir = null; pause();
+  });
 
   /* pause when the console leaves the screen or the tab is hidden; boot on first sight */
-  function pause(){if(running && !paused && !demo && countdown <= 0){paused = true; inp.down = false; draw()}}
-  document.addEventListener("visibilitychange", function(){if(document.hidden) pause()});
+  function pause(){if(running && !paused && !demo){paused = true; inp.down = false; draw()}}
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden){pause(); if(window.Music) window.Music.stop()}
+    else if(seen && music() && !demo) playTheme(theme);
+  });
   new IntersectionObserver(function(es){es.forEach(function(e){
     seen = e.isIntersecting;
     if(!e.isIntersecting){pause(); if(demo) menu(false); if(window.Music) window.Music.stop()}

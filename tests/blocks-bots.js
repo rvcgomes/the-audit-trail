@@ -9,7 +9,7 @@ const root = path.join(__dirname, "..");
 const ctx = {};
 vm.runInNewContext(fs.readFileSync(path.join(root, "games", "blocks.js"), "utf8") + "\nthis.Blocks = Blocks;", ctx);
 const B = ctx.Blocks;
-const DT = 1 / 60, SEEDS = 300, LIMIT = 300, THINK = 1.2, TAP = 5 / 60, HIGH = 8;
+const DT = 1 / 60, SEEDS = 300, LIMIT = 300, THINK = +(process.env.THINK || 2.5), TAP = 5 / 60, HIGH = 8;
 const fails = [];
 const pct = (a, b) => Math.round((100 * a) / b) + "%";
 function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -141,7 +141,7 @@ if (wRandom > 0.05) fails.push("random placement should not win");
     text: noop, sprite: () => ({ width: 8, height: 8 }), overlay: noop, fmt: k => "€" + Math.round(k) + "k", sign: n => String(n),
     say: noop, flash: noop, now: () => 0, float: noop, banner: noop, line: noop, sfx: noop };
   let cart = null;
-  const win = { RUNWAY: { register: c => { if (c.id === "blocks") cart = c; } } };
+  const win = { RUNWAY: { register: c => { if (c.id === "blocks") cart = c; } }, Blocks: B };
   const sb = { window: win, RUNWAY: win.RUNWAY, Blocks: B, Math, console };
   try {
     vm.runInNewContext(fs.readFileSync(path.join(root, "games", "carts", "blocks.js"), "utf8"), sb);

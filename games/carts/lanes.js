@@ -2,7 +2,7 @@
    Drawing and wording only; the rules are in lanes.js.
    The board is 16×10 tiles of 12px: the whole 192×120 screen. */
 (function(){
-  if(!window.RUNWAY) return;
+  if(!window.RUNWAY || !window.Lanes) return;
 
   var SP = null;
   var BODY = ["..######..",".########.",".#x####x#.",".########.","..######..","...#oo#...","..##oo##..",".#.#oo#.#."];

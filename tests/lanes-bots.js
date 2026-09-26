@@ -139,7 +139,7 @@ console.log(`  (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
   const g = { ctx: fake, W: 192, H: 120, COL, FONT: "10px VT323, monospace", BIG: "16px VT323, monospace", SPR: {}, fx: {}, reduce: false,
     text: noop, sprite: () => ({ width: 8, height: 8 }), overlay: noop, fmt: String, sign: String, say: noop, flash: noop, now: () => 0,
     float: noop, banner: noop, line: noop, sfx: noop };
-  const win = { RUNWAY: { register: c => { cart = c; } } };
+  const win = { RUNWAY: { register: c => { cart = c; } }, Lanes };
   const sandbox = { window: win, RUNWAY: win.RUNWAY, Lanes, Math, console };
   try {
     vm.runInNewContext(fs.readFileSync(path.join(__dirname, "..", "games", "carts", "lanes.js"), "utf8"), sandbox);

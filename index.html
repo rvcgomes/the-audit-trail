@@ -33,12 +33,7 @@ window.CONFIG = {
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
   cv: "",                       // e.g. "rui-gomes-cv.pdf" once the PDF is in the repo
-  // public sources for the index of evidence: [url, link text]; empty = "on request"
-  evidence: {
-    seed: ["https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/", "ECO, 6 Feb 2024"],
-    award: ["https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/", "Weezie on LinkedIn, May 2025"],
-    people: ["https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/", "my LinkedIn post, Aug 2025"]
-  }
+  // the evidence links are written straight into the index of evidence in the HTML
 };
 </script>
 <style>
@@ -88,8 +83,10 @@ img,svg{max-width:100%}
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:calc(80px + env(safe-area-inset-top,0px)) 60px}
 .meta{font-size:.9375rem;color:var(--muted);margin:0 0 2rem;line-height:1.5}
 .meta strong{color:var(--ink);font-weight:500}
+.hi.long{font-size:clamp(2rem,6vw,4rem)}
+.hi,h2,.meta,.when,footer{overflow-wrap:anywhere}
 .hi{font-size:clamp(2.6rem,8.5vw,5.6rem);line-height:1;letter-spacing:-.03em;font-weight:800;margin:0;min-height:1em}
-.hi .typed::after{content:"";display:inline-block;width:.06em;height:.85em;background:var(--pencil);margin-left:.06em;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
+.js .hi .typed::after{content:"";display:inline-block;width:.06em;height:.85em;background:var(--pencil);margin-left:.06em;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
 .hi .typed.done::after{animation:none;opacity:0}
 .hi2{font-size:clamp(1.9rem,5.5vw,3.6rem);line-height:1.06;letter-spacing:-.02em;font-weight:700;margin:.4rem 0 1.75rem;max-width:18ch}
 .ul{position:relative;display:inline-block;white-space:nowrap}
@@ -185,7 +182,7 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .award-photo+.award-photo{margin:28px 0 0 -18px;transform:rotate(1.5deg)}
 .award-photo img{display:block;width:100%;height:auto}
 .award-photo figcaption{font-family:var(--hand);color:var(--pencil);font-size:1.1rem;margin-top:8px}
-.award h3{font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.02em;line-height:1.1;margin:0 auto .75rem;max-width:22ch}
+.award h2{font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.02em;line-height:1.1;margin:0 auto .75rem;max-width:22ch}
 .award p{color:var(--muted);max-width:52ch;margin:0 auto}
 
 /* VCLevel sectors */
@@ -196,7 +193,7 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .wp{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:20px 20px 16px;box-shadow:0 20px 40px -24px rgba(21,38,58,.35);margin-bottom:14px;position:relative}
 .js .wp{margin-bottom:0}
-.wp h4{margin:0 0 .9rem;font-size:.9375rem;color:var(--muted);font-weight:500;display:flex;justify-content:space-between;gap:1rem}
+.wp h3{margin:0 0 .9rem;font-size:.9375rem;color:var(--muted);font-weight:500;display:flex;justify-content:space-between;gap:1rem}
 .wp .k{font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
 .wp .q{font-size:clamp(1.25rem,2.6vw,1.55rem);font-weight:700;line-height:1.25;letter-spacing:-.01em;margin:.2rem 0 1rem}
 .wp .b{margin:.2rem 0 0}
@@ -208,6 +205,7 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .quest .split{align-items:center}
 .device{background:linear-gradient(160deg,#3A3F46,#23272C);border-radius:18px 18px 44px 18px;padding:18px 20px 22px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);max-width:440px;margin:0 auto;width:100%;outline:none}
 .device:focus-visible{outline:2px solid var(--pencil);outline-offset:4px}
+.device :focus-visible,.bign :focus-visible,.why :focus-visible,.inter :focus-visible{outline-color:var(--pencilOnDeep)}
 .device .brand{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#9AA3AD;font-size:.75rem;letter-spacing:.08em;margin:0 4px 10px}
 .device .brand i{width:8px;height:8px;border-radius:50%;background:#555;display:inline-block;vertical-align:middle;margin-right:6px}
 .device.on .brand i{background:#FF7A45;box-shadow:0 0 8px #FF7A45}
@@ -262,7 +260,9 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .ghint{font-size:.8125rem;color:var(--muted);text-align:center;margin:.9rem auto 0;max-width:40ch}
 .nogame{font-family:var(--lcdf);color:var(--lcd);font-size:1.3rem}
 .js .nogame{display:none}
-.no-js .screen>:not(.nogame),.no-js .controls,.no-js .ghint{display:none}
+.no-js .screen>:not(.nogame),.no-js .controls,.no-js .ghint,.no-js .snd{display:none}
+.device.broken .screen>:not(.nogame),.device.broken .controls,.device.broken .snd{display:none}
+.js .device.broken .nogame{display:block}
 .chess{margin-top:1.5rem;padding:16px 18px;border-left:3px solid var(--pencil);background:var(--card);max-width:48ch}
 /* why */
 .why{padding:clamp(80px,14vh,140px) 0;background:var(--deep);color:var(--onDeep)}
@@ -327,7 +327,8 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .js .ledger td.t span{transform:rotate(-8deg)!important}
   .js .chart .draw,.js .hi2 .ul path{stroke-dashoffset:0!important}
   .hero{min-height:0;padding-block:0 24px}
-  .chap,.award,.evidence,.why,.inter{padding-block:24px;break-inside:avoid}
+  .chap,.award,.evidence,.why,.inter{padding-block:24px}
+  .ledger,.bign,.kpis,.chart,.wp,.ev tr,.award-photos,.split>div{break-inside:avoid}
   .inter,.why,.bign{background:none!important;color:#000!important}
   .why h2{color:#000}
   .inter .w{opacity:1!important}
@@ -335,7 +336,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .js .wp[hidden]{display:block!important}
   .js .tabs{display:none}
   .links a[href^="mailto"]::after{content:""}
-  .links a[href^="http"]::after{content:" (" attr(href) ")"}
+  .links a[href^="http"]::after,.ev a[href^="http"]::after{content:" (" attr(href) ")";word-break:break-all}
 }
 </style>
 </head>
@@ -420,7 +421,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
     </div>
     <div class="rev">
       <div class="chart" id="chart">
-        <svg viewBox="0 0 400 234" role="img" aria-label="Illustrative runway: without the round, cash reaches zero around month 14; with the €3M seed it lasts 18 months longer.">
+        <svg viewBox="0 0 400 234" role="img" aria-label="Illustrative chart, not company figures: without the round, cash reaches zero around month 14; with the €3M seed it lasts 18 months longer.">
           <line class="ax" x1="30" y1="190" x2="392" y2="190"/>
           <line class="ax" x1="30" y1="22" x2="30" y2="190"/>
           <text x="38" y="30">Cash</text>
@@ -456,7 +457,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
       <div class="chess">I played federated chess for five years. Finance works the same way: the move that matters is usually three moves before the one everybody sees.</div>
     </div>
     <div class="rev">
-      <div class="device" id="device" tabindex="0" aria-label="RUNWAY, a handheld console with three games. A or Space to play, B or Escape for the menu.">
+      <div class="device" id="device" tabindex="0" role="group" aria-label="RUNWAY, a handheld console with seven games. A or Space to play, B or Escape for the menu.">
         <div class="brand"><span><i></i>RUNWAY</span><span id="gCart">CFO EDITION</span><button type="button" class="snd" id="gSnd" aria-pressed="false">♪ OFF</button></div>
         <div class="screen">
           <p class="nogame">RUNWAY needs JavaScript.<br><br>The rest of the page doesn't.</p>
@@ -491,15 +492,15 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <section class="award wrap rev" aria-label="Award">
   <div class="award-photos">
     <figure class="award-photo">
-      <img src="award-trophy.jpg" width="720" height="720" loading="lazy" alt="The trophy: Prémios da Compensação 2025, powered by Coverflex, Líder em transparência na compensação, Pequenas Empresas, Weezie.">
+      <img src="award-trophy.jpg" srcset="award-trophy-360.jpg 360w, award-trophy.jpg 720w" sizes="(max-width: 760px) 45vw, 320px" width="720" height="720" loading="lazy" alt="The trophy: Prémios da Compensação 2025, powered by Coverflex, Líder em transparência na compensação, Pequenas Empresas, Weezie.">
       <figcaption>Small companies, 2025.</figcaption>
     </figure>
     <figure class="award-photo">
-      <img src="award.jpg" width="720" height="720" loading="lazy" alt="Rui Gomes on stage with the award, next to a screen that reads: Prémios da Compensação 2025, small companies, leader in compensation transparency, winner Weezie.">
+      <img src="award.jpg" srcset="award-360.jpg 360w, award.jpg 720w" sizes="(max-width: 760px) 45vw, 320px" width="720" height="720" loading="lazy" alt="Rui Gomes on stage with the award, next to a screen that reads: Prémios da Compensação 2025, small companies, leader in compensation transparency, winner Weezie.">
       <figcaption>Accepting it for the Weezie team.</figcaption>
     </figure>
   </div>
-  <h3>Transparency in Compensation Award, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h3>
+  <h2>Transparency in Compensation Award, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h2>
   <p>Coverflex Compensation Awards, small-company category. Given to Weezie for the company-wide compensation framework and salary bands I designed there.</p>
 </section>
 
@@ -526,7 +527,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <button role="tab" id="t-wine" aria-controls="p-wine" aria-selected="false" tabindex="-1">Wine</button>
       </div>
       <div class="wp" role="tabpanel" id="p-therapy" aria-labelledby="t-therapy">
-        <h4><span>Therapy practice</span><span>Case 1 of 6</span></h4>
+        <h3><span>Therapy practice</span><span>Case 1 of 6</span></h3>
         <p class="k">The question on the table</p>
         <p class="q">“We need to bill more.”</p>
         <p class="k">What the numbers showed</p>
@@ -534,7 +535,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="note">Know what an hour is worth first.</p>
       </div>
       <div class="wp" role="tabpanel" id="p-physio" aria-labelledby="t-physio">
-        <h4><span>Physiotherapy clinic</span><span>Case 2 of 6</span></h4>
+        <h3><span>Physiotherapy clinic</span><span>Case 2 of 6</span></h3>
         <p class="k">The question on the table</p>
         <p class="q">Sole trader or a company, before the first patient?</p>
         <p class="k">What the numbers showed</p>
@@ -542,7 +543,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="note">Choose the structure for year three.</p>
       </div>
       <div class="wp" role="tabpanel" id="p-dental" aria-labelledby="t-dental">
-        <h4><span>Dental clinic with insurer agreements</span><span>Case 3 of 6</span></h4>
+        <h3><span>Dental clinic with insurer agreements</span><span>Case 3 of 6</span></h3>
         <p class="k">The question on the table</p>
         <p class="q">Are our prices right for agreement patients?</p>
         <p class="k">What the numbers showed</p>
@@ -550,7 +551,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="note">Check the data before the price.</p>
       </div>
       <div class="wp" role="tabpanel" id="p-clinic" aria-labelledby="t-clinic">
-        <h4><span>Opening a first clinic</span><span>Case 4 of 6</span></h4>
+        <h3><span>Opening a first clinic</span><span>Case 4 of 6</span></h3>
         <p class="k">The question on the table</p>
         <p class="q">What do we need to know before signing the lease?</p>
         <p class="k">What the numbers showed</p>
@@ -558,7 +559,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="note">The lease is the first big decision.</p>
       </div>
       <div class="wp" role="tabpanel" id="p-pr" aria-labelledby="t-pr">
-        <h4><span>PR agency, eight months old</span><span>Case 5 of 6</span></h4>
+        <h3><span>PR agency, eight months old</span><span>Case 5 of 6</span></h3>
         <p class="k">The question on the table</p>
         <p class="q">The partners still invoice as freelancers. When do they become a company?</p>
         <p class="k">What the numbers showed</p>
@@ -566,7 +567,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="note">Sell hours before retainers.</p>
       </div>
       <div class="wp" role="tabpanel" id="p-wine" aria-labelledby="t-wine">
-        <h4><span>Small premium wine producer</span><span>Case 6 of 6</span></h4>
+        <h3><span>Small premium wine producer</span><span>Case 6 of 6</span></h3>
         <p class="k">The question on the table</p>
         <p class="q">Can we apply for EU funding?</p>
         <p class="k">What the numbers showed</p>
@@ -602,9 +603,9 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
     <tbody>
       <tr id="ev-A"><td>A</td><td>Roles and dates, 2013 to now</td><td><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></td></tr>
       <tr id="ev-B"><td>B</td><td>€500M in transactions advised on under IFRS</td><td>PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</td></tr>
-      <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td data-ev="seed">€3M round led by GED Ventures Portugal, February 2024. Runway figures on request.</td></tr>
-      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</td><td data-ev="people">Weezie management reporting; before-and-after figures on request. The attrition figure is public:</td></tr>
-      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td data-ev="award">Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category. Photos above.</td></tr>
+      <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td>€3M round led by GED Ventures Portugal, February 2024: <a href="https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/" rel="noopener" target="_blank">ECO, 6 Feb 2024</a>. Runway figures on request.</td></tr>
+      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</td><td>Weezie management reporting; before-and-after figures on request. The attrition figure is public: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/" rel="noopener" target="_blank">my LinkedIn post, Aug 2025</a>.</td></tr>
+      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td>Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category. Photos above; <a href="https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/" rel="noopener" target="_blank">Weezie on LinkedIn, May 2025</a>.</td></tr>
       <tr id="ev-F"><td>F</td><td>Founding partner, VCLevel</td><td><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></td></tr>
     </tbody>
   </table>
@@ -636,9 +637,10 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   document.querySelectorAll("[data-co]").forEach(function(e){e.textContent=co});
   if(co){
     $("toLine").hidden=false; $("disclaim").hidden=false;
-    document.title="Rui Gomes, for "+co;
-    $("whyLabel").textContent="Why "+co;
-    $("whyTitle").textContent="Why "+co+".";
+    var coT=co.replace(/[\s.,;:!?]+$/,"");
+    document.title="Rui Gomes, for "+coT;
+    $("whyLabel").textContent="Why "+coT;
+    $("whyTitle").textContent="Why "+coT+".";
   }
   if(why) $("whyText").textContent=why;
 
@@ -649,19 +651,19 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   document.querySelectorAll('[data-link="linkedin"]').forEach(function(a){if(C.linkedin)a.href=C.linkedin});
   document.querySelectorAll('[data-link="vclevel"]').forEach(function(a){if(C.vclevel)a.href=C.vclevel});
   document.querySelectorAll('[data-link="cv"]').forEach(function(a){if(C.cv){a.href=C.cv;a.hidden=false;a.setAttribute("download","")}});
-  var ev=C.evidence||{};
-  document.querySelectorAll("[data-ev]").forEach(function(td){
-    var e=ev[td.dataset.ev]; if(!e) return; if(typeof e==="string") e=[e,"Public link"]; if(!e[0]) return;
-    var a=document.createElement("a");a.href=e[0];a.rel="noopener";a.target="_blank";a.textContent=e[1];
-    td.appendChild(document.createTextNode(" "));td.appendChild(a);
-  });
 
   /* typed greeting */
-  var hero=$("hero"), greet=co?"Hey "+co+",":"Hi there,", typed=$("typed");
+  var hero=$("hero"), greet=co?"Hey "+co.replace(/[\s.,;:!?]+$/,"")+",":"Hi there,", typed=$("typed");
+  if(greet.length>18) document.querySelector(".hi").classList.add("long");
   $("greetSr").textContent=greet;
   function finishType(){typed.classList.add("done");hero.classList.add("shown")}
   if(reduce){typed.textContent=greet;finishType()}
-  else{typed.textContent="";var i=0;setTimeout(function t(){typed.textContent=greet.slice(0,++i);if(i<greet.length)setTimeout(t,70+Math.random()*60);else setTimeout(finishType,250)},400)}
+  else{
+    /* typing never takes more than about a second, and the rest of the hero doesn't wait for it */
+    var step=Math.min(110,1000/greet.length);
+    typed.textContent="";var i=0;setTimeout(function t(){typed.textContent=greet.slice(0,++i);if(i<greet.length)setTimeout(t,step*(0.7+Math.random()*0.6));else setTimeout(finishType,200)},300);
+    setTimeout(function(){hero.classList.add("shown")},700);
+  }
 
   /* progress + word highlight */
   var bar=$("bar"), inter=$("inter");
@@ -717,6 +719,6 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <script src="games/carts/blocks.js"></script>
 <script src="games/carts/spot.js"></script>
 <script src="games/carts/lanes.js"></script>
-<script>if(window.RUNWAY) RUNWAY.boot();</script>
+<script>if(window.RUNWAY) RUNWAY.boot(); else document.getElementById("device").classList.add("broken");</script>
 </body>
 </html>
