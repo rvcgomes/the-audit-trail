@@ -383,6 +383,17 @@
     }
   };
   /* ?debug&shot=runner:20[&end] opens a cartridge at a moment, for headless screenshots */
+  /* ?debug&from=award shows the page from that section on (by id or class), all revealed */
+  var from = /[?&]from=([a-z0-9-]+)/.exec(location.search);
+  if(from && window.RUNWAY_DEBUG){
+    var st0 = document.createElement("style"); st0.textContent = "*{transition:none!important;animation:none!important}.progress{display:none}"; document.head.appendChild(st0);
+    document.querySelectorAll(".rev").forEach(function(e){e.classList.add("in")});
+    var hide = true;
+    [].slice.call(document.querySelectorAll("main > section")).forEach(function(sec){
+      if(sec.id === from[1] || sec.classList.contains(from[1])) hide = false;
+      if(hide) sec.style.display = "none";
+    });
+  }
   var shot = /[?&]shot=([a-z]+):?([\d.]*)/.exec(location.search);
   if(shot && window.RUNWAY_DEBUG){
     booted = true;

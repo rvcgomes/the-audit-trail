@@ -33,7 +33,7 @@ window.CONFIG = {
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
   cv: "",                       // e.g. "rui-gomes-cv.pdf" once the PDF is in the repo
-  evidence: { seed: "", award: "" }   // public links, if any; empty = "on request"
+  evidence: { seed: "https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/", award: "" }   // public links, if any; empty = "on request"
 };
 </script>
 <style>
@@ -175,10 +175,9 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 
 /* award */
 .award{padding-block:clamp(70px,12vh,120px);border-top:1px solid var(--rule);text-align:center}
-.seal{width:150px;height:150px;margin:0 auto 1.5rem;position:relative}
-.seal svg{width:100%;height:100%}
-.seal .core{position:absolute;inset:30px;border-radius:50%;background:var(--pencil);color:var(--onPencil);display:grid;place-items:center;font-size:2.1rem;font-weight:800}
-.seal text{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;fill:var(--ink);font-weight:700}
+.award-photo{max-width:340px;margin:0 auto 2rem;padding:10px 10px 12px;background:var(--card);border:1px solid var(--rule);box-shadow:0 20px 40px -24px rgba(21,38,58,.45);transform:rotate(-1.5deg)}
+.award-photo img{display:block;width:100%;height:auto}
+.award-photo figcaption{font-family:var(--hand);color:var(--pencil);font-size:1.1rem;margin-top:8px}
 .award h3{font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.02em;line-height:1.1;margin:0 auto .75rem;max-width:22ch}
 .award p{color:var(--muted);max-width:52ch;margin:0 auto}
 
@@ -405,10 +404,10 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   <div class="split">
     <div class="copy rev">
       <p class="role">CFO &amp; Head of HR, Weezie<a class="ref" href="#ev-A" aria-label="Evidence A">A</a></p>
-      <p class="where">Venture-backed tech</p>
+      <p class="where">Venture-backed software for fibre-network operators</p>
       <p>For the first time the numbers weren't someone else's to review. I built the 12-month rolling forecast and the 36-month model, tied OKRs to unit economics, and set up quarterly board and investor reporting.</p>
       <p>In 2024 I led our €3M seed round<a class="ref" href="#ev-C" aria-label="Evidence C">C</a>: the model, the data room and the investor materials. It added 18 months of runway and paid for the go-to-market and hiring plan.</p>
-      <p>I also run people. Salary bands, the hiring plan and the payroll forecast end up in the same spreadsheet, so it made sense to own all three.</p>
+      <p>I also run people: hiring pipelines, 15/45/90-day onboarding with named owners, and career steps tied to delivery. In 20 months, nobody in a team of 23 left voluntarily<a class="ref" href="#ev-D" aria-label="Evidence D">D</a>.</p>
       <ul class="stack"><li>FP&amp;A</li><li>Fundraising</li><li>Treasury</li><li>Compensation</li><li>Power BI</li></ul>
     </div>
     <div class="rev">
@@ -433,7 +432,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <div class="kpi"><div class="v"><span>€3M</span><a class="ref" href="#ev-C" aria-label="Evidence C">C</a></div><div class="d">seed round raised, 2024</div></div>
         <div class="kpi"><div class="v"><span>−34%</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">time to close the month</div></div>
         <div class="kpi"><div class="v"><span>−28%</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">FX exposure, after a new liquidity policy</div></div>
-        <div class="kpi"><div class="v"><span>20 mo</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">with zero team turnover</div></div>
+        <div class="kpi"><div class="v"><span>20 mo</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">with zero voluntary attrition, team of 23</div></div>
       </div>
     </div>
   </div>
@@ -482,13 +481,12 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 </section>
 
 <section class="award wrap rev" aria-label="Award">
-  <div class="seal" aria-hidden="true">
-    <svg viewBox="0 0 150 150"><defs><path id="circ" d="M75,75 m-60,0 a60,60 0 1,1 120,0 a60,60 0 1,1 -120,0"/></defs>
-      <text><textPath href="#circ">TRANSPARENCY IN COMPENSATION · 2025 · COVERFLEX ·</textPath></text></svg>
-    <div class="core">✓</div>
-  </div>
-  <h3>Transparency in Compensation Award, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h3>
-  <p>Given by Coverflex for the company-wide compensation framework and salary bands I designed at Weezie.</p>
+  <figure class="award-photo">
+    <img src="award.jpg" width="720" height="720" loading="lazy" alt="Rui Gomes on stage with the award, next to a screen that reads: Prémios da Compensação 2025, small companies, leader in compensation transparency, winner Weezie.">
+    <figcaption>Accepting it for the Weezie team.</figcaption>
+  </figure>
+  <h3>Leader in compensation transparency, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h3>
+  <p>Coverflex Compensation Awards, small-company category. Given to Weezie for the company-wide compensation framework and salary bands I designed there.</p>
 </section>
 
 <section class="chap wrap" id="c4">
@@ -580,9 +578,9 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
     <tbody>
       <tr id="ev-A"><td>A</td><td>Roles and dates, 2013 to now</td><td><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></td></tr>
       <tr id="ev-B"><td>B</td><td>€500M in transactions advised on under IFRS</td><td>PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</td></tr>
-      <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td data-ev="seed">Weezie, 2024. Details on request.</td></tr>
-      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero team turnover</td><td>Weezie management reporting. Before-and-after figures on request.</td></tr>
-      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td data-ev="award">Coverflex, 2025.</td></tr>
+      <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td data-ev="seed">€3M round led by GED Ventures Portugal, February 2024. Runway figures on request.</td></tr>
+      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</td><td>Weezie management reporting; the attrition figure is from my <a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a>. Before-and-after figures on request.</td></tr>
+      <tr id="ev-E"><td>E</td><td>Leader in compensation transparency, 2025</td><td data-ev="award">Coverflex Compensation Awards 2025, small-company category. Photo above; announced on Weezie's LinkedIn.</td></tr>
       <tr id="ev-F"><td>F</td><td>Fractional finance work with VCLevel</td><td><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></td></tr>
     </tbody>
   </table>
@@ -630,7 +628,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   var ev=C.evidence||{};
   document.querySelectorAll("[data-ev]").forEach(function(td){
     var url=ev[td.dataset.ev]; if(!url) return;
-    var a=document.createElement("a");a.href=url;a.rel="noopener";a.target="_blank";a.textContent="Public link";
+    var a=document.createElement("a");a.href=url;a.rel="noopener";a.target="_blank";a.textContent=/eco\.sapo\.pt/.test(url)?"ECO, 6 Feb 2024":"Public link";
     td.appendChild(document.createTextNode(" "));td.appendChild(a);
   });
 

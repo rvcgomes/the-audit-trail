@@ -42,6 +42,13 @@ O Node não está no PATH: está em `C:\Users\Rui\tools\node\node.exe` (em Git B
 
 - Casos reais da VCLevel por setor (Saúde, Vinho, Food & drink, PR, Outros). Os textos atuais foram escritos pelo Claude e são para substituir.
 - O papel do Rui na VCLevel (fundador, sócio, consultor…).
-- O CV em PDF (`CONFIG.cv`) e os links públicos do seed e do prémio Coverflex (`CONFIG.evidence`).
-- O âmbito dos "20 months with zero team turnover" e a confirmação de que os números da Weezie podem ser públicos.
+- O CV em PDF (`CONFIG.cv`) e os URLs dos posts do LinkedIn (o dos 0% de saídas voluntárias e o anúncio do prémio pela Weezie).
+- Se a ronda de €3M se deve chamar "seed": o ECO (6.2.2024) diz "ronda de 3 milhões" liderada pela GED Ventures Portugal, depois de €525k em 2019.
+- Confirmar que os −34% e −28% da Weezie podem ser públicos.
 - A dificuldade dos jogos para pessoas reais, sobretudo o labirinto e o CASH FLOW no telemóvel.
+
+## Evidências já confirmadas (26.09.2026)
+
+- €3M: ECO, 6.2.2024, ronda liderada pela GED Ventures Portugal; na altura a Weezie tinha 23 pessoas. Link em `CONFIG.evidence.seed`.
+- Prémio: Prémios da Compensação 2025 (Coverflex), categoria Pequenas empresas, "Líder em transparência na compensação"; o Rui recebeu-o em nome da equipa. A foto está em `award.jpg`.
+- 20 meses com 0% de saídas voluntárias numa equipa de 23 (Eng + GTM em Portugal), segundo um post do Rui no LinkedIn.
