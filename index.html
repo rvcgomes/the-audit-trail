@@ -32,7 +32,7 @@ window.CONFIG = {
   email: "ruimcamposgomes@gmail.com",
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
-  cv: "",                       // e.g. "rui-gomes-cv.pdf" once the PDF is in the repo
+  cv: "rui-gomes-cv.pdf",       // public copy, without the phone number
   // the evidence links are written straight into the index of evidence in the HTML
 };
 </script>
@@ -198,6 +198,29 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .wp .q{font-size:clamp(1.25rem,2.6vw,1.55rem);font-weight:700;line-height:1.25;letter-spacing:-.01em;margin:.2rem 0 1rem}
 .wp .b{margin:.2rem 0 0}
 .anon{font-size:.8125rem;color:var(--muted);margin:.75rem 0 0}
+.mdash{margin:1rem 0 0;padding:10px;border:1px solid var(--rule);border-radius:6px;background:var(--paper)}
+.md-head{display:flex;justify-content:space-between;font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 2px 8px}
+.md-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:6px}
+.md-kpi,.md-box{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:6px 7px;min-width:0}
+.md-kpi span,.md-t{display:block;font-size:.6875rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.md-kpi svg{display:block;width:100%;height:18px}
+.md-kpi polyline{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.md-gauge{height:8px;margin-top:7px;background:var(--rule);border-radius:4px;overflow:hidden}
+.md-gauge i{display:block;width:64%;height:100%;background:var(--pencil)}
+.md-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+.md-bar{display:grid;grid-template-columns:3.8rem minmax(0,1fr);align-items:center;gap:6px;font-size:.6875rem;color:var(--muted);margin-top:5px}
+.md-bar em{font-style:normal;white-space:nowrap}
+.md-bar b{display:block;width:var(--w);height:8px;border-radius:2px;background:var(--ink);opacity:.75}
+.md-stack{display:flex;height:10px;border-radius:3px;overflow:hidden;margin:6px 0 8px}
+.md-stack i{width:var(--w)}
+.md-legend{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:.6875rem;color:var(--muted)}
+.md-legend li::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.md-stack i:nth-child(1),.md-legend li:nth-child(1)::before{background:var(--ink)}
+.md-stack i:nth-child(2),.md-legend li:nth-child(2)::before{background:var(--pencil)}
+.md-stack i:nth-child(3),.md-legend li:nth-child(3)::before{background:var(--muted)}
+.md-stack i:nth-child(4),.md-legend li:nth-child(4)::before{background:color-mix(in srgb,var(--muted) 45%,var(--card))}
+.mdash figcaption{font-size:.75rem;color:var(--muted);margin:8px 2px 0;line-height:1.3}
+@media (max-width:560px){.md-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.md-row{grid-template-columns:minmax(0,1fr)}}
 .wp .note{font-family:var(--hand);color:var(--pencil);font-size:1.15rem;margin:1rem 0 0;line-height:1.3}
 
 /* game */
@@ -349,7 +372,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   <h1 class="hi"><span class="sr" id="greetSr">Hi there,</span><span class="typed" id="typed" aria-hidden="true">Hi there,</span></h1>
   <p class="hi2">here's the <span class="ul">audit trail<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 50 6, 120 18, 198 8"/></svg></span> behind my CV.</p>
   <p class="lede">I'm Rui. I started in audit in 2013, checking other people's numbers. Today I'm CFO and Head of HR at a venture-backed startup, and through VCLevel I do the same job for smaller companies.</p>
-  <p class="avail">Open to finance leadership roles, in Porto or remote. <a href="#contact">Get in touch</a> or <a href="#quest">play one of the games</a>.</p>
+  <p class="avail">Open to finance leadership roles, in Porto or remote. <a href="#contact">Get in touch</a>, <a href="rui-gomes-cv.pdf">read the CV</a> or <a href="#quest">play one of the games</a>.</p>
   <a class="go" href="#c1"><span class="c" aria-hidden="true">↓</span>Follow the trail</a>
 </section>
 
@@ -573,6 +596,28 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="q">Can we apply for EU funding?</p>
         <p class="k">What the numbers showed</p>
         <p class="b">The application asked for management numbers the business had never had. Building them was the real gain, whatever the grant decided.</p>
+        <figure class="mdash" role="img" aria-label="Sketch of the monthly dashboard built for this producer: revenue, gross margin, EBITDA, and cash with runway at the top; stock by vintage; sales by channel. Shown without the client's figures.">
+          <div class="md-head"><span>Monthly dashboard</span><span>Month view</span></div>
+          <div class="md-kpis">
+            <div class="md-kpi"><span>Revenue</span><svg viewBox="0 0 60 18" preserveAspectRatio="none"><polyline points="0,15 10,14 20,15 30,11 40,9 50,7 60,4"/></svg></div>
+            <div class="md-kpi"><span>Gross margin</span><svg viewBox="0 0 60 18" preserveAspectRatio="none"><polyline points="0,9 10,8 20,10 30,8 40,7 50,7 60,6"/></svg></div>
+            <div class="md-kpi"><span>EBITDA</span><svg viewBox="0 0 60 18" preserveAspectRatio="none"><polyline points="0,12 10,13 20,11 30,12 40,9 50,10 60,8"/></svg></div>
+            <div class="md-kpi"><span>Cash &amp; runway</span><div class="md-gauge"><i></i></div></div>
+          </div>
+          <div class="md-row">
+            <div class="md-box"><span class="md-t">Stock by vintage</span>
+              <div class="md-bar"><em>Latest</em><b style="--w:85%"></b></div>
+              <div class="md-bar"><em>−1 year</em><b style="--w:60%"></b></div>
+              <div class="md-bar"><em>−2 years</em><b style="--w:35%"></b></div>
+              <div class="md-bar"><em>Reserve</em><b style="--w:15%"></b></div>
+            </div>
+            <div class="md-box"><span class="md-t">Sales by channel</span>
+              <div class="md-stack"><i style="--w:44%"></i><i style="--w:30%"></i><i style="--w:16%"></i><i style="--w:10%"></i></div>
+              <ul class="md-legend"><li>Distribution</li><li>Export</li><li>Cellar door</li><li>Wine club</li></ul>
+            </div>
+          </div>
+          <figcaption>The monthly dashboard, shown without the client&#8217;s figures.</figcaption>
+        </figure>
         <p class="note">The form was the business plan nobody had written.</p>
       </div>
       <div class="wp" role="tabpanel" id="p-fb" aria-labelledby="t-fb">
@@ -624,7 +669,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   <h2 class="rev">That's my trail. I'd like to hear where yours is going.</h2>
   <p class="sub rev">Portuguese, English and Italian. Based in the north of Portugal, open to remote.</p>
   <a class="cta rev" id="cta" href="mailto:ruimcamposgomes@gmail.com">Let's talk <span aria-hidden="true">↗</span></a>
-  <p class="links" id="links"><a data-link="email" href="mailto:ruimcamposgomes@gmail.com">ruimcamposgomes@gmail.com</a><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a><a data-link="cv" href="#" hidden>CV (PDF)</a></p>
+  <p class="links" id="links"><a data-link="email" href="mailto:ruimcamposgomes@gmail.com">ruimcamposgomes@gmail.com</a><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a><a data-link="cv" href="rui-gomes-cv.pdf" download>CV (PDF)</a></p>
   <p class="ai">I built this page with AI, the same way I now build most client models: the tool writes the first draft, and I check every number. The index of evidence is there so you can check them too.</p>
 </section>
 </main>
