@@ -6,7 +6,7 @@ Live at <https://rvcgomes.github.io/the-audit-trail/> (full) and <https://rvcgom
 
 ## Two versions
 
-`index.html` is the full page. `short.html` is about a third shorter: one PwC chapter instead of two, no interlude, the index of evidence folded behind "Show the sources", and less space between sections. It is **generated** from `index.html`; never edit it by hand. After any change to `index.html`:
+`index.html` is the full page. `short.html` is about a third shorter: one PwC chapter instead of two, no interlude, and less space between sections. It is **generated** from `index.html`; never edit it by hand. After any change to `index.html`:
 
 ```
 python tools/make_short.py
@@ -26,7 +26,7 @@ The name and the text travel in the link, so every company sees its own version 
 
 ## What to edit in `index.html`
 
-The `CONFIG` block at the top (the evidence links are written straight into the index of evidence):
+The `CONFIG` block at the top. The sources behind the circled letters (A–F) are popovers written into the HTML at the end of `<main>` (`<div class="srcs">`); each letter is a button with `popovertarget="src-X"`.
 
 | Key | What it does |
 |---|---|

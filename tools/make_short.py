@@ -9,9 +9,9 @@ What the short version changes:
   - the two PwC chapters become one (2013-2022), with the working paper and
     the EUR 500M card side by side
   - no interlude
-  - the index of evidence is folded ("Show the sources"); every circled
-    letter opens it at the right line
   - less empty space between sections
+(The sources behind the circled letters are popovers in index.html, so the
+short version gets them as they are.)
 """
 import os, re
 
@@ -58,7 +58,6 @@ sub(".chap-head{display:grid;gap:.4rem;margin-bottom:2.5rem}", ".chap-head{displ
 sub(".award{padding-block:clamp(70px,12vh,120px);", ".award{padding-block:clamp(44px,7vh,80px);")
 sub(".quest{padding-block:clamp(80px,14vh,140px);", ".quest{padding-block:clamp(48px,8vh,88px);")
 sub(".why{padding:clamp(80px,14vh,140px) 0;", ".why{padding:clamp(48px,8vh,88px) 0;")
-sub(".evidence{padding-block:clamp(70px,12vh,120px);", ".evidence{padding-block:clamp(44px,7vh,80px);")
 sub(".close{padding-block:clamp(90px,16vh,160px) 60px;", ".close{padding-block:clamp(56px,9vh,100px) 48px;")
 
 # --- one PwC chapter ---
@@ -72,7 +71,7 @@ merged = '''<section class="chap wrap" id="c1">
   </div>
   <div class="split">
     <div class="copy rev">
-      <p class="role">Financial audit at PwC, then Claranet and ITEN<a class="ref" href="#ev-A" aria-label="Evidence A">A</a></p>
+      <p class="role">Financial audit at PwC, then Claranet and ITEN<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
       <p class="where">2013–2017 · banks, insurers and venture capital funds</p>
       <p>At PwC I audited some of the most regulated balance sheets there are, under IFRS. It gave me the habit I still work by: before you trust a number, find out where it came from. At Claranet and ITEN I moved into operational finance, reporting and change management.</p>
       <p class="role next">Associate Manager, Capital Markets &amp; Accounting Advisory, PwC</p>
@@ -88,7 +87,7 @@ merged = '''<section class="chap wrap" id="c1">
 </section>
 ''' % (ledger.replace("\n", "\n  "), bign.replace("\n", "\n  "))
 sub(c1 + "\n" + c2, merged)
-sub("/* evidence refs */", ".col-stack{display:grid;gap:22px;align-content:start}\n.copy .role.next{margin-top:1.75rem}\n\n/* evidence refs */")
+sub("/* evidence refs: ", ".col-stack{display:grid;gap:22px;align-content:start}\n.copy .role.next{margin-top:1.75rem}\n\n/* evidence refs: ")
 
 # --- no interlude ---
 m = re.search(r'<section class="inter" aria-label="Interlude">.*?</section>\n\n', s, re.S)
@@ -102,34 +101,6 @@ sub('''    var r=inter.getBoundingClientRect(), vh=innerHeight;
     var k=Math.max(0,Math.min(1,(vh*0.85-r.top)/(r.height+vh*0.35))), n=Math.round(k*words.length);
     words.forEach(function(w,j){w.classList.toggle("lit",j<n)});
 ''', "")
-
-# --- folded index of evidence ---
-sub('<p class="intro rev">An audit trail is only useful if you can follow it. Each circled letter on this page points here.</p>\n  <table class="ev rev">',
-    '<p class="intro rev">An audit trail is only useful if you can follow it. Each circled letter on this page opens its source here.</p>\n'
-    '  <details class="sources rev" id="sources">\n  <summary><span class="c">Show the sources</span><span class="o">Hide the sources</span></summary>\n  <table class="ev">')
-m = re.search(r'(<details class="sources rev" id="sources">.*?</table>)', s, re.S)
-s = s.replace(m.group(1), m.group(1) + "\n  </details>")
-sub(".evidence .intro{", '''.sources summary{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;list-style:none;font-weight:600;padding:9px 16px;border:1px solid var(--rule);border-radius:999px;background:var(--card);color:var(--ink)}
-.sources summary::-webkit-details-marker{display:none}
-.sources summary::after{content:"▾";color:var(--pencil)}
-.sources[open] summary::after{content:"▴"}
-.sources[open] summary{margin-bottom:1rem}
-.sources .o,.sources[open] .c{display:none}
-.sources[open] .o{display:inline}
-.evidence .intro{''')
-sub('''  addEventListener("scroll",onScroll,{passive:true});''', '''  addEventListener("scroll",onScroll,{passive:true});
-
-  /* folded sources: a circled letter opens them at its line; printing opens them too */
-  var sources=$("sources");
-  function openSource(hash){
-    if(!sources||!/^#ev-[A-Z]$/.test(hash||"")) return;
-    sources.open=true; var row=document.querySelector(hash); if(row) row.scrollIntoView({block:"center"});
-  }
-  document.querySelectorAll("a.ref").forEach(function(a){
-    a.addEventListener("click",function(e){var h=a.getAttribute("href"); e.preventDefault(); history.replaceState(null,"",h); openSource(h)});
-  });
-  openSource(location.hash);
-  addEventListener("beforeprint",function(){if(sources) sources.open=true});''')
 
 out = os.path.join(ROOT, "short.html")
 open(out, "w", encoding="utf-8", newline="\n").write(s)
