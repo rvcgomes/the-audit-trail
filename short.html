@@ -33,7 +33,7 @@ window.CONFIG = {
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
   cv: "rui-gomes-cv.pdf",       // public copy, without the phone number
-  // the evidence links are written straight into the index of evidence in the HTML
+  // the sources behind the circled letters are written into the HTML, near the end of <main>
 };
 </script>
 <style>
@@ -123,9 +123,22 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .col-stack{display:grid;gap:22px;align-content:start}
 .copy .role.next{margin-top:1.75rem}
 
-/* evidence refs */
+/* evidence refs: each circled letter opens its source (native popover) */
+.src:popover-open{display:block}
+.src::backdrop{background:rgba(21,38,58,.25)}
 .ref{display:inline-grid;place-items:center;width:1.35em;height:1.35em;margin-left:.2em;border:1.5px solid var(--pencil);border-radius:50%;font-family:var(--hand);font-weight:700;font-size:.8em;line-height:1;color:var(--pencil);text-decoration:none;vertical-align:.15em}
-.ref:hover{background:var(--pencil);color:var(--onPencil)}
+button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.ref:hover,.ref:focus-visible{background:var(--pencil);color:var(--onPencil)}
+.bign .ref:hover,.bign .ref:focus-visible{background:var(--pencilOnDeep);color:#0C1722}
+.print-only{display:none}
+.src{display:none;position:fixed;inset:0;margin:auto;height:fit-content;width:min(92vw,420px);padding:18px 44px 16px 20px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);box-shadow:0 24px 48px -20px rgba(21,38,58,.45);font-size:.9375rem;line-height:1.5;text-align:left}
+.src.open{display:block;z-index:40}
+.src-k{margin:0 0 .25rem;font-family:var(--hand);font-weight:700;font-size:1.15rem;color:var(--pencil)}
+.src-claim{margin:0 0 .5rem;font-weight:600}
+.src-where{margin:0;color:var(--muted)}
+.src-where a{color:var(--ink);text-decoration-color:var(--pencil);text-underline-offset:3px}
+.src-x{position:absolute;top:8px;right:10px;width:30px;height:30px;border:0;border-radius:50%;background:none;color:var(--muted);font-size:1.4rem;line-height:1;cursor:pointer}
+.src-x:hover,.src-x:focus-visible{background:var(--rule);color:var(--ink)}
 .bign .ref,.kpi .ref{font-size:.35em;vertical-align:.9em}
 .bign .ref{border-color:var(--pencilOnDeep);color:var(--pencilOnDeep)}
 
@@ -300,25 +313,6 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 .fit li{padding-left:1.8rem;position:relative;opacity:.9}
 .fit li::before{content:"✓";position:absolute;left:0;top:-.1em;font-family:var(--hand);font-weight:700;font-size:1.3rem;color:var(--pencilOnDeep)}
 
-/* evidence index */
-.evidence{padding-block:clamp(44px,7vh,80px);border-top:1px solid var(--rule)}
-.evidence h2{font-size:clamp(1.8rem,4.5vw,2.8rem);margin:.4rem 0 .75rem}
-.sources summary{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;list-style:none;font-weight:600;padding:9px 16px;border:1px solid var(--rule);border-radius:999px;background:var(--card);color:var(--ink)}
-.sources summary::-webkit-details-marker{display:none}
-.sources summary::after{content:"▾";color:var(--pencil)}
-.sources[open] summary::after{content:"▴"}
-.sources[open] summary{margin-bottom:1rem}
-.sources .o,.sources[open] .c{display:none}
-.sources[open] .o{display:inline}
-.evidence .intro{color:var(--muted);max-width:56ch;margin:0 0 2rem}
-.ev{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--rule);border-radius:6px;font-size:.9375rem}
-.ev th{text-align:left;font-weight:500;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--rule)}
-.ev td{padding:12px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
-.ev tr:last-child td{border-bottom:0}
-.ev td:first-child{width:3rem;font-family:var(--hand);font-weight:700;font-size:1.3rem;color:var(--pencil);line-height:1.1}
-.ev td:nth-child(2){font-weight:500;width:40%}
-.ev td:last-child{color:var(--muted)}
-.ev tr:target{background:color-mix(in srgb,var(--pencil) 10%,var(--card))}
 
 /* close */
 .close{padding-block:clamp(56px,9vh,100px) 48px;text-align:center}
@@ -336,12 +330,6 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .split{grid-template-columns:minmax(0,1fr)}
   .screen{min-height:360px}
   .ledger{transform:none}
-  .ev td:nth-child(2){width:auto}
-  .ev th:last-child,.ev td:last-child{display:block;border-bottom:0;padding-top:0}
-  .ev tr{display:grid;grid-template-columns:3rem 1fr;border-bottom:1px solid var(--rule)}
-  .ev tr:last-child{border-bottom:0}
-  .ev td,.ev th{border-bottom:0}
-  .ev td:last-child,.ev th:last-child{grid-column:2}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -360,8 +348,11 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .js .ledger td.t span{transform:rotate(-8deg)!important}
   .js .chart .draw,.js .hi2 .ul path{stroke-dashoffset:0!important}
   .hero{min-height:0;padding-block:0 24px}
-  .chap,.award,.evidence,.why,.inter{padding-block:24px}
-  .ledger,.bign,.kpis,.chart,.wp,.ev tr,.award-photos,.split>div{break-inside:avoid}
+  .chap,.award,.why,.inter{padding-block:24px}
+  .ledger,.bign,.kpis,.chart,.wp,.src,.award-photos,.split>div{break-inside:avoid}
+  .srcs{padding-top:24px} .print-only{display:block!important}
+  .src{display:block!important;position:static!important;inset:auto!important;transform:none!important;box-shadow:none!important;max-width:none!important;margin:0 0 10px!important}
+  .src-x,.ref{display:none!important}
   .inter,.why,.bign{background:none!important;color:#000!important}
   .why h2{color:#000}
   .inter .w{opacity:1!important}
@@ -369,7 +360,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .js .wp[hidden]{display:block!important}
   .js .tabs{display:none}
   .links a[href^="mailto"]::after{content:""}
-  .links a[href^="http"]::after,.ev a[href^="http"]::after{content:" (" attr(href) ")";word-break:break-all}
+  .links a[href^="http"]::after,.src a[href^="http"]::after{content:" (" attr(href) ")";word-break:break-all}
 }
 </style>
 </head>
@@ -393,7 +384,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   </div>
   <div class="split">
     <div class="copy rev">
-      <p class="role">Financial audit at PwC, then Claranet and ITEN<a class="ref" href="#ev-A" aria-label="Evidence A">A</a></p>
+      <p class="role">Financial audit at PwC, then Claranet and ITEN<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
       <p class="where">2013–2017 · banks, insurers and venture capital funds</p>
       <p>At PwC I audited some of the most regulated balance sheets there are, under IFRS. It gave me the habit I still work by: before you trust a number, find out where it came from. At Claranet and ITEN I moved into operational finance, reporting and change management.</p>
       <p class="role next">Associate Manager, Capital Markets &amp; Accounting Advisory, PwC</p>
@@ -414,7 +405,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="foot">Note: a number only matters once someone acts on it.</p>
       </div>
       <div class="bign rev" id="bign">
-        <div class="num"><span>€500M</span><a class="ref" href="#ev-B" aria-label="Evidence B">B</a></div>
+        <div class="num"><span>€500M</span><button type="button" class="ref" popovertarget="src-B" aria-label="Source B">B</button></div>
         <p class="lbl">in transactions advised on under IFRS</p>
         <div class="chips" id="chips"><span>IFRS 3</span><span>IFRS 9</span><span>IFRS 15</span><span>IFRS 16</span></div>
       </div>
@@ -429,11 +420,11 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   </div>
   <div class="split">
     <div class="copy rev">
-      <p class="role">CFO &amp; Head of HR, Weezie<a class="ref" href="#ev-A" aria-label="Evidence A">A</a></p>
+      <p class="role">CFO &amp; Head of HR, Weezie<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
       <p class="where">Venture-backed software for fibre-network operators</p>
       <p>For the first time the numbers weren't someone else's to review. I built the 12-month rolling forecast and the 36-month model, tied OKRs to unit economics, and set up quarterly board and investor reporting.</p>
-      <p>In 2024 I led our €3M seed round<a class="ref" href="#ev-C" aria-label="Evidence C">C</a>: the model, the data room and the investor materials. It added 18 months of runway and paid for the go-to-market and hiring plan.</p>
-      <p>I also run people: hiring pipelines, 15/45/90-day onboarding with named owners, and career steps tied to delivery. In 20 months, nobody in a team of 23 left voluntarily<a class="ref" href="#ev-D" aria-label="Evidence D">D</a>.</p>
+      <p>In 2024 I led our €3M seed round<button type="button" class="ref" popovertarget="src-C" aria-label="Source C">C</button>: the model, the data room and the investor materials. It added 18 months of runway and paid for the go-to-market and hiring plan.</p>
+      <p>I also run people: hiring pipelines, 15/45/90-day onboarding with named owners, and career steps tied to delivery. In 20 months, nobody in a team of 23 left voluntarily<button type="button" class="ref" popovertarget="src-D" aria-label="Source D">D</button>.</p>
       <ul class="stack"><li>FP&amp;A</li><li>Fundraising</li><li>Treasury</li><li>Compensation</li><li>Power BI</li></ul>
     </div>
     <div class="rev">
@@ -455,10 +446,10 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
         <p class="cap">Illustrative shape, not company figures.</p>
       </div>
       <div class="kpis">
-        <div class="kpi"><div class="v"><span>€3M</span><a class="ref" href="#ev-C" aria-label="Evidence C">C</a></div><div class="d">seed round raised, 2024</div></div>
-        <div class="kpi"><div class="v"><span>−34%</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">time to close the month</div></div>
-        <div class="kpi"><div class="v"><span>−28%</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">FX exposure, after a new liquidity policy</div></div>
-        <div class="kpi"><div class="v"><span>20 mo</span><a class="ref" href="#ev-D" aria-label="Evidence D">D</a></div><div class="d">with zero voluntary attrition, team of 23</div></div>
+        <div class="kpi"><div class="v"><span>€3M</span><button type="button" class="ref" popovertarget="src-C" aria-label="Source C">C</button></div><div class="d">seed round raised, 2024</div></div>
+        <div class="kpi"><div class="v"><span>−34%</span><button type="button" class="ref" popovertarget="src-D" aria-label="Source D">D</button></div><div class="d">time to close the month</div></div>
+        <div class="kpi"><div class="v"><span>−28%</span><button type="button" class="ref" popovertarget="src-D" aria-label="Source D">D</button></div><div class="d">FX exposure, after a new liquidity policy</div></div>
+        <div class="kpi"><div class="v"><span>20 mo</span><button type="button" class="ref" popovertarget="src-D" aria-label="Source D">D</button></div><div class="d">with zero voluntary attrition, team of 23</div></div>
       </div>
     </div>
   </div>
@@ -517,13 +508,13 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
       <figcaption>Accepting it for the Weezie team.</figcaption>
     </figure>
   </div>
-  <h2>Transparency in Compensation Award, 2025<a class="ref" href="#ev-E" aria-label="Evidence E">E</a></h2>
+  <h2>Transparency in Compensation Award, 2025<button type="button" class="ref" popovertarget="src-E" aria-label="Source E">E</button></h2>
   <p>Coverflex Compensation Awards, small-company category. Given to Weezie for the company-wide compensation framework and salary bands I designed there.</p>
 </section>
 
 <section class="chap wrap" id="c4">
   <div class="chap-head rev">
-    <span class="when"><b>Alongside</b>, with VCLevel<a class="ref" href="#ev-F" aria-label="Evidence F">F</a></span>
+    <span class="when"><b>Alongside</b>, with VCLevel<button type="button" class="ref" popovertarget="src-F" aria-label="Source F">F</button></span>
     <h2>The same job, in other people's industries.</h2>
   </div>
   <div class="split">
@@ -642,33 +633,52 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   </div>
 </section>
 
-<section class="evidence wrap" id="evidence">
-  <span class="when rev"><b>Index of evidence</b></span>
-  <h2 class="rev">Where each number comes from.</h2>
-  <p class="intro rev">An audit trail is only useful if you can follow it. Each circled letter on this page opens its source here.</p>
-  <details class="sources rev" id="sources">
-  <summary><span class="c">Show the sources</span><span class="o">Hide the sources</span></summary>
-  <table class="ev">
-    <thead><tr><th scope="col">Ref</th><th scope="col">Claim</th><th scope="col">Where to check</th></tr></thead>
-    <tbody>
-      <tr id="ev-A"><td>A</td><td>Roles and dates, 2013 to now</td><td><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></td></tr>
-      <tr id="ev-B"><td>B</td><td>€500M in transactions advised on under IFRS</td><td>PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</td></tr>
-      <tr id="ev-C"><td>C</td><td>€3M seed round in 2024, 18 more months of runway</td><td>€3M round led by GED Ventures Portugal, February 2024: <a href="https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/" rel="noopener" target="_blank">ECO, 6 Feb 2024</a>. Runway figures on request.</td></tr>
-      <tr id="ev-D"><td>D</td><td>−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</td><td>Weezie management reporting; before-and-after figures on request. The attrition figure is public: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/" rel="noopener" target="_blank">my LinkedIn post, Aug 2025</a>.</td></tr>
-      <tr id="ev-E"><td>E</td><td>Transparency in Compensation Award, 2025</td><td>Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category. Photos above; <a href="https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/" rel="noopener" target="_blank">Weezie on LinkedIn, May 2025</a>.</td></tr>
-      <tr id="ev-F"><td>F</td><td>Founding partner, VCLevel</td><td><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></td></tr>
-    </tbody>
-  </table>
-  </details>
-</section>
-
 <section class="close wrap" id="contact">
   <h2 class="rev">That's my trail. I'd like to hear where yours is going.</h2>
   <p class="sub rev">Portuguese, English and Italian. Based in the north of Portugal, open to remote.</p>
   <a class="cta rev" id="cta" href="mailto:ruimcamposgomes@gmail.com">Let's talk <span aria-hidden="true">↗</span></a>
   <p class="links" id="links"><a data-link="email" href="mailto:ruimcamposgomes@gmail.com">ruimcamposgomes@gmail.com</a><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a><a data-link="cv" href="rui-gomes-cv.pdf" download>CV (PDF)</a></p>
-  <p class="ai">I built this page with AI, the same way I now build most client models: the tool writes the first draft, and I check every number. The index of evidence is there so you can check them too.</p>
+  <p class="ai">I built this page with AI, the same way I now build most client models: the tool writes the first draft, and I check every number. Each circled letter shows where a number comes from, so you can check them too.</p>
 </section>
+<div class="srcs">
+  <h2 class="print-only">Sources</h2>
+  <div class="src" id="src-A" popover>
+    <p class="src-k">Source A</p>
+    <p class="src-claim">Roles and dates, 2013 to now</p>
+    <p class="src-where"><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></p>
+    <button type="button" class="src-x" popovertarget="src-A" popovertargetaction="hide" aria-label="Close">×</button>
+  </div>
+  <div class="src" id="src-B" popover>
+    <p class="src-k">Source B</p>
+    <p class="src-claim">€500M in transactions advised on under IFRS</p>
+    <p class="src-where">PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</p>
+    <button type="button" class="src-x" popovertarget="src-B" popovertargetaction="hide" aria-label="Close">×</button>
+  </div>
+  <div class="src" id="src-C" popover>
+    <p class="src-k">Source C</p>
+    <p class="src-claim">€3M seed round in 2024, 18 more months of runway</p>
+    <p class="src-where">€3M round led by GED Ventures Portugal, February 2024: <a href="https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/" rel="noopener" target="_blank">ECO, 6 Feb 2024</a>. Runway figures on request.</p>
+    <button type="button" class="src-x" popovertarget="src-C" popovertargetaction="hide" aria-label="Close">×</button>
+  </div>
+  <div class="src" id="src-D" popover>
+    <p class="src-k">Source D</p>
+    <p class="src-claim">−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</p>
+    <p class="src-where">Weezie management reporting; before-and-after figures on request. The attrition figure is public: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/" rel="noopener" target="_blank">my LinkedIn post, Aug 2025</a>.</p>
+    <button type="button" class="src-x" popovertarget="src-D" popovertargetaction="hide" aria-label="Close">×</button>
+  </div>
+  <div class="src" id="src-E" popover>
+    <p class="src-k">Source E</p>
+    <p class="src-claim">Transparency in Compensation Award, 2025</p>
+    <p class="src-where">Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category. Photos above, <a href="https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/" rel="noopener" target="_blank">Weezie on LinkedIn, May 2025</a>.</p>
+    <button type="button" class="src-x" popovertarget="src-E" popovertargetaction="hide" aria-label="Close">×</button>
+  </div>
+  <div class="src" id="src-F" popover>
+    <p class="src-k">Source F</p>
+    <p class="src-claim">Founding partner, VCLevel</p>
+    <p class="src-where"><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></p>
+    <button type="button" class="src-x" popovertarget="src-F" popovertargetaction="hide" aria-label="Close">×</button>
+  </div>
+</div>
 </main>
 
 <footer class="wrap">
@@ -724,17 +734,18 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   }
   addEventListener("scroll",onScroll,{passive:true});
 
-  /* folded sources: a circled letter opens them at its line; printing opens them too */
-  var sources=$("sources");
-  function openSource(hash){
-    if(!sources||!/^#ev-[A-Z]$/.test(hash||"")) return;
-    sources.open=true; var row=document.querySelector(hash); if(row) row.scrollIntoView({block:"center"});
+  /* sources: native popovers; older browsers get the same by hand */
+  if(!HTMLElement.prototype.hasOwnProperty("popover")){
+    document.querySelectorAll("[popovertarget]").forEach(function(b){
+      b.addEventListener("click",function(e){
+        e.stopPropagation(); var t=$(b.getAttribute("popovertarget")), on=!t.classList.contains("open");
+        document.querySelectorAll(".src.open").forEach(function(x){x.classList.remove("open")});
+        if(on && b.getAttribute("popovertargetaction")!=="hide") t.classList.add("open");
+      });
+    });
+    document.addEventListener("click",function(e){if(!e.target.closest(".src")) document.querySelectorAll(".src.open").forEach(function(x){x.classList.remove("open")})});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape") document.querySelectorAll(".src.open").forEach(function(x){x.classList.remove("open")})});
   }
-  document.querySelectorAll("a.ref").forEach(function(a){
-    a.addEventListener("click",function(e){var h=a.getAttribute("href"); e.preventDefault(); history.replaceState(null,"",h); openSource(h)});
-  });
-  openSource(location.hash);
-  addEventListener("beforeprint",function(){if(sources) sources.open=true});
 
   document.querySelectorAll("#ledger td.t span").forEach(function(s,k){s.style.transitionDelay=(0.3+k*0.25)+"s"});
   document.querySelectorAll("#chart .cash.draw").forEach(function(p){p.style.setProperty("--len",Math.ceil(p.getTotalLength()))});
