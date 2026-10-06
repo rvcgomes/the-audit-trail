@@ -1,7 +1,7 @@
 <!doctype html><meta charset="utf-8"><title>RUNWAY input test</title>
 <!-- Loaded by tests/input.js in headless Chrome (real time). Plays the page with real
      keyboard, pointer and swipe events and writes PASS/FAIL lines into #out. -->
-<iframe id="f" src="../index.html?debug" width="520" height="900"></iframe>
+<iframe id="f" width="520" height="900"></iframe>
 <pre id="out">pending</pre>
 <script>
 var R = [];
@@ -127,4 +127,5 @@ function run(){
   })().catch(function(e){log("harness error", false, e.message)});
 }
 f.onload = function(){f.onload = null; run().then(function(){out.textContent = R.join("\n")})};
+f.src = "../" + (new URLSearchParams(location.search).get("page") || "index.html") + "?debug";
 </script>

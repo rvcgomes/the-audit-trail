@@ -20,6 +20,10 @@ output{display:block;word-break:break-all;margin-top:1.5rem;padding:12px;border:
 .row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
 button,a.b{font:inherit;padding:10px 16px;border-radius:6px;border:1px solid var(--pencil);background:var(--pencil);color:#fff;cursor:pointer;text-decoration:none}
 a.b{background:none;color:var(--pencil)}
+.ver{border:0;padding:0;margin:1.25rem 0 0}
+.ver legend{font-weight:600;padding:0;margin-bottom:.35rem}
+.ver label{display:inline-flex;align-items:center;gap:.4rem;font-weight:400;margin:0 1.25rem 0 0}
+.ver input{width:auto}
 </style>
 </head>
 <body>
@@ -31,6 +35,10 @@ a.b{background:none;color:var(--pencil)}
   <label for="why">Why this company <small>(1–3 sentences, optional)</small></label>
   <textarea id="why" maxlength="600"></textarea>
   <small id="n">0 / 600</small>
+  <fieldset class="ver"><legend>Version</legend>
+    <label><input type="radio" name="v" value="" checked> Full</label>
+    <label><input type="radio" name="v" value="short.html"> Short (about a third shorter)</label>
+  </fieldset>
   <output id="out"></output>
   <div class="row"><button type="button" id="copy">Copy link</button><a class="b" id="open" target="_blank" rel="noopener">Open</a></div>
 </main>
@@ -40,13 +48,15 @@ function build(){
   var q = new URLSearchParams(), co = document.getElementById("co").value.trim(), why = document.getElementById("why").value.trim();
   if (co) q.set("co", co);
   if (why) q.set("why", why);
-  var url = base + (q.toString() ? "?" + q : "");
+  var v = document.querySelector('input[name="v"]:checked').value;
+  var url = base + v + (q.toString() ? "?" + q : "");
   document.getElementById("out").textContent = url;
   document.getElementById("open").href = url;
   document.getElementById("n").textContent = why.length + " / 600";
   return url;
 }
 ["co","why"].forEach(function(id){document.getElementById(id).addEventListener("input",build)});
+document.querySelectorAll('input[name="v"]').forEach(function(r){r.addEventListener("change",build)});
 document.getElementById("copy").onclick = function(){
   var b = this, url = build();
   navigator.clipboard.writeText(url).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy link"},1500)});

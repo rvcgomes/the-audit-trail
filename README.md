@@ -2,7 +2,17 @@
 
 A one-page introduction for job applications: from IFRS audit at PwC to CFO and Head of HR at Weezie, fractional finance work with VCLevel, and a pixel-art handheld with seven small retro games.
 
-Live at <https://rvcgomes.github.io/the-audit-trail/>
+Live at <https://rvcgomes.github.io/the-audit-trail/> (full) and <https://rvcgomes.github.io/the-audit-trail/short.html> (short).
+
+## Two versions
+
+`index.html` is the full page. `short.html` is about a third shorter: one PwC chapter instead of two, no interlude, the index of evidence folded behind "Show the sources", and less space between sections. It is **generated** from `index.html`; never edit it by hand. After any change to `index.html`:
+
+```
+python tools/make_short.py
+```
+
+The script stops and names the piece it couldn't find if `index.html` changed in a way it doesn't expect. `link.html` lets you pick the version for each link.
 
 ## One link per application
 
@@ -51,6 +61,7 @@ node tests/blocks-bots.js
 node tests/spot-bots.js
 node tests/lanes-bots.js
 node tests/input.js          # real keyboard, touch and swipe in headless Chrome; needs `python -m http.server 8765`
+node tests/input.js http://localhost:8765/tests/input.html?page=short.html   # the same on the short version
 ```
 
 Each plays hundreds of seeded games with bots of different skill and fails unless skill decides the result (a careful player wins, careless play loses, no game gets stuck). The arcade tests also draw every frame of a few demo games against a fake canvas.
