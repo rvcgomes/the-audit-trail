@@ -1,67 +1,91 @@
 """Builds short.html, the shorter version of the page, from index.html.
 
-index.html stays the full version. Run this after any change to index.html:
-    python tools/make_short.py
-Every replacement must match exactly once; if index.html changed in a way this
-script doesn't expect, it stops and says which piece it couldn't find.
+index.html stays the full version. After any change to index.html:
+    python tools/make_short.py          # writes short.html
+    python tools/make_short.py --check  # fails if short.html is out of date (writes nothing)
 
 What the short version changes:
   - the two PwC chapters become one (2013-2022), with the working paper and
     the EUR 500M card side by side
   - no interlude
-  - less empty space between sections
-(The sources behind the circled letters are popovers in index.html, so the
-short version gets them as they are.)
+  - less empty space between sections (a small screen-only style block; the
+    rest of the styles come from the shared styles.css)
+Every replacement must match exactly once; if index.html changed in a way this
+script doesn't expect, it stops and says which piece it couldn't find.
+
+The merged PwC chapter is written by hand below. If the two PwC chapters (c1, c2)
+in index.html change, the script stops, so the short text can be updated too.
 """
-import os, re
+import hashlib, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-s = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
+# fingerprint of c1 + c2 in index.html when the merged chapter below was last written
+SOURCE_HASH = "3f96a924b52d9c84"
+
+s = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read().replace("\r\n", "\n")
+
+
+def stop(msg):
+    raise SystemExit("make_short: " + msg)
 
 
 def sub(a, b):
     global s
     n = s.count(a)
     if n != 1:
-        raise SystemExit("make_short: expected one match, found %d for:\n%s" % (n, a[:120]))
+        stop("expected one match, found %d for:\n%s" % (n, a[:120]))
     s = s.replace(a, b)
 
 
 def section(sid):
     m = re.search(r'<section class="chap wrap" id="%s">.*?\n</section>\n' % sid, s, re.S)
     if not m:
-        raise SystemExit("make_short: section #%s not found" % sid)
+        stop("section #%s not found" % sid)
     return m.group(0)
 
 
 def block(text, start):
     """The <div ...> starting with `start`, up to its matching </div>."""
-    i = text.index(start)
-    depth, j = 0, i
+    i = text.find(start)
+    if i < 0:
+        stop("block not found: " + start)
+    depth = 0
     for m in re.finditer(r"<div\b|</div>", text[i:]):
         depth += 1 if m.group(0) == "<div" else -1
         if depth == 0:
-            j = i + m.end()
-            break
-    return text[i:j]
+            return text[i:i + m.end()]
+    stop("block not closed: " + start)
 
 
 URL = "https://rvcgomes.github.io/the-audit-trail/"
 sub('<meta property="og:url" content="%s">' % URL, '<meta property="og:url" content="%sshort.html">' % URL)
 sub('<link rel="canonical" href="%s">' % URL, '<link rel="canonical" href="%sshort.html">' % URL)
 
-# --- less empty space ---
-sub(".hero{min-height:100svh;", ".hero{min-height:86svh;")
-sub("margin:0;max-width:16ch}", "margin:0;max-width:22ch}")
-sub(".chap{padding-block:clamp(80px,14vh,140px);", ".chap{padding-block:clamp(48px,8vh,88px);")
-sub(".chap-head{display:grid;gap:.4rem;margin-bottom:2.5rem}", ".chap-head{display:grid;gap:.4rem;margin-bottom:1.75rem}")
-sub(".award{padding-block:clamp(70px,12vh,120px);", ".award{padding-block:clamp(44px,7vh,80px);")
-sub(".quest{padding-block:clamp(80px,14vh,140px);", ".quest{padding-block:clamp(48px,8vh,88px);")
-sub(".why{padding:clamp(80px,14vh,140px) 0;", ".why{padding:clamp(48px,8vh,88px) 0;")
-sub(".close{padding-block:clamp(90px,16vh,160px) 60px;", ".close{padding-block:clamp(56px,9vh,100px) 48px;")
+# --- less empty space (screen only, so print keeps its own spacing) ---
+sub('<link rel="stylesheet" href="styles.css">\n', '''<link rel="stylesheet" href="styles.css">
+<style>
+/* short version: less empty space between sections */
+@media screen{
+  .hero{min-height:86svh}
+  h2{max-width:22ch}
+  .chap{padding-block:clamp(48px,8vh,88px)}
+  .chap-head{margin-bottom:1.75rem}
+  .award{padding-block:clamp(44px,7vh,80px)}
+  .quest{padding-block:clamp(48px,8vh,88px)}
+  .why{padding:clamp(48px,8vh,88px) 0}
+  .close{padding-block:clamp(56px,9vh,100px) 48px}
+}
+.col-stack{display:grid;gap:22px;align-content:start}
+.copy .role.next{margin-top:1.75rem}
+</style>
+''')
 
 # --- one PwC chapter ---
 c1, c2 = section("c1"), section("c2")
+h = hashlib.sha256((c1 + c2).encode("utf-8")).hexdigest()[:16]
+if h != SOURCE_HASH:
+    stop("the PwC chapters (c1, c2) in index.html changed. Update the merged chapter in this script to match, "
+         "then set SOURCE_HASH = \"%s\"." % h)
 ledger = block(c1, '<div class="ledger rev" id="ledger"')
 bign = block(c2, '<div class="bign rev" id="bign"')
 merged = '''<section class="chap wrap" id="c1">
@@ -87,12 +111,11 @@ merged = '''<section class="chap wrap" id="c1">
 </section>
 ''' % (ledger.replace("\n", "\n  "), bign.replace("\n", "\n  "))
 sub(c1 + "\n" + c2, merged)
-sub("/* evidence refs: ", ".col-stack{display:grid;gap:22px;align-content:start}\n.copy .role.next{margin-top:1.75rem}\n\n/* evidence refs: ")
 
 # --- no interlude ---
 m = re.search(r'<section class="inter" aria-label="Interlude">.*?</section>\n\n', s, re.S)
 if not m:
-    raise SystemExit("make_short: interlude not found")
+    stop("interlude not found")
 s = s.replace(m.group(0), "")
 sub('''  var bar=$("bar"), inter=$("inter");
   inter.innerHTML=inter.textContent.split(" ").map(function(w){return '<span class="w">'+w+'</span>'}).join(" ");
@@ -103,5 +126,11 @@ sub('''    var r=inter.getBoundingClientRect(), vh=innerHeight;
 ''', "")
 
 out = os.path.join(ROOT, "short.html")
-open(out, "w", encoding="utf-8", newline="\n").write(s)
-print("short.html written,", len(s.splitlines()), "lines")
+if "--check" in sys.argv:
+    current = open(out, encoding="utf-8").read().replace("\r\n", "\n") if os.path.exists(out) else ""
+    if current != s:
+        stop("short.html is out of date: run python tools/make_short.py")
+    print("short.html is up to date")
+else:
+    open(out, "w", encoding="utf-8", newline="\n").write(s)
+    print("short.html written,", len(s.splitlines()), "lines")
