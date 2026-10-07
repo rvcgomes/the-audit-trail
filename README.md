@@ -10,7 +10,10 @@ Live at <https://rvcgomes.github.io/the-audit-trail/> (full) and <https://rvcgom
 
 ```
 python tools/make_short.py
+python tools/make_short.py --check   # fails if short.html is out of date
 ```
+
+Both pages load the same `styles.css`; the short one adds a small screen-only style block for spacing. The merged PwC chapter is written in the script: if the PwC chapters in `index.html` change, the script stops and asks for the merged text to be updated.
 
 The script stops and names the piece it couldn't find if `index.html` changed in a way it doesn't expect. `link.html` lets you pick the version for each link.
 

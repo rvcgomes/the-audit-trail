@@ -1,7 +1,6 @@
 <!doctype html><meta charset="utf-8"><title>RUNWAY input test</title>
 <!-- Loaded by tests/input.js in headless Chrome (real time). Plays the page with real
      keyboard, pointer and swipe events and writes PASS/FAIL lines into #out. -->
-<iframe id="f" width="520" height="900"></iframe>
 <pre id="out">pending</pre>
 <script>
 var R = [];
@@ -126,6 +125,8 @@ function run(){
     w2.localStorage.removeItem("runway-sound");
   })().catch(function(e){log("harness error", false, e.message)});
 }
+var f = document.createElement("iframe"); f.width = 520; f.height = 900;
 f.onload = function(){f.onload = null; run().then(function(){out.textContent = R.join("\n")})};
 f.src = "../" + (new URLSearchParams(location.search).get("page") || "index.html") + "?debug";
+document.body.insertBefore(f, document.getElementById("out"));
 </script>

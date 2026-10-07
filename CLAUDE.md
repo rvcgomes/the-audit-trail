@@ -17,8 +17,9 @@ O objetivo é **branding com estrutura interativa**, não uma ferramenta de CFO.
 
 | O quê | Onde |
 |---|---|
-| Página, textos, `CONFIG` (email, LinkedIn, CV, links de evidência) | `index.html` (versão completa) |
-| Versão curta | `short.html`, gerada por `python tools/make_short.py`; nunca editar à mão, regenerar depois de mexer no `index.html` |
+| Página, textos, `CONFIG` (email, LinkedIn, CV); fontes das letras A–F em popovers no fim do `<main>` | `index.html` (versão completa) |
+| Estilos (página e consola) | `styles.css`, partilhado pelas duas versões |
+| Versão curta | `short.html`, gerada por `python tools/make_short.py`; nunca editar à mão. Depois de mexer no `index.html`: regenerar e confirmar com `python tools/make_short.py --check`. Se o script parar por causa dos capítulos PwC, atualizar o capítulo junto no script e o `SOURCE_HASH` |
 | Gerador de links por empresa | `link.html` |
 | Regras de cada jogo (sem DOM, com seed) | `games/decisions.js`, `runner.js`, `fight.js`, `maze.js`, `blocks.js`, `spot.js`, `lanes.js` |
 | Desenho e texto de cada cartucho | `games/carts/*.js` (`classic.js` tem RUNWAY RUN, BOARD FIGHT e DECISIONS) |
