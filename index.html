@@ -15,7 +15,7 @@
 <meta property="og:image:alt" content="The audit trail: Rui Gomes, CFO and Head of HR, with a pixel-art handheld console.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://rvcgomes.github.io/the-audit-trail/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2315263A'/%3E%3Cpath d='M8 17l5 5 11-12' fill='none' stroke='%23F0685B' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230C271F'/%3E%3Cpath d='M8 17l5 5 11-12' fill='none' stroke='%238CB979' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Kalam:wght@400;700&family=VT323&display=swap" rel="stylesheet">
@@ -38,9 +38,11 @@ window.CONFIG = {
 </script>
 <style>
 :root{
-  --paper:#E8EEF1; --ink:#15263A; --muted:#566777; --rule:#C6D5DE;
-  --pencil:#C2372C; --onPencil:#fff; --pencilOnDeep:#F0685B;
-  --card:#F4F7F9; --deep:#15263A; --onDeep:#E8EEF1;
+  /* VCLevel palette: ouro #9F8E6A, verde #8CB979, floresta #0C271F, salva #969C7D, claro #F2F2F2.
+     Text uses the darkened tones from the VCLevel brand kit so every pair passes AA. */
+  --paper:#F2F2F2; --ink:#0C271F; --muted:#46584F; --rule:#D5D9CB;
+  --pencil:#50793F; --onPencil:#fff; --pencilOnDeep:#8CB979; --gold:#7A6C4F;
+  --card:#FFFFFF; --deep:#0C271F; --onDeep:#F2F2F2;
   --lcd-bg:#1C1812; --lcd:#FFB547; --lcd-dim:#B08A48;
   --sans:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
   --hand:"Kalam","Bradley Hand","Comic Sans MS",cursive;
@@ -49,15 +51,15 @@ window.CONFIG = {
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --paper:#122130; --ink:#E6EDF2; --muted:#93A5B4; --rule:#22364A;
-    --pencil:#F0685B; --onPencil:#0C1722; --pencilOnDeep:#F0685B;
-    --card:#172A3B; --deep:#0C1722; --onDeep:#E6EDF2; color-scheme:dark;
+    --paper:#0C271F; --ink:#F2F2F2; --muted:#969C7D; --rule:#1E4A3E;
+    --pencil:#8CB979; --onPencil:#0C271F; --pencilOnDeep:#8CB979; --gold:#B8A882;
+    --card:#14342B; --deep:#061812; --onDeep:#F2F2F2; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#122130; --ink:#E6EDF2; --muted:#93A5B4; --rule:#22364A;
-  --pencil:#F0685B; --onPencil:#0C1722; --pencilOnDeep:#F0685B;
-  --card:#172A3B; --deep:#0C1722; --onDeep:#E6EDF2; color-scheme:dark;
+  --paper:#0C271F; --ink:#F2F2F2; --muted:#969C7D; --rule:#1E4A3E;
+  --pencil:#8CB979; --onPencil:#0C271F; --pencilOnDeep:#8CB979; --gold:#B8A882;
+  --card:#14342B; --deep:#061812; --onDeep:#F2F2F2; color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -109,7 +111,7 @@ img,svg{max-width:100%}
 .chap{padding-block:clamp(80px,14vh,140px);border-top:1px solid var(--rule)}
 .chap-head{display:grid;gap:.4rem;margin-bottom:2.5rem}
 .when{font-size:.9375rem;color:var(--muted)}
-.when b{color:var(--pencil);font-weight:700}
+.when b{color:var(--gold);font-weight:700}
 h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;font-weight:800;margin:0;max-width:16ch}
 .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(28px,5vw,72px);align-items:start}
 .copy p{margin:0 0 1rem;max-width:52ch}
@@ -122,15 +124,15 @@ h2{font-size:clamp(2.2rem,6.5vw,4.2rem);line-height:1.02;letter-spacing:-.028em;
 
 /* evidence refs: each circled letter opens its source (native popover) */
 .src:popover-open{display:block}
-.src::backdrop{background:rgba(21,38,58,.25)}
+.src::backdrop{background:rgba(12,39,31,.25)}
 .ref{display:inline-grid;place-items:center;width:1.35em;height:1.35em;margin-left:.2em;border:1.5px solid var(--pencil);border-radius:50%;font-family:var(--hand);font-weight:700;font-size:.8em;line-height:1;color:var(--pencil);text-decoration:none;vertical-align:.15em}
 button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appearance:none}
 .ref:hover,.ref:focus-visible{background:var(--pencil);color:var(--onPencil)}
-.bign .ref:hover,.bign .ref:focus-visible{background:var(--pencilOnDeep);color:#0C1722}
+.bign .ref:hover,.bign .ref:focus-visible{background:var(--pencilOnDeep);color:#0C271F}
 .print-only{display:none}
-.src{display:none;position:fixed;inset:0;margin:auto;height:fit-content;width:min(92vw,420px);padding:18px 44px 16px 20px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);box-shadow:0 24px 48px -20px rgba(21,38,58,.45);font-size:.9375rem;line-height:1.5;text-align:left}
+.src{display:none;position:fixed;inset:0;margin:auto;height:fit-content;width:min(92vw,420px);padding:18px 44px 16px 20px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);box-shadow:0 24px 48px -20px rgba(12,39,31,.45);font-size:.9375rem;line-height:1.5;text-align:left}
 .src.open{display:block;z-index:40}
-.src-k{margin:0 0 .25rem;font-family:var(--hand);font-weight:700;font-size:1.15rem;color:var(--pencil)}
+.src-k{margin:0 0 .25rem;font-family:var(--hand);font-weight:700;font-size:1.15rem;color:var(--gold)}
 .src-claim{margin:0 0 .5rem;font-weight:600}
 .src-where{margin:0;color:var(--muted)}
 .src-where a{color:var(--ink);text-decoration-color:var(--pencil);text-underline-offset:3px}
@@ -140,7 +142,7 @@ button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appe
 .bign .ref{border-color:var(--pencilOnDeep);color:var(--pencilOnDeep)}
 
 /* ledger visual */
-.ledger{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:18px 18px 12px;box-shadow:0 20px 40px -24px rgba(21,38,58,.35);transform:rotate(-1.2deg)}
+.ledger{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:18px 18px 12px;box-shadow:0 20px 40px -24px rgba(12,39,31,.35);transform:rotate(-1.2deg)}
 .ledger h4{margin:0 0 .75rem;font-size:.9375rem;display:flex;justify-content:space-between;color:var(--muted);font-weight:500}
 .ledger table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.9375rem}
 .ledger td{padding:9px 4px;border-bottom:1px solid var(--rule)}
@@ -149,7 +151,7 @@ button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appe
 .ledger td.t span{display:inline-block;transform:rotate(-8deg)}
 .js .ledger td.t span{transform:scale(0) rotate(-30deg);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
 .js .ledger.in td.t span{transform:scale(1) rotate(-8deg)}
-.ledger .foot{font-family:var(--hand);color:var(--pencil);font-size:1.15rem;margin:.75rem 0 0}
+.ledger .foot{font-family:var(--hand);color:var(--gold);font-size:1.15rem;margin:.75rem 0 0}
 .js .ledger .foot{opacity:0;transition:opacity .5s 1.6s}
 .js .ledger.in .foot{opacity:1}
 
@@ -191,10 +193,10 @@ button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appe
 /* award */
 .award{padding-block:clamp(70px,12vh,120px);border-top:1px solid var(--rule);text-align:center}
 .award-photos{display:flex;justify-content:center;align-items:flex-start;margin:0 auto 2rem;max-width:660px}
-.award-photo{flex:1 1 0;min-width:0;max-width:320px;margin:0;padding:10px 10px 12px;background:var(--card);border:1px solid var(--rule);box-shadow:0 20px 40px -24px rgba(21,38,58,.45);transform:rotate(-2deg)}
+.award-photo{flex:1 1 0;min-width:0;max-width:320px;margin:0;padding:10px 10px 12px;background:var(--card);border:1px solid var(--rule);box-shadow:0 20px 40px -24px rgba(12,39,31,.45);transform:rotate(-2deg)}
 .award-photo+.award-photo{margin:28px 0 0 -18px;transform:rotate(1.5deg)}
 .award-photo img{display:block;width:100%;height:auto}
-.award-photo figcaption{font-family:var(--hand);color:var(--pencil);font-size:1.1rem;margin-top:8px}
+.award-photo figcaption{font-family:var(--hand);color:var(--gold);font-size:1.1rem;margin-top:8px}
 .award h2{font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.02em;line-height:1.1;margin:0 auto .75rem;max-width:22ch}
 .award p{color:var(--muted);max-width:52ch;margin:0 auto}
 
@@ -204,7 +206,7 @@ button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appe
 .js .tabs{display:flex}
 .tabs button{font:inherit;font-size:.9375rem;padding:7px 14px;border:1px solid var(--rule);border-radius:999px;background:var(--card);color:var(--ink);cursor:pointer}
 .tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.wp{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:20px 20px 16px;box-shadow:0 20px 40px -24px rgba(21,38,58,.35);margin-bottom:14px;position:relative}
+.wp{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:20px 20px 16px;box-shadow:0 20px 40px -24px rgba(12,39,31,.35);margin-bottom:14px;position:relative}
 .js .wp{margin-bottom:0}
 .wp h3{margin:0 0 .9rem;font-size:.9375rem;color:var(--muted);font-weight:500;display:flex;justify-content:space-between;gap:1rem}
 .wp .k{font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
@@ -234,7 +236,7 @@ button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appe
 .md-stack i:nth-child(4),.md-legend li:nth-child(4)::before{background:color-mix(in srgb,var(--muted) 45%,var(--card))}
 .mdash figcaption{font-size:.75rem;color:var(--muted);margin:8px 2px 0;line-height:1.3}
 @media (max-width:560px){.md-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.md-row{grid-template-columns:minmax(0,1fr)}}
-.wp .note{font-family:var(--hand);color:var(--pencil);font-size:1.15rem;margin:1rem 0 0;line-height:1.3}
+.wp .note{font-family:var(--hand);color:var(--gold);font-size:1.15rem;margin:1rem 0 0;line-height:1.3}
 
 /* game */
 .quest{padding-block:clamp(80px,14vh,140px);border-top:1px solid var(--rule)}
@@ -302,7 +304,7 @@ button.ref{padding:0;background:none;cursor:pointer;-webkit-appearance:none;appe
 .chess{margin-top:1.5rem;padding:16px 18px;border-left:3px solid var(--pencil);background:var(--card);max-width:48ch}
 /* why */
 .why{padding:clamp(80px,14vh,140px) 0;background:var(--deep);color:var(--onDeep)}
-.why .when b{color:var(--pencilOnDeep)}
+.why .when b{color:#C9BC98}
 .why h2{color:var(--onDeep);margin:.4rem 0 1.75rem}
 .why .lead{font-size:clamp(1.15rem,2.4vw,1.5rem);line-height:1.45;max-width:46ch;margin:0 0 2.5rem}
 .why h3{font-size:1.125rem;margin:0 0 1rem}
@@ -368,7 +370,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <section class="wrap hero" id="hero" aria-label="Introduction">
   <p class="meta">From <strong>Rui Gomes</strong> (V.N. Famalicão, PT)<span id="toLine" hidden><br>To <strong data-co></strong></span></p>
   <h1 class="hi"><span class="sr" id="greetSr">Hi there,</span><span class="typed" id="typed" aria-hidden="true">Hi there,</span></h1>
-  <p class="hi2">here's the <span class="ul">audit trail<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 50 6, 120 18, 198 8"/></svg></span> behind my CV.</p>
+  <p class="hi2">here's the <span class="ul">audit trail<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 50 6, 120 18, 198 8"/></svg></span> behind my CV</p>
   <p class="lede">I'm Rui. I started in audit in 2013, checking other people's numbers. Today I'm CFO and Head of HR at a venture-backed startup, and through VCLevel I do the same job for smaller companies.</p>
   <p class="avail">Open to finance leadership roles, in Porto or remote. <a href="#contact">Get in touch</a>, <a href="rui-gomes-cv.pdf">read the CV</a> or <a href="#quest">play one of the games</a>.</p>
   <a class="go" href="#c1"><span class="c" aria-hidden="true">↓</span>Follow the trail</a>
@@ -377,7 +379,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <section class="chap wrap" id="c1">
   <div class="chap-head rev">
     <span class="when"><b>2013 – 2017</b>, Lisbon</span>
-    <h2>It started with reading the numbers.</h2>
+    <h2>It started with reading the numbers</h2>
   </div>
   <div class="split">
     <div class="copy rev">
@@ -404,7 +406,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <section class="chap wrap" id="c2">
   <div class="chap-head rev">
     <span class="when"><b>2018 – 2022</b>, Porto</span>
-    <h2>Then, the cases without a template.</h2>
+    <h2>Then, the cases without a template</h2>
   </div>
   <div class="split">
     <div class="copy rev">
@@ -429,7 +431,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <section class="chap wrap" id="c3">
   <div class="chap-head rev">
     <span class="when"><b>2022 – now</b>, Porto</span>
-    <h2>From checking to owning.</h2>
+    <h2>From checking to owning</h2>
   </div>
   <div class="split">
     <div class="copy rev">
@@ -472,7 +474,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   <div class="split">
     <div class="copy rev">
       <span class="when"><b>A small side quest</b></span>
-      <h2 style="margin:.4rem 0 1.5rem">Insert a cartridge.</h2>
+      <h2 style="margin:.4rem 0 1.5rem">Insert a cartridge</h2>
       <p>Seven small games, each built on something I've done for real: tracing a number back to its source, closing the month, keeping cash ahead of payroll, raising a seed round with eight months of runway left.</p>
       <p>They're toys, but the rules come from the job. Turn the sound on for the music.</p>
       <div class="chess">I played federated chess for five years. Finance works the same way: the move that matters is usually three moves before the one everybody sees.</div>
@@ -528,7 +530,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <section class="chap wrap" id="c4">
   <div class="chap-head rev">
     <span class="when"><b>Alongside</b>, with VCLevel<button type="button" class="ref" popovertarget="src-F" aria-label="Source F">F</button></span>
-    <h2>The same job, in other people's industries.</h2>
+    <h2>The same job, in other people's industries</h2>
   </div>
   <div class="split">
     <div class="copy rev">
@@ -634,20 +636,20 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 <section class="why" id="why">
   <div class="wrap">
     <span class="when rev"><b id="whyLabel">What I'm looking for</b></span>
-    <h2 class="rev" id="whyTitle">Finance close to the decisions.</h2>
+    <h2 class="rev" id="whyTitle">Finance close to the decisions</h2>
     <p class="lead rev" id="whyText">A finance leadership role where the CFO is in the room when the plan gets made, and where people and pay are part of the job rather than someone else's department.</p>
     <h3 class="rev">You'll probably want to talk to me if</h3>
     <ul class="fit rev">
-      <li>you're raising in the next twelve months and the model isn't ready</li>
-      <li>closing the month still takes weeks</li>
-      <li>you're hiring faster than you can decide what to pay</li>
-      <li>your business isn't SaaS, and most finance people you meet have only seen SaaS</li>
+      <li>You're raising in the next twelve months and the model isn't ready</li>
+      <li>Closing the month still takes weeks</li>
+      <li>You're hiring faster than you can decide what to pay</li>
+      <li>Your business isn't SaaS, and most finance people you meet have only seen SaaS</li>
     </ul>
   </div>
 </section>
 
 <section class="close wrap" id="contact">
-  <h2 class="rev">That's my trail. I'd like to hear where yours is going.</h2>
+  <h2 class="rev">That's my trail. I'd like to hear where yours is going</h2>
   <p class="sub rev">Portuguese, English and Italian. Based in the north of Portugal, open to remote.</p>
   <a class="cta rev" id="cta" href="mailto:ruimcamposgomes@gmail.com">Let's talk <span aria-hidden="true">↗</span></a>
   <p class="links" id="links"><a data-link="email" href="mailto:ruimcamposgomes@gmail.com">ruimcamposgomes@gmail.com</a><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a><a data-link="cv" href="rui-gomes-cv.pdf" download>CV (PDF)</a></p>
@@ -714,7 +716,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
     var coT=co.replace(/[\s.,;:!?]+$/,"");
     document.title="Rui Gomes, for "+coT;
     $("whyLabel").textContent="Why "+coT;
-    $("whyTitle").textContent="Why "+coT+".";
+    $("whyTitle").textContent="Why "+coT;
   }
   if(why) $("whyText").textContent=why;
 
