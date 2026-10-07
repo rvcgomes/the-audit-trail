@@ -67,7 +67,7 @@ bign = block(c2, '<div class="bign rev" id="bign"')
 merged = '''<section class="chap wrap" id="c1">
   <div class="chap-head rev">
     <span class="when"><b>2013 – 2022</b>, Lisbon and Porto</span>
-    <h2>Audit first, then the cases without a template.</h2>
+    <h2>Audit first, then the cases without a template</h2>
   </div>
   <div class="split">
     <div class="copy rev">
