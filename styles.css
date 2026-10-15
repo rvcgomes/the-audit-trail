@@ -45,6 +45,31 @@ img,svg{max-width:100%}
 
 /* hero */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:calc(80px + env(safe-area-inset-top,0px)) 60px}
+/* hero: the summary card on the right ("audit file") */
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);gap:clamp(32px,5vw,72px);align-items:center}
+.file{width:100%;max-width:390px;justify-self:end;background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:18px 20px 16px;box-shadow:0 20px 40px -24px rgba(12,39,31,.35);transform:rotate(1.2deg)}
+.file-h{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--rule);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.file-h b{font-family:var(--hand);color:var(--pencil);font-size:1.3rem;letter-spacing:0;line-height:1}
+.file-roles{margin:0 0 10px;font-weight:600;line-height:1.45}
+.file-roles span{display:block}
+.file dl{margin:0}
+.file dl div{display:grid;grid-template-columns:4.4rem minmax(0,1fr) auto;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid var(--rule)}
+.file dt{font-weight:800;font-size:1.3rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.file dd{margin:0;color:var(--muted);font-size:.9rem;line-height:1.35}
+.file dl div::after{content:"✓";font-family:var(--hand);font-weight:700;color:var(--pencil);font-size:1.2rem;line-height:1;transform:rotate(-8deg)}
+.file-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin:4px 0 0;padding-top:12px;border-top:1px solid var(--rule);font-size:.8125rem;line-height:1.4;color:var(--muted)}
+.file-cv{display:inline-block;padding:8px 14px;border-radius:4px;background:var(--pencil);color:var(--onPencil);font-weight:700;font-size:.875rem;text-decoration:none}
+.file-cv:hover{filter:brightness(1.08)}
+.hero-grid .hi{font-size:clamp(2.6rem,7vw,5rem)}
+.hero-grid .hi2{font-size:clamp(1.9rem,4.6vw,3.2rem)}
+.js .file{opacity:0;transform:translateY(10px) rotate(1.2deg);transition:opacity .6s .85s,transform .6s .85s}
+.js .shown .file{opacity:1;transform:rotate(1.2deg)}
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .file{justify-self:start;max-width:440px;transform:none}
+  .js .file,.js .shown .file{transform:none}
+}
+
 .meta{font-size:.9375rem;color:var(--muted);margin:0 0 2rem;line-height:1.5}
 .meta strong{color:var(--ink);font-weight:500}
 .hi.long{font-size:clamp(2rem,6vw,4rem)}
@@ -297,7 +322,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
-  .js .rev,.js .hi2,.js .lede,.js .avail,.js .go{opacity:1!important;transform:none!important}
+  .js .rev,.js .hi2,.js .lede,.js .avail,.js .go,.js .file{opacity:1!important;transform:none!important}
   .js .hi2 .ul path,.js .chart .draw{stroke-dashoffset:0!important}
   .js .ledger td.t span{transform:rotate(-8deg)!important}
   .js .ledger .foot,.js .chart .late,.js .chart .ext.draw{opacity:1!important}
@@ -308,7 +333,8 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .receipt,.ghint{display:none!important}
   body{background:#fff;color:#000;font-size:11pt}
   .progress,.quest,.go,.cta,.seal{display:none!important}
-  .js .rev,.js .hi2,.js .lede,.js .ledger .foot,.js .chart .late,.js .chart .ext.draw{opacity:1!important;transform:none!important}
+  .js .rev,.js .hi2,.js .lede,.js .avail,.js .file,.js .ledger .foot,.js .chart .late,.js .chart .ext.draw{opacity:1!important;transform:none!important}
+  .file{box-shadow:none;break-inside:avoid}
   .js .ledger td.t span{transform:rotate(-8deg)!important}
   .js .chart .draw,.js .hi2 .ul path{stroke-dashoffset:0!important}
   .hero{min-height:0;padding-block:0 24px}
