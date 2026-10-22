@@ -19,6 +19,9 @@
     };
     return SP;
   }
+  /* wording in the page's language (the Portuguese pages set <html lang="pt">) */
+  var PT = typeof document !== "undefined" && document.documentElement.lang === "pt";
+  function T(en, pt){return PT ? pt : en}
   function money(n){return (n < 0 ? "−€" : "€") + Math.abs(Math.round(n)) + "k"}
   function signed(n){return (n < 0 ? "−€" : "+€") + Math.abs(Math.round(n)) + "k"}
   function weekNow(s){return Math.min(Blocks.WEEKS, s.weeks + (s.won ? 0 : 1))}
@@ -76,9 +79,10 @@
   function cell(ctx, sp, v, x, y){ctx.drawImage(v === Blocks.IN ? sp.inn : sp.out, x, y)}
 
   RUNWAY.register({
-    id:"blocks", order:3, name:"CASH FLOW", sub:"stack", countdown:1.2, canvas:"swipe", real:false,
-    help:"◀ ▶ move · ▲ rotate · ▼ faster · A drop. Close rows with more + than −.",
-    say:"Cash Flow. Falling blocks: left and right move, up or a tap rotates, down drops faster, A drops. Plus blocks are money in, minus blocks are money out. Each full row closes a week, and a week with more minus than plus pays an overdraft fee. Payroll is due every 13 seconds. Close 13 weeks.",
+    id:"blocks", order:3, name:T("CASH FLOW", "TESOURARIA"), sub:T("stack", "empilhar"), countdown:1.2, canvas:"swipe", real:false,
+    help:T("◀ ▶ move · ▲ rotate · ▼ faster · A drop. Close rows with more + than −.", "◀ ▶ mover · ▲ rodar · ▼ mais rápido · A largar. Feche linhas com mais + do que −."),
+    say:T("Cash Flow. Falling blocks: left and right move, up or a tap rotates, down drops faster, A drops. Plus blocks are money in, minus blocks are money out. Each full row closes a week, and a week with more minus than plus pays an overdraft fee. Payroll is due every 13 seconds. Close 13 weeks.",
+      "Tesouraria. Blocos a cair: esquerda e direita movem, cima ou um toque roda, baixo acelera, A larga. Os blocos mais são dinheiro a entrar, os menos são dinheiro a sair. Cada linha completa fecha uma semana, e uma semana com mais menos do que mais paga uma comissão de descoberto. Os salários vencem a cada 13 segundos. Feche 13 semanas."),
     create:function(){return Blocks.create()},
     step:function(s, dt, inp){
       var p = inp.press || {}, sw = inp.swiped;
@@ -95,32 +99,32 @@
     },
     hud:function(s){
       var pct = stackPct(s);
-      return {cells:[["WEEK", Math.min(Blocks.WEEKS, s.weeks) + "/" + Blocks.WEEKS], ["CASH", money(Math.max(0, s.cash))], ["PAYROLL", Math.max(0, Math.ceil(s.pay)) + "s"]],
-        row2:["LAST WEEK", s.last === null ? "—" : signed(s.last), "STACK", pct, pct > 70]};
+      return {cells:[[T("WEEK", "SEMANA"), Math.min(Blocks.WEEKS, s.weeks) + "/" + Blocks.WEEKS], [T("CASH", "CAIXA"), money(Math.max(0, s.cash))], [T("PAYROLL", "SALÁRIOS"), Math.max(0, Math.ceil(s.pay)) + "s"]],
+        row2:[T("LAST WEEK", "ÚLT. SEMANA"), s.last === null ? "—" : signed(s.last), T("STACK", "PILHA"), pct, pct > 70]};
     },
     onEvent:function(e, g, s){
       var C = g.COL, ry = e.y == null ? 60 : Y0 + e.y*CELL + 6;
       if(e.type === "drop") g.sfx("drop");
       else if(e.type === "line"){
         g.sfx("line");
-        var n = e.rows.length, first = Math.min(e.week, s.weeks - n + 1), span = first < e.week ? "Weeks " + first + "–" + e.week : "Week " + e.week;
-        var head = e.bonus ? "BATCH RUN" : span.toUpperCase();
+        var n = e.rows.length, first = Math.min(e.week, s.weeks - n + 1), span = first < e.week ? T("Weeks ", "Semanas ") + first + "–" + e.week : T("Week ", "Semana ") + e.week;
+        var head = e.bonus ? T("BATCH RUN", "LOTE") : span.toUpperCase();
         g.banner(head + " " + signed(e.net), 1.1);
-        var detail = "+" + e.ins + " in, −" + e.outs + " out";
-        if(e.fee) g.line(span + " in the red: " + detail + ", €" + e.fee + "k overdraft fee" + (e.bonus ? ", batch bonus on the rest" : "") + ".");
-        else if(e.bonus) g.line("Batch run: " + detail + ", ×" + Blocks.BATCH + " on the net. " + signed(e.net) + ".");
+        var detail = "+" + e.ins + T(" in, −", " entra, −") + e.outs + T(" out", " sai");
+        if(e.fee) g.line(span + T(" in the red: ", " no vermelho: ") + detail + ", €" + e.fee + T("k overdraft fee", "k de descoberto") + (e.bonus ? T(", batch bonus on the rest", ", bónus de lote no resto") : "") + ".");
+        else if(e.bonus) g.line(T("Batch run: ", "Lote: ") + detail + ", ×" + Blocks.BATCH + T(" on the net. ", " no saldo. ") + signed(e.net) + ".");
         else g.line(span + ": " + detail + " = " + signed(e.net) + ".");
       }
       else if(e.type === "good"){g.flash("gV2", true); g.float(signed(e.net), X0 + 30, ry, C.lcd)}
       else if(e.type === "bad"){
         g.sfx("bad"); g.fx.shake = 0.2;
-        if(e.text) g.say(e.text);
+        if(e.text) g.say(T(e.text, "BLOQUEADO"));
         else{g.flash("gV2", false); g.float(signed(e.net), X0 + 30, ry, C.hot)}
       }
       else if(e.type === "power") g.sfx("power");
       else if(e.type === "hurt"){
         g.sfx("hurt"); g.fx.shake = 0.2; g.flash("gV3", false); g.float("−€" + Blocks.PAYROLL + "k", PX + 40, 58, C.hot);
-        g.line("Payroll: −€" + Blocks.PAYROLL + "k. Next one in " + Blocks.PAY_EVERY + " seconds.");
+        g.line(T("Payroll: −€", "Salários: −€") + Blocks.PAYROLL + T("k. Next one in ", "k. Os próximos daqui a ") + Blocks.PAY_EVERY + T(" seconds.", " segundos."));
       }
     },
     draw:function(g, s){
@@ -158,44 +162,44 @@
       }
 
       /* panel: next, cash, payroll, legend */
-      g.text("NEXT", PX, 9, C.dim);
+      g.text(T("NEXT", "SEGUE"), PX, 9, C.dim);
       if(s.next){
         var ns = Blocks.SHAPES[s.next.k][0], mini = s.next.sign === Blocks.IN ? sp.inMini : sp.outMini, minY = 9;
         ns.forEach(function(c){minY = Math.min(minY, c[1])});
         ns.forEach(function(c){ctx.drawImage(mini, PX + c[0]*6, 12 + (c[1] - minY)*6)});
-        g.text(s.next.sign === Blocks.IN ? "+ IN" : "− OUT", PX + 30, 20, s.next.sign === Blocks.IN ? C.lcd : C.dim);
+        g.text(s.next.sign === Blocks.IN ? T("+ IN", "+ ENTRA") : T("− OUT", "− SAI"), PX + 30, 20, s.next.sign === Blocks.IN ? C.lcd : C.dim);
       }
       var poor = s.cash <= Blocks.PAYROLL;
-      g.text("CASH", PX, 35, C.dim);
+      g.text(T("CASH", "CAIXA"), PX, 35, C.dim);
       g.text(money(Math.max(0, s.cash)), PX, 49, poor ? C.hot : C.lcd, g.BIG);
-      g.text("PAYROLL", PX, 61, C.dim);
+      g.text(T("PAYROLL", "SALÁRIOS"), PX, 61, C.dim);
       var left = Math.max(0, s.pay), due = left < 2 && !s.over && !s.won, bw = W - PX - 8;
       ctx.fillStyle = C.faint; ctx.fillRect(PX, 64, bw, 4);
       ctx.fillStyle = due && Math.floor(now/150) % 2 ? C.hot : C.lcd; ctx.fillRect(PX, 64, Math.round(bw*left/Blocks.PAY_EVERY), 4);
       g.text(Math.ceil(left) + "s · −€" + Blocks.PAYROLL + "k", PX, 77, due ? C.hot : C.dim);
-      ctx.drawImage(sp.inMini, PX, 83); g.text("money in", PX + 9, 88, C.lcd);
-      ctx.drawImage(sp.outMini, PX, 92); g.text("money out", PX + 9, 97, C.dim);
-      ctx.fillStyle = C.hot; ctx.fillRect(PX + 1, 101, 2, 5); g.text("week in red", PX + 9, 106, C.dim);
+      ctx.drawImage(sp.inMini, PX, 83); g.text(T("money in", "entra"), PX + 9, 88, C.lcd);
+      ctx.drawImage(sp.outMini, PX, 92); g.text(T("money out", "sai"), PX + 9, 97, C.dim);
+      ctx.fillStyle = C.hot; ctx.fillRect(PX + 1, 101, 2, 5); g.text(T("week in red", "no vermelho"), PX + 9, 106, C.dim);
 
       if(s.over || s.won){
         ctx.fillStyle = C.dark; ctx.fillRect(0, 50, W, 22);
-        g.text(s.won ? "QUARTER CLOSED" : s.over === "cash" ? "OUT OF CASH" : "WORKING CAPITAL JAMMED", W/2, 66, s.won ? C.lcd : C.hot, g.BIG, "center");
+        g.text(s.won ? T("QUARTER CLOSED", "TRIMESTRE FECHADO") : s.over === "cash" ? T("OUT OF CASH", "SEM CAIXA") : T("WORKING CAPITAL JAMMED", "MANEIO BLOQUEADO"), W/2, 66, s.won ? C.lcd : C.hot, g.BIG, "center");
       }
     },
     result:function(s){
       var wk = Math.min(Blocks.WEEKS, s.weeks), net = s.collected - s.paidOut + s.bonus - s.fees;
-      var rows = [["Weeks closed", wk + "/" + Blocks.WEEKS], ["Cash left", money(Math.max(0, s.cash))], ["Net from weeks", signed(net)],
-        ["Weeks in the red", s.red], ["Payroll paid", money(s.payroll)]];
+      var rows = [[T("Weeks closed", "Semanas fechadas"), wk + "/" + Blocks.WEEKS], [T("Cash left", "Caixa final"), money(Math.max(0, s.cash))], [T("Net from weeks", "Saldo das semanas"), signed(net)],
+        [T("Weeks in the red", "Semanas no vermelho"), s.red], [T("Payroll paid", "Salários pagos"), money(s.payroll)]];
       if(s.won){
-        var verdict = s.red === 0 ? "Not one week in the red." : s.cash >= 150 ? "Room to breathe next quarter." : "Closed, with not much to spare.";
-        return {win:true, title:"QUARTER CLOSED.\n13 WEEKS, " + money(s.cash) + " IN THE BANK.",
-          lines:["In " + money(s.collected) + " · out " + money(s.paidOut) + " · payroll " + money(s.payroll), verdict],
-          tip:"Same money, different weeks: that is cash flow.", rows:rows, real:false};
+        var verdict = s.red === 0 ? T("Not one week in the red.", "Nem uma semana no vermelho.") : s.cash >= 150 ? T("Room to breathe next quarter.", "Folga para o próximo trimestre.") : T("Closed, with not much to spare.", "Fechado, mas à justa.");
+        return {win:true, title:T("QUARTER CLOSED.\n13 WEEKS, ", "TRIMESTRE FECHADO.\n13 SEMANAS, ") + money(s.cash) + T(" IN THE BANK.", " NO BANCO."),
+          lines:[T("In ", "Entrou ") + money(s.collected) + T(" · out ", " · saiu ") + money(s.paidOut) + T(" · payroll ", " · salários ") + money(s.payroll), verdict],
+          tip:T("Same money, different weeks: that is cash flow.", "O mesmo dinheiro, em semanas diferentes: isso é tesouraria."), rows:rows, real:false};
       }
-      if(s.over === "jam") return {win:false, title:"WORKING CAPITAL JAMMED\nIN WEEK " + weekNow(s) + ".", lines:[],
-        tip:"Keep the stack low. A small week closed beats a big one stuck.", rows:rows, real:false};
-      var tip = s.red >= 2 ? "Weeks with more − than + pay a fee. Spread the − blocks across rows." : "Payroll never waits. Close rows full of + before payday.";
-      return {win:false, title:"OUT OF CASH IN WEEK " + weekNow(s) + ".", lines:[s.red ? s.red + " week" + (s.red > 1 ? "s" : "") + " in the red cost " + money(s.fees) + " in fees." : "Payroll took " + money(s.payroll) + "."],
+      if(s.over === "jam") return {win:false, title:T("WORKING CAPITAL JAMMED\nIN WEEK ", "FUNDO DE MANEIO BLOQUEADO\nNA SEMANA ") + weekNow(s) + ".", lines:[],
+        tip:T("Keep the stack low. A small week closed beats a big one stuck.", "Mantenha a pilha baixa. Uma semana pequena fechada vale mais do que uma grande encravada."), rows:rows, real:false};
+      var tip = s.red >= 2 ? T("Weeks with more − than + pay a fee. Spread the − blocks across rows.", "As semanas com mais − do que + pagam comissão. Espalhe os blocos − pelas linhas.") : T("Payroll never waits. Close rows full of + before payday.", "Os salários não esperam. Feche linhas cheias de + antes do dia de pagamento.");
+      return {win:false, title:T("OUT OF CASH IN WEEK ", "SEM CAIXA NA SEMANA ") + weekNow(s) + ".", lines:[s.red ? (PT ? s.red + (s.red > 1 ? " semanas" : " semana") + " no vermelho custaram " + money(s.fees) + " em comissões." : s.red + " week" + (s.red > 1 ? "s" : "") + " in the red cost " + money(s.fees) + " in fees.") : T("Payroll took ", "Os salários levaram ") + money(s.payroll) + "."],
         tip:tip, rows:rows, real:false};
     }
   });
