@@ -20,7 +20,7 @@ import hashlib, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # fingerprint of c1 + c2 in index.html when the merged chapter below was last written
-SOURCE_HASH = "3f96a924b52d9c84"
+SOURCE_HASH = "06ff98b8270e9be5"
 
 s = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read().replace("\r\n", "\n")
 
@@ -95,6 +95,7 @@ merged = '''<section class="chap wrap" id="c1">
   </div>
   <div class="split">
     <div class="copy rev">
+      <p class="edu">Before that: Master's in Finance, ISEG Lisbon<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></p>
       <p class="role">Financial audit at PwC, then Claranet and ITEN<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
       <p class="where">2013–2017 · banks, insurers and venture capital funds</p>
       <p>At PwC I audited some of the most regulated balance sheets there are, under IFRS. It gave me the habit I still work by: before you trust a number, find out where it came from. At Claranet and ITEN I moved into operational finance, reporting and change management.</p>
@@ -117,13 +118,7 @@ m = re.search(r'<section class="inter" aria-label="Interlude">.*?</section>\n\n'
 if not m:
     stop("interlude not found")
 s = s.replace(m.group(0), "")
-sub('''  var bar=$("bar"), inter=$("inter");
-  inter.innerHTML=inter.textContent.split(" ").map(function(w){return '<span class="w">'+w+'</span>'}).join(" ");
-  var words=inter.querySelectorAll(".w");''', '''  var bar=$("bar");''')
-sub('''    var r=inter.getBoundingClientRect(), vh=innerHeight;
-    var k=Math.max(0,Math.min(1,(vh*0.85-r.top)/(r.height+vh*0.35))), n=Math.round(k*words.length);
-    words.forEach(function(w,j){w.classList.toggle("lit",j<n)});
-''', "")
+# (page.js skips the word highlight when there is no interlude)
 
 out = os.path.join(ROOT, "short.html")
 if "--check" in sys.argv:

@@ -38,7 +38,10 @@ a.b{background:none;color:var(--pencil)}
   <fieldset class="ver"><legend>Version</legend>
     <label><input type="radio" name="v" value="" checked> Full</label>
     <label><input type="radio" name="v" value="short.html"> Short (about a third shorter)</label>
+    <label><input type="radio" name="v" value="saude.html"> Clinics, Portuguese</label>
+    <label><input type="radio" name="v" value="health.html"> Clinics, English</label>
   </fieldset>
+  <small>The clinic pages use only the name; the "why" text is left out.</small>
   <output id="out"></output>
   <div class="row"><button type="button" id="copy">Copy link</button><a class="b" id="open" target="_blank" rel="noopener">Open</a></div>
 </main>
@@ -47,8 +50,8 @@ var base = "https://rvcgomes.github.io/the-audit-trail/";
 function build(){
   var q = new URLSearchParams(), co = document.getElementById("co").value.trim(), why = document.getElementById("why").value.trim();
   if (co) q.set("co", co);
-  if (why) q.set("why", why);
   var v = document.querySelector('input[name="v"]:checked').value;
+  if (why && !/health|saude/.test(v)) q.set("why", why);
   var url = base + v + (q.toString() ? "?" + q : "");
   document.getElementById("out").textContent = url;
   document.getElementById("open").href = url;

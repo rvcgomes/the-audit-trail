@@ -50,6 +50,24 @@ img,svg{max-width:100%}
 .file{width:100%;max-width:390px;justify-self:end;background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:18px 20px 16px;box-shadow:0 20px 40px -24px rgba(12,39,31,.35);transform:rotate(1.2deg)}
 .file-h{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--rule);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .file-h b{font-family:var(--hand);color:var(--pencil);font-size:1.3rem;letter-spacing:0;line-height:1}
+.edu{margin:0 0 1rem;font-size:.9375rem;color:var(--muted)}
+/* health pages (health.html, saude.html) */
+.file dl.list div{grid-template-columns:1.6rem minmax(0,1fr) auto}
+.file dl.list dt{font-size:1rem;color:var(--muted);font-weight:700}
+.file dl.list dd{color:var(--ink);font-size:.9375rem}
+.file.flat{transform:none;justify-self:stretch;max-width:none}
+.js .file.flat,.js .shown .file.flat{transform:none}
+.file.flat dl div{grid-template-columns:4.4rem minmax(0,1fr) auto}
+.also{font-size:.9375rem;color:var(--muted);margin-top:1.25rem}
+.also a,footer a{color:inherit;text-underline-offset:3px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:st;display:grid;gap:22px;max-width:52ch}
+.steps li{counter-increment:st;display:grid;grid-template-columns:2.6rem minmax(0,1fr);column-gap:12px}
+.steps li::before{content:counter(st);grid-row:span 2;width:2.2rem;height:2.2rem;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700}
+.steps b{font-size:1.15rem}
+.steps span{color:var(--muted)}
+.health .hero-grid .hi2{font-size:clamp(1.7rem,3.9vw,2.7rem)}
+.health .mdash{margin:0;background:var(--card)}
+.health .mdash .md-kpi,.health .mdash .md-box{background:var(--paper)}
 .file-roles{margin:0 0 10px;font-weight:600;line-height:1.45}
 .file-roles span{display:block}
 .file dl{margin:0}

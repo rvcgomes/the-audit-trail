@@ -88,6 +88,7 @@ window.CONFIG = {
   </div>
   <div class="split">
     <div class="copy rev">
+      <p class="edu">Before that: Master's in Finance, ISEG Lisbon<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></p>
       <p class="role">Financial audit at PwC, then Claranet and ITEN<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
       <p class="where">2013–2017 · banks, insurers and venture capital funds</p>
       <p>At PwC I audited some of the most regulated balance sheets there are, under IFRS. It gave me the habit I still work by: before you trust a number, find out where it came from. At Claranet and ITEN I moved into operational finance, reporting and change management.</p>
@@ -219,14 +220,14 @@ window.CONFIG = {
 <section class="chap wrap" id="c4">
   <div class="chap-head rev">
     <span class="when"><b>Alongside</b>, with VCLevel<button type="button" class="ref" popovertarget="src-F" aria-label="Source F">F</button></span>
-    <h2>The same job, in other people's industries</h2>
+    <h2>An insider, working from the outside</h2>
   </div>
   <div class="split">
     <div class="copy rev">
-      <p class="role">Founding partner, VCLevel</p>
+      <p class="role">Founding partner, VCLevel · fractional CFO</p>
       <p class="where">Clinics and health practices, wine, food and drink, PR agencies, and others</p>
       <p>I'm a founding partner of VCLevel, which puts senior finance, operations and people work into companies that don't need a full-time CFO yet. I take the finance seat: the model, the pricing, the cash forecast, the conversation with the bank.</p>
-      <p>Most of these businesses have never had a finance person look at them from the inside. The first question they bring is rarely the one that matters, so the work usually starts with a diagnosis.</p>
+      <p>Most of these businesses have never had a finance person look at them from the inside. The first question they bring is rarely the one that matters, so I start with a diagnosis of where the company stands today. Then I build the tools the owners use to decide: the pricing model, the break-even, the monthly dashboard.</p>
       <ul class="stack"><li>Diagnosis</li><li>Pricing</li><li>Company structure</li><li>Break-even</li><li>Public funding</li></ul>
     </div>
     <div class="sectors rev" id="sectors">
@@ -382,6 +383,12 @@ window.CONFIG = {
     <p class="src-where"><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></p>
     <button type="button" class="src-x" popovertarget="src-F" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
+  <div class="src" id="src-G" popover role="dialog" aria-labelledby="src-G-k" tabindex="-1">
+    <p class="src-k" id="src-G-k">Source G</p>
+    <p class="src-claim">Master's in Finance, ISEG Lisbon, 2013</p>
+    <p class="src-where">ISEG's Master's in Finance is 33rd worldwide and top 3 in Portugal in the Financial Times Masters in Finance ranking 2026 (pre-experience), where it has been ranked since 2020: <a href="https://www.iseg.ulisboa.pt/en/?p=70573" rel="noopener" target="_blank">ISEG</a>.</p>
+    <button type="button" class="src-x" popovertarget="src-G" popovertargetaction="hide" aria-label="Close">×</button>
+  </div>
 </div>
 </main>
 
@@ -390,100 +397,7 @@ window.CONFIG = {
   <span id="disclaim" hidden>A personal introduction, not affiliated with <span data-co></span>.</span>
 </footer>
 
-<script>
-(function(){
-  var C = window.CONFIG||{}, qs = new URLSearchParams(location.search);
-  var co = (qs.get("co")||C.company||"").trim().slice(0,60);
-  var why = (qs.get("why")||C.why||"").trim().slice(0,600);
-  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function $(id){return document.getElementById(id)}
-
-  /* personalisation (textContent only) */
-  document.querySelectorAll("[data-co]").forEach(function(e){e.textContent=co});
-  if(co){
-    $("toLine").hidden=false; $("disclaim").hidden=false;
-    var coT=co.replace(/[\s.,;:!?]+$/,"");
-    document.title="Rui Gomes, for "+coT;
-    $("whyLabel").textContent="Why "+coT;
-    $("whyTitle").textContent="Why "+coT;
-  }
-  if(why) $("whyText").textContent=why;
-
-  /* links */
-  var cta=$("cta");
-  document.querySelectorAll('[data-link="email"]').forEach(function(a){if(C.email){a.href="mailto:"+C.email;a.textContent=C.email}else a.hidden=true});
-  if(C.email) cta.href="mailto:"+C.email+(co?"?subject="+encodeURIComponent("Hello from "+co):""); else cta.hidden=true;
-  document.querySelectorAll('[data-link="linkedin"]').forEach(function(a){if(C.linkedin)a.href=C.linkedin});
-  document.querySelectorAll('[data-link="vclevel"]').forEach(function(a){if(C.vclevel)a.href=C.vclevel});
-  document.querySelectorAll('[data-link="cv"]').forEach(function(a){if(C.cv){a.href=C.cv}else a.hidden=true});
-
-  /* typed greeting */
-  var hero=$("hero"), greet=co?"Hey "+co.replace(/[\s.,;:!?]+$/,"")+",":"Hi there,", typed=$("typed");
-  if(greet.length>18) document.querySelector(".hi").classList.add("long");
-  $("greetSr").textContent=greet;
-  function finishType(){typed.classList.add("done");hero.classList.add("shown")}
-  if(reduce){typed.textContent=greet;finishType()}
-  else{
-    /* typing never takes more than about a second, and the rest of the hero doesn't wait for it */
-    var step=Math.min(110,1000/greet.length);
-    typed.textContent="";var i=0;setTimeout(function t(){typed.textContent=greet.slice(0,++i);if(i<greet.length)setTimeout(t,step*(0.7+Math.random()*0.6));else setTimeout(finishType,200)},300);
-    setTimeout(function(){hero.classList.add("shown")},700);
-  }
-
-  /* progress + word highlight */
-  var bar=$("bar");
-  function onScroll(){
-    var h=document.documentElement, p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
-    bar.style.transform="scaleX("+p+")";
-  }
-  addEventListener("scroll",onScroll,{passive:true});
-
-  /* sources: native popovers; older browsers get the same by hand */
-  if(!HTMLElement.prototype.hasOwnProperty("popover")){
-    var opener=null;
-    function closeAll(){
-      var was=document.querySelector(".src.open");
-      document.querySelectorAll(".src.open").forEach(function(x){x.classList.remove("open")});
-      if(was&&opener){opener.focus();opener=null}
-    }
-    document.querySelectorAll("[popovertarget]").forEach(function(b){
-      b.addEventListener("click",function(e){
-        e.stopPropagation(); var t=$(b.getAttribute("popovertarget")), on=!t.classList.contains("open");
-        closeAll();
-        if(on && b.getAttribute("popovertargetaction")!=="hide"){t.classList.add("open"); opener=b; t.focus()}
-      });
-    });
-    document.addEventListener("click",function(e){if(!e.target.closest(".src")) closeAll()});
-    document.addEventListener("keydown",function(e){if(e.key==="Escape") closeAll()});
-  }
-
-  document.querySelectorAll("#ledger td.t span").forEach(function(s,k){s.style.transitionDelay=(0.3+k*0.25)+"s"});
-  document.querySelectorAll("#chart .cash.draw").forEach(function(p){p.style.setProperty("--len",Math.ceil(p.getTotalLength()))});
-
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(!e.isIntersecting)return; var el=e.target; el.classList.add("in"); io.unobserve(el);
-  })},{threshold:.2,rootMargin:"0px 0px -8% 0px"});
-  document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){io.observe(el)});
-  addEventListener("beforeprint",function(){document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){el.classList.add("in")})});
-  onScroll();
-
-  /* sector tabs */
-  var tabs=[].slice.call(document.querySelectorAll('#sectors [role="tab"]'));
-  function select(tab,focus){
-    tabs.forEach(function(t){var on=t===tab;t.setAttribute("aria-selected",on);t.tabIndex=on?0:-1;$(t.getAttribute("aria-controls")).hidden=!on});
-    if(focus)tab.focus();
-  }
-  tabs.forEach(function(t,i){
-    t.addEventListener("click",function(){select(t)});
-    t.addEventListener("keydown",function(e){
-      var j=e.key==="ArrowRight"?i+1:e.key==="ArrowLeft"?i-1:e.key==="Home"?0:e.key==="End"?tabs.length-1:null;
-      if(j===null)return; e.preventDefault(); select(tabs[(j+tabs.length)%tabs.length],true);
-    });
-  });
-  select(tabs[0]);
-
-})();
-</script>
+<script src="page.js"></script>
 <script src="games/decisions.js"></script>
 <script src="games/runner.js"></script>
 <script src="games/fight.js"></script>
