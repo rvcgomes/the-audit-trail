@@ -4,6 +4,11 @@
 (function(){
   if(!window.RUNWAY || !window.Lanes) return;
 
+  /* wording in the page's language (the Portuguese pages set <html lang="pt">) */
+  var PT = typeof document !== "undefined" && document.documentElement.lang === "pt";
+  function T(en, pt){return PT ? pt : en}
+  Lanes.setLang(PT ? "pt" : "en");
+
   var SP = null;
   var BODY = ["..######..",".########.",".#x####x#.",".########.","..######..","...#oo#...","..##oo##..",".#.#oo#.#."];
   function sprites(g){
@@ -74,24 +79,25 @@
   }
 
   /* a deadline label that does not fit its block falls back to a short word */
-  var SHORT = {"BOARD PACK":"BOARD", "BANK REC":"BANK", "INVOICES":"INVOICE", "PAYROLL":"PAY"};
+  var SHORT = {"BOARD PACK":"BOARD", "BANK REC":"BANK", "INVOICES":"INVOICE", "PAYROLL":"PAY", "SALÁRIOS":"SAL.", "CONC. BANC.":"BANCOS", "DOSSIÊ ADM.":"DOSSIÊ"};
   function label(g, t, w){g.ctx.font = g.FONT; return g.ctx.measureText(t).width <= w - 4 || !SHORT[t] ? t : SHORT[t]}
   function open(s){return Lanes.SLOTS.filter(function(sl, i){return !s.filled[i]}).map(function(sl){return sl.name}).join(", ")}
+  function dot(t){return t.replace(/\.$/, "")}
   function mostLost(s){var best = null; for(var k in s.lost) if(s.lost[k] && (!best || s.lost[k] > s.lost[best])) best = k; return best}
   var TIPS = {
-    hit:"Deadlines run in patterns. Wait on a safe row and watch one lane at a time.",
-    fall:"Up top, only a sign-off holds you. Hop when one is right above you.",
-    off:"A sign-off carries you along. Hop off before it takes you off the page.",
-    time:"Every day has 24 hours. Waiting is fine, standing still all day is not.",
-    gap:"Land inside an open slot, not on the wall between two.",
-    twice:"A task closed once stays closed. Aim for an open slot."
+    hit:T("Deadlines run in patterns. Wait on a safe row and watch one lane at a time.", "Os prazos repetem-se. Espere numa fila segura e observe uma faixa de cada vez."),
+    fall:T("Up top, only a sign-off holds you. Hop when one is right above you.", "Lá em cima, só uma aprovação o segura. Salte quando houver uma mesmo à sua frente."),
+    off:T("A sign-off carries you along. Hop off before it takes you off the page.", "A aprovação leva-o consigo. Salte antes de ela o levar para fora do ecrã."),
+    time:T("Every day has 24 hours. Waiting is fine, standing still all day is not.", "Cada dia tem 24 horas. Esperar é aceitável, ficar parado o dia todo não."),
+    gap:T("Land inside an open slot, not on the wall between two.", "Aterre dentro de uma tarefa aberta, não na parede entre duas."),
+    twice:T("A task closed once stays closed. Aim for an open slot.", "Uma tarefa fechada fica fechada. Aponte a uma tarefa aberta.")
   };
 
   RUNWAY.register({
-    id:"lanes", order:5, name:"CLOSE THE MONTH", sub:"cross", countdown:1.2, canvas:"swipe",
-    help:"Arrows or swipe to hop. Dodge the deadlines, ride the sign-offs, close all five.",
-    say:"Close the Month. Use the arrow keys or swipe to hop one square at a time. Cross four lanes of deadlines, then ride the moving sign-offs to the top and close cash, receivables, payables, payroll and reporting. You have three lives and 24 hours a day.",
-    realLine:"At Weezie I cut the time to close the month by 34%.",
+    id:"lanes", order:5, name:T("CLOSE THE MONTH", "FECHAR O MÊS"), sub:T("cross", "atravessar"), countdown:1.2, canvas:"swipe",
+    help:T("Arrows or swipe to hop. Dodge the deadlines, ride the sign-offs, close all five.", "Setas ou deslize para saltar. Evite os prazos, use as aprovações, feche as cinco tarefas."),
+    say:T("Close the Month. Use the arrow keys or swipe to hop one square at a time. Cross four lanes of deadlines, then ride the moving sign-offs to the top and close cash, receivables, payables, payroll and reporting. You have three lives and 24 hours a day.", "Fechar o Mês. Use as setas ou deslize para saltar uma casa de cada vez. Atravesse quatro faixas de prazos, depois use as aprovações em movimento para chegar ao topo e fechar a caixa, os clientes, os fornecedores, os salários e o relatório. Tem três vidas e 24 horas por dia."),
+    realLine:T("At Weezie I cut the time to close the month by 34%.", "Na Weezie reduzi em 34% o tempo de fecho do mês."),
     create:function(){return Lanes.create()},
     step:function(s, dt, inp){Lanes.step(s, dt, inp.press)},
     demo:function(s, mem){if(!mem.bot) mem.bot = demoBot(); return mem.bot(s, mem)},
@@ -101,80 +107,81 @@
     },
     hud:function(s){
       var left = 100*s.hours/Lanes.HOURS;
-      return {cells:[["CLOSED", s.closed + "/5"], ["LIVES", s.lives], ["HOURS", Math.ceil(s.hours)]],
-        row2:["DAY", s.day, "TIME", left, left < 25]};
+      return {cells:[[T("CLOSED", "FECHADAS"), s.closed + "/5"], [T("LIVES", "VIDAS"), s.lives], [T("HOURS", "HORAS"), Math.ceil(s.hours)]],
+        row2:[T("DAY", "DIA"), s.day, T("TIME", "TEMPO"), left, left < 25]};
     },
     onEvent:function(e, g, s){
       var C = g.COL, x = Math.max(2, Math.min(g.W - e.text.length*5 - 2, e.x - e.text.length*2.5));
       if(e.type === "jump") g.sfx("jump");
       else if(e.type === "good"){
         g.sfx("good"); g.float(e.text, x, e.y + 22); g.flash("gV1", true);
-        if(!s.won) g.line(e.text + ". Still open: " + open(s) + ".");
+        if(!s.won) g.line(dot(e.text) + T(". Still open: ", ". Por fechar: ") + dot(open(s)) + ".");
       }
       else if(e.type === "hit" || e.type === "hurt"){
         g.sfx(e.type); g.fx.shake = 0.2; g.float(e.text, x, Math.max(12, e.y), C.hot); g.flash("gV2", false);
-        g.line(e.text + (s.lives ? ". A day lost to rework." : "."));
+        g.line(e.text + (s.lives ? T(". A day lost to rework.", ". Um dia perdido em retrabalho.") : "."));
       }
-      else if(e.type === "day") g.line("DAY " + s.day + " · still open: " + open(s));
-      else if(e.type === "line"){g.sfx("line"); g.banner("MONTH CLOSED", 2); g.say("Month closed on day " + s.day + ".")}
+      else if(e.type === "day") g.line(T("DAY ", "DIA ") + s.day + T(" · still open: ", " · por fechar: ") + open(s));
+      else if(e.type === "line"){g.sfx("line"); g.banner(T("MONTH CLOSED", "MÊS FECHADO"), 2); g.say(T("Month closed on day ", "Mês fechado no dia ") + s.day + ".")}
     },
     draw:function(g, s){
-      var ctx = g.ctx, C = g.COL, W = g.W, T = Lanes.TILE, sp = sprites(g), r, i, L, it, x, y, w;
+      var ctx = g.ctx, C = g.COL, W = g.W, TS = Lanes.TILE, sp = sprites(g), r, i, L, it, x, y, w;
       /* safe rows and the goal band */
-      ctx.fillStyle = C.faint; ctx.fillRect(0, 0, W, T); ctx.fillRect(0, 4*T, W, T); ctx.fillRect(0, 9*T, W, T);
-      g.text("RIDE THE SIGN-OFFS", W/2, 4*T + 9, C.mid, g.FONT, "center");
-      g.text("DODGE THE DEADLINES", W/2, 9*T + 9, C.mid, g.FONT, "center");
+      ctx.fillStyle = C.faint; ctx.fillRect(0, 0, W, TS); ctx.fillRect(0, 4*TS, W, TS); ctx.fillRect(0, 9*TS, W, TS);
+      g.text(T("RIDE THE SIGN-OFFS", "SIGA AS APROVAÇÕES"), W/2, 4*TS + 9, C.mid, g.FONT, "center");
+      g.text(T("DODGE THE DEADLINES", "EVITE OS PRAZOS"), W/2, 9*TS + 9, C.mid, g.FONT, "center");
       /* empty sign-off lanes read as gaps: a row of faint dots */
       ctx.fillStyle = C.faint;
-      for(r=1;r<=3;r++) for(x=3;x<W;x+=6) ctx.fillRect(x, r*T + 6, 2, 1);
+      for(r=1;r<=3;r++) for(x=3;x<W;x+=6) ctx.fillRect(x, r*TS + 6, 2, 1);
       /* lane separators */
-      for(r=1;r<Lanes.ROWS;r++){ctx.fillStyle = C.faint; ctx.fillRect(0, r*T, W, 1)}
+      for(r=1;r<Lanes.ROWS;r++){ctx.fillStyle = C.faint; ctx.fillRect(0, r*TS, W, 1)}
       /* goal slots */
       Lanes.SLOTS.forEach(function(sl, i){
-        var sx = sl.c*T, done = s.filled[i];
-        ctx.fillStyle = done ? C.lcd : C.dark; ctx.fillRect(sx, 1, 2*T, T - 1);
-        if(!done){ctx.strokeStyle = C.dim; ctx.strokeRect(sx + 0.5, 1.5, 2*T - 1, T - 2)}
-        g.text(sl.name, sx + T, 9, done ? C.dark : C.dim, g.FONT, "center");
+        var sx = sl.c*TS, done = s.filled[i];
+        ctx.fillStyle = done ? C.lcd : C.dark; ctx.fillRect(sx, 1, 2*TS, TS - 1);
+        if(!done){ctx.strokeStyle = C.dim; ctx.strokeRect(sx + 0.5, 1.5, 2*TS - 1, TS - 2)}
+        g.text(sl.name, sx + TS, 9, done ? C.dark : C.dim, g.FONT, "center");
       });
       /* movers */
       for(r=1;r<Lanes.ROWS;r++){
         L = s.lanes[r]; if(!L) continue;
-        y = r*T;
+        y = r*TS;
         for(i=0;i<L.items.length;i++){
-          it = L.items[i]; x = Math.round(it.x*T); w = it.len*T;
+          it = L.items[i]; x = Math.round(it.x*TS); w = it.len*TS;
           if(x >= W || x + w <= 0) continue;
           if(L.kind === "deadline"){
-            ctx.fillStyle = L.hot ? C.hot : C.dim; ctx.fillRect(x + 1, y + 2, w - 2, T - 3);
+            ctx.fillStyle = L.hot ? C.hot : C.dim; ctx.fillRect(x + 1, y + 2, w - 2, TS - 3);
             g.text(label(g, it.t, w), x + w/2, y + 9, C.dark, g.FONT, "center");
           }else{
-            ctx.fillStyle = C.faint; ctx.fillRect(x + 1, y + 2, w - 2, T - 3);
-            ctx.strokeStyle = C.lcd; ctx.strokeRect(x + 1.5, y + 2.5, w - 3, T - 4);
-            for(var k=0;k<it.len;k++) ctx.drawImage(sp.tick, x + k*T + 3, y + 4);
+            ctx.fillStyle = C.faint; ctx.fillRect(x + 1, y + 2, w - 2, TS - 3);
+            ctx.strokeStyle = C.lcd; ctx.strokeRect(x + 1.5, y + 2.5, w - 3, TS - 4);
+            for(var k=0;k<it.len;k++) ctx.drawImage(sp.tick, x + k*TS + 3, y + 4);
           }
         }
       }
       /* the player */
       if(s.wait > 0 && s.dead){
-        if(Math.floor(s.wait*10) % 2 || g.reduce) ctx.drawImage(sp.hurt, Math.round(s.deadX*T) + 1, s.deadRow*T + 1);
+        if(Math.floor(s.wait*10) % 2 || g.reduce) ctx.drawImage(sp.hurt, Math.round(s.deadX*TS) + 1, s.deadRow*TS + 1);
       }else if(!(s.wait > 0)){
         var fr = s.hopT < 0.09 ? sp.hop : sp.stand;
-        ctx.drawImage(fr, Math.round(s.px*T) + 1, s.row*T + 1 - (s.hopT < 0.09 ? 1 : 0));
+        ctx.drawImage(fr, Math.round(s.px*TS) + 1, s.row*TS + 1 - (s.hopT < 0.09 ? 1 : 0));
       }
       if(s.over || s.won){
         ctx.fillStyle = C.dark; ctx.fillRect(0, 50, W, 20);
-        g.text(s.won ? "MONTH CLOSED" : "CLOSE SLIPPED", W/2, 65, s.won ? C.lcd : C.hot, g.BIG, "center");
+        g.text(s.won ? T("MONTH CLOSED", "MÊS FECHADO") : T("CLOSE SLIPPED", "FECHO FALHADO"), W/2, 65, s.won ? C.lcd : C.hot, g.BIG, "center");
       }
     },
     result:function(s){
       var misses = 0; for(var k in s.lost) misses += s.lost[k];
-      var rows = [["Tasks closed", s.closed + "/5"], ["Closed on day", s.won ? s.day : "-"], ["Lives left", s.lives], ["Misses", misses], ["Hops", s.hops]];
+      var rows = [[T("Tasks closed", "Tarefas fechadas"), s.closed + "/5"], [T("Closed on day", "Fechado no dia"), s.won ? s.day : "-"], [T("Lives left", "Vidas restantes"), s.lives], [T("Misses", "Falhas"), misses], [T("Hops", "Saltos"), s.hops]];
       if(s.won){
-        var verdict = s.day <= 5 ? "Five tasks, five days, no rework." : (s.day - 5) + (s.day - 5 === 1 ? " day" : " days") + " lost to rework. Same close, later.";
-        return {win:true, title:"MONTH CLOSED ON DAY " + s.day + ".", lines:["Cash, AR, AP, payroll and reporting all signed off.", verdict],
-          rows:rows, realLine:"At Weezie I cut the time to close the month by 34%."};
+        var late = s.day - 5;
+        var verdict = s.day <= 5 ? T("Five tasks, five days, no rework.", "Cinco tarefas, cinco dias, sem retrabalho.") : PT ? late + (late === 1 ? " dia perdido" : " dias perdidos") + " em retrabalho. O mesmo fecho, mais tarde." : late + (late === 1 ? " day" : " days") + " lost to rework. Same close, later.";
+        return {win:true, title:T("MONTH CLOSED ON DAY ", "MÊS FECHADO NO DIA ") + s.day + ".", lines:[T("Cash, AR, AP, payroll and reporting all signed off.", "Caixa, clientes, fornecedores, salários e relatório aprovados."), verdict],
+          rows:rows, realLine:T("At Weezie I cut the time to close the month by 34%.", "Na Weezie reduzi em 34% o tempo de fecho do mês.")};
       }
       var why = mostLost(s);
-      return {win:false, title:"CLOSE SLIPPED.\n" + s.closed + " OF 5 TASKS CLOSED.", lines:["Still open: " + open(s) + "."],
+      return {win:false, title:T("CLOSE SLIPPED.\n" + s.closed + " OF 5 TASKS CLOSED.", "FECHO FALHADO.\n" + s.closed + " DE 5 TAREFAS FECHADAS."), lines:[T("Still open: ", "Por fechar: ") + dot(open(s)) + "."],
         tip:TIPS[why] || TIPS.hit, rows:rows};
     }
   });

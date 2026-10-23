@@ -57,7 +57,7 @@ img,svg{max-width:100%}
 .file dl.list dd{color:var(--ink);font-size:.9375rem}
 .file.flat{transform:none;justify-self:stretch;max-width:none}
 .js .file.flat,.js .shown .file.flat{transform:none}
-.file.flat dl div{grid-template-columns:4.4rem minmax(0,1fr) auto}
+.file.flat dl div{grid-template-columns:5.4rem minmax(0,1fr) auto}
 .also{font-size:.9375rem;color:var(--muted);margin-top:1.25rem}
 .also a,footer a{color:inherit;text-underline-offset:3px}
 .steps{list-style:none;margin:0;padding:0;counter-reset:st;display:grid;gap:22px;max-width:52ch}
@@ -68,6 +68,17 @@ img,svg{max-width:100%}
 .health .hero-grid .hi2{font-size:clamp(1.7rem,3.9vw,2.7rem)}
 .health .mdash{margin:0;background:var(--card)}
 .health .mdash .md-kpi,.health .mdash .md-box{background:var(--paper)}
+.health .mdash{padding:14px}
+.health .md-head{font-size:.75rem;margin-bottom:10px}
+.health .md-kpis{gap:8px;margin-bottom:8px}
+.health .md-row{gap:8px}
+.health .md-kpi,.health .md-box{padding:8px 10px}
+.health .md-kpi span,.health .md-t{font-size:.75rem;margin-bottom:6px}
+.health .md-bar{grid-template-columns:6.2rem minmax(0,1fr);font-size:.75rem;margin-top:7px}
+.health .md-bar em{overflow:hidden;text-overflow:ellipsis}
+.health .md-stack{height:12px;margin:8px 0 10px}
+.health .md-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.75rem}
+.health .file.flat dd .ref{margin-left:4px}
 .file-roles{margin:0 0 10px;font-weight:600;line-height:1.45}
 .file-roles span{display:block}
 .file dl{margin:0}
@@ -273,6 +284,9 @@ button.ref::after{content:"";position:absolute;inset:-5px}
 #gCanvas[hidden]{display:none}
 .msg{flex:1;white-space:pre-wrap;min-height:6.5em}
 .msg.line{flex:none;min-height:3.6em;font-size:1.05rem}
+.msg.top{flex:none;min-height:0;margin-bottom:10px}
+#gArt{display:block;width:100%;height:auto;flex:1 1 auto;min-height:0;object-fit:contain;image-rendering:pixelated;image-rendering:crisp-edges;filter:drop-shadow(0 0 3px rgba(255,181,71,.35))}
+#gArt[hidden]{display:none}
 .opts{display:grid;gap:8px;margin-top:10px}
 .opts button{font-family:var(--lcdf);font-size:1.25rem;text-align:left;background:transparent;color:var(--lcd);border:1px solid var(--lcd-dim);padding:8px 10px;cursor:pointer;border-radius:3px;line-height:1.1}
 .opts button .s{display:block;font-size:1rem;color:var(--lcd-dim);margin-top:2px}

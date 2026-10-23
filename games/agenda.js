@@ -11,7 +11,7 @@
    in private patients, and what it pushed out of a full diary.
    These are game numbers, not market data. */
 var Agenda = (function(){
-  var WEEKS = 4, SLOTS = 8, HOUR = 34, DECIDE = 1.7, GAP = 0.25, NOSHOW = 0.1, BREAK = 1.4;
+  var WEEKS = 4, SLOTS = 8, HOUR = 34, DECIDE = 2.7, GAP = 0.25, NOSHOW = 0.1, BREAK = 1.4;
   var PRICES = [40, 45, 50, 55, 60, 65, 70, 75, 80, 90], PRICE0 = 2;
   /* private patients a week at a given price */
   function demand(p){return Math.max(0.6, 12 - 0.12*p)}

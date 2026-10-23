@@ -154,6 +154,54 @@
     text(big, W/2, H/2 + 2, COL.lcd, BIG, "center"); if(small) text(small, W/2, H/2 + 16, COL.dim, FONT, "center");
   }
 
+
+  /* ---------- the menu screen: a small animation in the empty space ----------
+     A heartbeat that turns into a cash line, with the runner jogging on it.
+     Only when the menu leaves room for it (up to four cartridges). */
+  var art = document.createElement("canvas"); art.id = "gArt"; art.width = 192; art.height = 64; art.hidden = true; art.setAttribute("aria-hidden", "true");
+  msg.parentNode.insertBefore(art, opts);
+  var actx = art.getContext("2d"), artRaf = 0, artT0 = 0;
+  var PULSE = [0, 0, -1, -2, -1, 0, 3, -16, 6, 0, 0, -2, -3, -2, -1, 0];
+  function lineY(u){
+    var k = ((Math.floor(u) % 40) + 40) % 40, beat = k < PULSE.length ? PULSE[k] : 0;
+    return 40 + beat - 6*Math.sin(u/37) - 3*Math.sin(u/11);
+  }
+  function drawArt(t){
+    var w = art.width, h = art.height, scroll = t*28, x, y;
+    actx.setTransform(1, 0, 0, 1, 0, 0); actx.imageSmoothingEnabled = false;
+    actx.fillStyle = COL.dark; actx.fillRect(0, 0, w, h);
+    actx.fillStyle = COL.faint;
+    for(y=4;y<h;y+=8) for(x=((-Math.floor(scroll*0.5)) % 8 + 8) % 8;x<w;x+=8) actx.fillRect(x, y, 1, 1);
+    var head = 150;
+    for(x=0;x<=head;x++){
+      var a = lineY(x + scroll), b = lineY(x + 1 + scroll);
+      actx.fillStyle = x > head - 40 ? COL.lcd : x > head - 100 ? COL.dim : COL.mid;
+      actx.fillRect(x, Math.round(Math.min(a, b)), 1, Math.max(1, Math.round(Math.abs(b - a))));
+    }
+    var hy = Math.round(lineY(head + scroll));
+    actx.fillStyle = COL.hot; actx.fillRect(head - 1, hy - 1, 3, 3);
+    var spr = Math.floor(t*8) % 2 ? SPR.run1 : SPR.run2;
+    actx.drawImage(spr, head - 5, hy - spr.height - 2);
+    /* a coin pops at each beat and drifts back along the line */
+    var beatX = 40 - ((Math.floor(head + scroll)) % 40);
+    for(var c=0;c<4;c++){
+      var cx = head + beatX - 40*c - 40; if(cx < 0 || cx > head) continue;
+      actx.globalAlpha = Math.max(0.15, cx/head); actx.drawImage(SPR.coin, Math.round(cx) - 4, Math.round(lineY(cx + scroll)) - 30); actx.globalAlpha = 1;
+    }
+  }
+  function startArt(){
+    if(list().length > 4){art.hidden = true; return}
+    art.hidden = false; msg.classList.add("top");
+    if(reduce){drawArt(0); return}
+    if(artRaf) return;
+    artT0 = performance.now();
+    (function loop(now){
+      if(mode !== "menu" || demo){stopArt(); return}
+      drawArt((now - artT0)/1000); artRaf = requestAnimationFrame(loop);
+    })(artT0);
+  }
+  function stopArt(){if(artRaf) cancelAnimationFrame(artRaf); artRaf = 0; art.hidden = true; msg.classList.remove("top")}
+
   /* ---------- state ---------- */
   var mode = "menu", cart = null, S = null, running = false, paused = false, raf = 0, last = 0, countdown = 0, endTimer = 0;
   var floats = [], fx = {}, bannerText = "", hudT = 0, moodT = 0, demo = null, idleT = 0, idleTimer = 0, seen = false, booted = false;
@@ -176,10 +224,10 @@
     stop(); endDemo(); mode = "menu"; cart = null; cartEl.textContent = "CFO EDITION"; hud.hidden = hud2.hidden = true; cv.hidden = true;
     msg.classList.remove("line"); msg.textContent = L.insert; if(seen) say(L.insertSay);
     options(list().map(function(c){return [c.name, c.sub, function(){start(c.id)}]}), focus, true);
-    dev.classList.remove("on"); playTheme("menu"); armIdle();
+    dev.classList.remove("on"); playTheme("menu"); armIdle(); startArt();
   }
   function start(id, asDemo){
-    stop(); var c = byId[id]; if(!c) return;
+    stop(); stopArt(); var c = byId[id]; if(!c) return;
     cart = c; if(!asDemo){endDemo(); receipt.hidden = true; dev.classList.add("on")}
     cartEl.textContent = c.name;
     if(c.type === "text"){
@@ -305,7 +353,7 @@
     if(booted) return; booted = true;
     if(mode !== "idle") return;
     if(reduce){menu(false); return}
-    mode = "boot"; cv.hidden = false; hud.hidden = hud2.hidden = true; opts.innerHTML = ""; line("");
+    stopArt(); mode = "boot"; cv.hidden = false; hud.hidden = hud2.hidden = true; opts.innerHTML = ""; line("");
     var t0 = performance.now(), dinged = false;
     (function b(now){
       if(mode !== "boot") return;

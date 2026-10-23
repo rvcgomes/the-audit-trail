@@ -3,6 +3,10 @@
    A light-gun game where the target is a ledger: tap a wrong line to flag it. */
 (function(){
   if(!window.RUNWAY || !window.Spot) return;
+  /* wording in the page's language (the Portuguese pages set <html lang="pt">) */
+  var PT = typeof document !== "undefined" && document.documentElement.lang === "pt";
+  function T(en, pt){return PT ? pt : en}
+  Spot.setLang(PT ? "pt" : "en");
 
   var SP = null;
   function sprites(g){
@@ -30,27 +34,27 @@
   }
 
   RUNWAY.register({
-    id:"spot", order:4, name:"SPOT THE ERROR", sub:"spot", countdown:1.2, canvas:"tap",
-    help:"Tap a wrong line to flag it. ▲ ▼ and A work too. Don't flag the right ones.",
-    say:"Spot the Error. Ledger lines scroll up the screen for sixty seconds. Tap a wrong line to flag it, or move with the arrow keys and press A or Space. Flagging a right line, or letting a wrong one leave the top, costs credibility.",
-    realLine:"I started my career doing exactly this, at PwC.",
+    id:"spot", order:4, name:T("SPOT THE ERROR", "ENCONTRE O ERRO"), sub:T("spot", "erro"), countdown:1.2, canvas:"tap",
+    help:T("Tap a wrong line to flag it. ▲ ▼ and A work too. Don't flag the right ones.", "Toque numa linha errada para a assinalar. ▲ ▼ e A também servem. Não assinale as certas."),
+    say:T("Spot the Error. Ledger lines scroll up the screen for sixty seconds. Tap a wrong line to flag it, or move with the arrow keys and press A or Space. Flagging a right line, or letting a wrong one leave the top, costs credibility.", "Encontre o erro. Linhas do balancete sobem no ecrã durante sessenta segundos. Toque numa linha errada para a assinalar, ou mova-se com as setas e prima A ou Espaço. Assinalar uma linha certa, ou deixar uma errada sair pelo topo, custa credibilidade."),
+    realLine:T("I started my career doing exactly this, at PwC.", "Comecei a carreira a fazer exatamente isto, na PwC."),
     create:function(){return Spot.create()},
     step:function(s, dt, inp){Spot.step(s, dt, inp)},
     demo:function(s, mem){if(!mem.bot) mem.bot = spotBot(); return mem.bot(s, mem)},
     mood:function(s){return Math.max(0, Math.min(1, 0.6*s.t/Spot.ROUND + 0.2*(Spot.CRED - s.cred)))},
     hud:function(s){
-      return {cells:[["FINDINGS", s.found], ["MISSED", s.misses], ["TIME", Math.max(0, Math.ceil(Spot.ROUND - s.t)) + "s"]],
-        row2:["ACCURACY", Spot.accuracy(s) + "%", "CREDIBILITY", 100*s.cred/Spot.CRED, s.cred === 1]};
+      return {cells:[[T("FINDINGS", "ACHADOS"), s.found], [T("MISSED", "ESCAPARAM"), s.misses], [T("TIME", "TEMPO"), Math.max(0, Math.ceil(Spot.ROUND - s.t)) + "s"]],
+        row2:[T("ACCURACY", "PRECISÃO"), Spot.accuracy(s) + "%", T("CREDIBILITY", "CREDIB."), 100*s.cred/Spot.CRED, s.cred === 1]};
     },
     onEvent:function(e, g, s){
       var C = g.COL;
-      if(e.type === "found"){g.sfx("good"); g.float("FOUND", 150, e.y, C.lcd); g.line("Found. " + e.why); g.flash("gV1", true)}
+      if(e.type === "found"){g.sfx("good"); g.float(T("FOUND", "ACHADO"), 150, e.y, C.lcd); g.line(T("Found. ", "Encontrado. ") + e.why); g.flash("gV1", true)}
       else if(e.type === "hint"){g.sfx("blip"); g.line(e.text)}
       else if(e.type === "false"){g.sfx("bad"); g.fx.shake = 0.2; g.float("−1", 170, e.y, C.hot); g.line(e.text + (e.why ? " " + e.why : "")); g.flash("gV4", false)}
-      else if(e.type === "miss"){g.sfx("hurt"); g.fx.shake = 0.2; g.float("MISSED", 150, Spot.TOP + 8, C.hot); g.line("Missed. " + e.why); g.flash("gV2", false)}
+      else if(e.type === "miss"){g.sfx("hurt"); g.fx.shake = 0.2; g.float(T("MISSED", "ESCAPOU"), 150, Spot.TOP + 8, C.hot); g.line(T("Missed. ", "Escapou. ") + e.why); g.flash("gV2", false)}
       else if(e.type === "move") g.sfx("blip");
-      else if(e.type === "over"){g.say("Credibility gone. Qualified opinion.")}
-      else if(e.type === "won"){g.sfx("clean"); g.say("Sixty seconds. Clean opinion.")}
+      else if(e.type === "over"){g.say(T("Credibility gone. Qualified opinion.", "Credibilidade perdida. Opinião com reservas."))}
+      else if(e.type === "won"){g.sfx("clean"); g.say(T("Sixty seconds. Clean opinion.", "Sessenta segundos. Opinião sem reservas."))}
     },
     draw:function(g, s){
       var ctx = g.ctx, C = g.COL, W = g.W, ROW = Spot.ROW, sp = sprites(g), blink = Math.floor(s.t*8) % 2;
@@ -68,7 +72,7 @@
       });
       if(s.over || s.won){
         ctx.fillStyle = C.dark; ctx.fillRect(10, 52, W - 20, 24); ctx.strokeStyle = s.won ? C.lcd : C.hot; ctx.strokeRect(10.5, 52.5, W - 21, 23);
-        g.text(s.won ? "CLEAN OPINION" : "QUALIFIED OPINION", W/2, 69, s.won ? C.lcd : C.hot, g.BIG, "center");
+        g.text(s.won ? T("CLEAN OPINION", "SEM RESERVAS") : T("QUALIFIED OPINION", "OPINIÃO COM RESERVAS"), W/2, 69, s.won ? C.lcd : C.hot, g.BIG, "center");
       }
     },
     overlay:function(g, s){
@@ -83,15 +87,15 @@
     },
     result:function(s){
       var seen = s.found + s.misses, left = Math.max(0, Math.round(Spot.ROUND - s.t));
-      var rows = [["Lines checked", Spot.checked(s)], ["Findings", s.found + "/" + seen], ["False flags", s.falses], ["Missed", s.misses], ["Fieldwork", Math.round(s.t) + "s"]];
-      var real = "I started my career doing exactly this, at PwC.";
+      var rows = [[T("Lines checked", "Linhas verificadas"), Spot.checked(s)], [T("Findings", "Erros encontrados"), s.found + "/" + seen], [T("False flags", "Falsos alertas"), s.falses], [T("Missed", "Escaparam"), s.misses], [T("Fieldwork", "Trabalho de campo"), Math.round(s.t) + "s"]];
+      var real = T("I started my career doing exactly this, at PwC.", "Comecei a carreira a fazer exatamente isto, na PwC.");
       if(s.won){
-        var verdict = s.falses + s.misses === 0 ? "Every error found, nothing flagged by mistake." : s.cred === 1 ? "Signed, but it was close." : "A few slips, but the opinion holds.";
-        return {win:true, title:"CLEAN OPINION.", lines:["Findings " + s.found + "/" + seen + " · false flags " + s.falses + " · missed " + s.misses, verdict], rows:rows, realLine:real};
+        var verdict = s.falses + s.misses === 0 ? T("Every error found, nothing flagged by mistake.", "Todos os erros encontrados, nenhum alerta falso.") : s.cred === 1 ? T("Signed, but it was close.", "Assinado, mas por pouco.") : T("A few slips, but the opinion holds.", "Houve falhas, mas a opinião mantém-se.");
+        return {win:true, title:T("CLEAN OPINION.", "OPINIÃO SEM RESERVAS."), lines:[T("Findings " + s.found + "/" + seen + " · false flags " + s.falses + " · missed " + s.misses, "Erros encontrados " + s.found + "/" + seen + " · falsos alertas " + s.falses + " · escaparam " + s.misses), verdict], rows:rows, realLine:real};
       }
-      var tip = s.misses > s.falses ? "A missed error costs as much as a false flag. Check each total as it comes in." :
-        "Only flag what you can prove. A false flag costs credibility too.";
-      return {win:false, title:"QUALIFIED OPINION.\n" + left + " SECONDS OF FIELDWORK LEFT.", lines:["Findings " + s.found + " · false flags " + s.falses + " · missed " + s.misses], tip:tip, rows:rows, realLine:real};
+      var tip = s.misses > s.falses ? T("A missed error costs as much as a false flag. Check each total as it comes in.", "Um erro que escapa custa tanto como um falso alerta. Confira cada total à medida que aparece.") :
+        T("Only flag what you can prove. A false flag costs credibility too.", "Assinale só o que consegue provar. Um falso alerta também custa credibilidade.");
+      return {win:false, title:T("QUALIFIED OPINION.\n" + left + " SECONDS OF FIELDWORK LEFT.", "OPINIÃO COM RESERVAS.\nFALTAVAM " + left + " SEGUNDOS DE TRABALHO DE CAMPO."), lines:[T("Findings " + s.found + " · false flags " + s.falses + " · missed " + s.misses, "Erros encontrados " + s.found + " · falsos alertas " + s.falses + " · escaparam " + s.misses)], tip:tip, rows:rows, realLine:real};
     }
   });
 })();

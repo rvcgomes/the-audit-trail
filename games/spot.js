@@ -10,12 +10,31 @@ var Spot = (function(){
   var W = 192, H = 120, TOP = 12, ROW = 12, ROUND = 60, V0 = 7, V1 = 16, CRED = 3;
   var PITCH = [24, 30, 36], OUT = TOP - 3, PREFILL = [40, 70, 100];
   var VAT = [500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 8000];
-  var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  /* wording per language; setLang("pt") switches it, English is the default */
+  var LANGS = {
+    en:{sep:",",
+      months:["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      inv:"Invoice ", vat:"VAT 23% of ", of:"23% of ", sumWhy:"is ",
+      feb:"February 2026 has 28 days.", d30:" has 30 days.", d32:"No month has 32 days.", m13:"There is no month 13.", d0:"There is no day 0.",
+      dupWhy:function(n){return "Invoice " + n + " was booked twice."},
+      found:"FOUND", hintOrig:"That's the original. Flag the copy further down.",
+      firstOk:"The first booking is fine. Flag the copy.", rightLine:"That line was right.", miss:"MISSED"},
+    pt:{sep:".",
+      months:["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
+      inv:"Fatura ", vat:"IVA 23% de ", of:"23% de ", sumWhy:"é ",
+      feb:"Fevereiro de 2026 tem 28 dias.", d30:" tem 30 dias.", d32:"Nenhum mês tem 32 dias.", m13:"Não existe o mês 13.", d0:"Não existe o dia 0.",
+      dupWhy:function(n){return "A fatura " + n + " foi lançada duas vezes."},
+      found:"ENCONTRADO", hintOrig:"Esta é a original. Assinale a cópia, mais abaixo.",
+      firstOk:"O primeiro lançamento está certo. Assinale a cópia.", rightLine:"Essa linha estava certa.", miss:"ESCAPOU"}
+  };
+  var L = LANGS.en;
+  function setLang(l){L = LANGS[l] || LANGS.en}
+  function cap(s){return s.charAt(0).toUpperCase() + s.slice(1)}
 
   function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
   function pick(r, a){return a[Math.floor(r()*a.length)]}
-  function num(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+  function num(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, L.sep)}
   function dd(n){return (n < 10 ? "0" : "") + n}
 
   /* which lines are wrong: one per block of four, never two in a row early on */
@@ -44,7 +63,7 @@ var Spot = (function(){
   function sum(r, err, t){
     var hi = t < 25 ? 49 : 99, a = (1 + Math.floor(r()*hi))*100, b = (1 + Math.floor(r()*hi))*100, c = a + b, w = c;
     if(err){var d = t < 25 || r() < 0.5 ? 1000 : 100; w = r() < 0.5 && c - d > Math.max(a, b) ? c - d : c + d}
-    return {kind:"sum", text:num(a) + " + " + num(b) + " = " + num(w), why:num(a) + " + " + num(b) + " is " + num(c) + "."};
+    return {kind:"sum", text:num(a) + " + " + num(b) + " = " + num(w), why:num(a) + " + " + num(b) + " " + L.sumWhy + num(c) + "."};
   }
   function vat(r, err, t){
     var b = pick(r, VAT), v = b*23/100, w = v;
@@ -52,7 +71,7 @@ var Spot = (function(){
       w = t < 25 ? (r() < 0.5 ? b/5 : v + (r() < 0.5 ? -100 : 100)) : v + pick(r, [-50, -30, -20, 20, 30, 50]);
       if(w <= 0) w = v + 100;
     }
-    return {kind:"vat", text:"VAT 23% of " + num(b) + " = " + num(w), why:"23% of " + num(b) + " is " + num(v) + "."};
+    return {kind:"vat", text:L.vat + num(b) + " = " + num(w), why:L.of + num(b) + " " + L.sumWhy + num(v) + "."};
   }
   function date(s, err, t){
     var r = s.rnd, m = Math.floor(r()*12), d = 1 + Math.floor(r()*28), why = "";
@@ -60,19 +79,19 @@ var Spot = (function(){
     if(err){
       if(t >= 25 && r() < 0.7){
         var bad = pick(r, [[31, 3], [31, 5], [31, 8], [31, 10], [30, 1], [31, 1]]); d = bad[0]; m = bad[1];
-        why = m === 1 ? "February 2026 has 28 days." : MONTHS[m] + " has 30 days.";
+        why = m === 1 ? L.feb : cap(L.months[m]) + L.d30;
       }else{
         var e = Math.floor(r()*3);
-        if(e === 0){d = 32; why = "No month has 32 days."}
-        else if(e === 1){m = 12; why = "There is no month 13."}
-        else{d = 0; why = "There is no day 0."}
+        if(e === 0){d = 32; why = L.d32}
+        else if(e === 1){m = 12; why = L.m13}
+        else{d = 0; why = L.d0}
       }
     }
-    return {kind:"date", text:"Invoice " + next(s) + " · " + dd(d) + "." + dd(m + 1) + ".2026", why:why};
+    return {kind:"date", text:L.inv + next(s) + " · " + dd(d) + "." + dd(m + 1) + ".2026", why:why};
   }
   function amt(s){
     var no = next(s), a = (5 + Math.floor(s.rnd()*95))*100;
-    return {kind:"amt", no:no, text:"Invoice " + no + " · €" + num(a), why:""};
+    return {kind:"amt", no:no, text:L.inv + no + " · €" + num(a), why:""};
   }
   /* the copy of an invoice line still on screen, with time left to spot both */
   function dup(s){
@@ -80,7 +99,7 @@ var Spot = (function(){
       var o = s.rows[i];
       if(o.kind === "amt" && !o.err && !o.copied && !o.flagged && !o.judged && o.y >= TOP + s.speed*4){
         o.copied = true;
-        return {kind:"dup", no:o.no, text:o.text, why:"Invoice " + o.no + " was booked twice.", orig:o.id};
+        return {kind:"dup", no:o.no, text:o.text, why:L.dupWhy(o.no), orig:o.id};
       }
     }
     return null;
@@ -114,10 +133,10 @@ var Spot = (function(){
 
   function flag(s, row){
     if(!row || row.flagged || row.judged) return false;
-    if(!row.err && row.copied){ev(s, "hint", "That's the original. Flag the copy further down.", row); return false}
+    if(!row.err && row.copied){ev(s, "hint", L.hintOrig, row); return false}
     row.flagged = true;
-    if(row.err){s.found++; ev(s, "found", "FOUND", row)}
-    else{s.falses++; s.cred--; ev(s, "false", row.copied ? "The first booking is fine. Flag the copy." : "That line was right.", row)}
+    if(row.err){s.found++; ev(s, "found", L.found, row)}
+    else{s.falses++; s.cred--; ev(s, "false", row.copied ? L.firstOk : L.rightLine, row)}
     return true;
   }
   function move(s, d){
@@ -146,7 +165,7 @@ var Spot = (function(){
       r.y -= s.speed*dt; if(r.flash > 0) r.flash -= dt;
       if(!r.judged && r.y < OUT){
         r.judged = true;
-        if(r.err && !r.flagged){r.missed = true; r.flash = 0.7; s.misses++; s.cred--; ev(s, "miss", "MISSED", r)}
+        if(r.err && !r.flagged){r.missed = true; r.flash = 0.7; s.misses++; s.cred--; ev(s, "miss", L.miss, r)}
         else if(!r.err && !r.flagged) s.clean++;
       }
     }
@@ -164,6 +183,6 @@ var Spot = (function(){
     return s;
   }
 
-  return {W:W, H:H, TOP:TOP, ROW:ROW, ROUND:ROUND, CRED:CRED,
+  return {setLang:setLang, W:W, H:H, TOP:TOP, ROW:ROW, ROUND:ROUND, CRED:CRED,
     create:create, step:step, rowAt:rowAt, visible:visible, byId:byId, checked:checked, accuracy:accuracy};
 })();

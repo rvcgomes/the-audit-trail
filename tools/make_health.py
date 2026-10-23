@@ -6,7 +6,8 @@
     python tools/make_health.py --check  # fails if either is out of date (writes nothing)
 
 The page is for clinic and practice owners (VCLevel work), not for recruiters:
-no CV, two cartridges (FULL DIARY on pricing and agreements, CASH FLOW), and the
+no CV, four cartridges (FULL DIARY on pricing and agreements, CASH FLOW, SPOT THE ERROR,
+CLOSE THE MONTH), and the
 main button books a call.
 The English case texts are copied from the health cases in index.html, so the two
 never disagree; the Portuguese ones are written below. If a health case in
@@ -87,6 +88,7 @@ PT_PANELS = "".join([
 ECO = "https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/"
 AWARD = "https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/"
 ISEG = "https://www.iseg.ulisboa.pt/en/?p=70573"
+D_POST = "https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/"
 
 T = {
 "en": dict(
@@ -96,18 +98,17 @@ T = {
     og_alt="Rui Gomes, fractional CFO for clinics and health practices.",
     from_="From", to="To",
     hi2='your practice&#8217;s numbers, <span class="ul">seen from the inside@@UL@@</span>',
-    lede="I'm Rui, the founder of VCLevel. One of the things we do is fractional CFO work: a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and health practices. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
+    lede="I'm Rui, the founder of VCLevel. One of the things we do is fractional CFO work: a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and practices across health care: medical, dental, physiotherapy, psychology, aesthetics and others. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
     avail='<a data-link="mail" href="#contact">Book a call</a>, <a href="#cases">see the cases</a> or <a href="index.html">read my full trail</a>.',
     go="See the cases",
     card_label="Summary", card_h="Diagnosis · what I check first",
     card_roles="<span>Founder, VCLevel</span><span>CFO &amp; Head of HR, Weezie</span>",
     card_rows=["What an hour of the diary is worth", "Occupancy and no-shows", "Agreement patients against private ones",
                "Break-even, and the months to reach it", "Sole trader or a company"],
-    card_foot="Psychology · Physio · Dental · Medical", card_btn="Book a call",
+    card_foot="Medical · Dental · Physio · Psychology · Aesthetics · and more", card_btn="Book a call",
     cases_when="<b>Real cases</b>, with VCLevel", cases_h="The first question is rarely the one that matters",
     cases_p="Four practices I've worked with through VCLevel. Most of them had never had a finance person look at their numbers from the inside.",
     cases_stack="<li>Diagnosis</li><li>Pricing</li><li>Company structure</li><li>Break-even</li>",
-    cases_also='Also wine producers, food and drink, and PR agencies: <a href="index.html#c4">on the full trail</a>.',
     tabs_label="Client cases", tabs=EN_TABS, panels=EN_PANELS,
     anon="Real cases, shared with the clients&#8217; permission: sector only, no names or places, and ratios rather than amounts.",
     how_when="<b>How I work</b>", how_h="An insider, working from the outside",
@@ -117,28 +118,37 @@ T = {
     md_aria="Example of a monthly dashboard for a practice: revenue, occupancy, no-shows and cash at the top; revenue by service; agreement and private patients. No client figures.",
     md_head="Monthly dashboard", md_view="Month view", md_kpis=["Revenue", "Occupancy", "No-shows", "Cash &amp; runway"],
     md_t1="Revenue by service", md_bars=["Consults", "Treatments", "Assessments", "Other"],
-    md_t2="Agreement and private", md_legend=["Private", "Agreements", "Insurers"],
+    md_t2="Private and agreements", md_legend=["Private", "Agreements", "Insurers"],
     md_cap="An example of the monthly view, without any client&#8217;s figures.",
     path_when="<b>Where the method comes from</b>", path_h="Audit first, then the CFO seat",
     edu="Master's in Finance, ISEG Lisbon",
-    path_roles=[("2013 – 2022", "PwC: financial audit, then capital markets and accounting advisory, with Claranet and ITEN in between", "A"),
+    path_roles=[("2013 – 2022", "PwC: financial audit, then capital markets and accounting advisory, with Claranet in between, working directly with Microsoft", "A"),
                 ("2022 – now", "CFO &amp; Head of HR, Weezie, venture-backed software for fibre-network operators", ""),
                 ("Alongside", "Founder, VCLevel", "D")],
     path_p="At PwC I learnt to ask where a number comes from before trusting it. At Weezie the numbers are mine: the budget, the cash, the funding round, the pay bands. With clinics I do the same job, from the outside.",
-    facts_h="Track record", facts=[("€3M", "seed round, 2024", "B"), ("2025", "Transparency in Compensation Award", "C")],
+    facts_h="Track record", facts=[("€500M", "in transactions advised on under IFRS", "F"), ("€3M", "seed round, 2024: 18 more months of runway", "B"),
+        ("−34%", "time to close the month", "G"), ("−28%", "FX exposure, after a new liquidity policy", "G"),
+        ("0%", "voluntary attrition in 20 months, team of 23", "G"), ("2025", "Transparency in Compensation Award", "C")],
     fit_when="<b>Where I can help</b>", fit_h="Before the next big decision",
     fit_lead="The work is most useful before a decision that is hard to undo: a price list, a lease, a company.",
     fit_h3="You'll probably want to talk to me if",
     fit=["You've never worked out what an hour of the diary is worth", "You're not sure your prices for agreement patients still pay",
          "No-shows worry you, but nobody has put a number on them", "You're about to sign the lease for a new practice",
-         "You're choosing between sole trader and a company"],
+         "You're choosing between sole trader and a company",
+         "You want to apply for public funding, or the incentives for the interior", "You're bringing in a partner, or about to talk to the bank"],
     quest_when="<b>A small side quest</b>", quest_h="Insert a cartridge",
-    quest_p=["Two small games. In Full Diary you set a practice's private price, decide which agreements to sign and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a full diary. Cash Flow is about the weeks when money comes in and goes out.",
+    quest_p=["Four small games. In Full Diary you set a practice's private price, decide which agreements to sign and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a full diary. Cash Flow is about the weeks when money comes in and goes out, Spot the Error about the invoices that don't add up, and Close the Month about getting it done on time.",
              "They're toys, and the numbers in them are game numbers, but the rules come from the job. Turn the sound on for the music."],
-    dev_aria="RUNWAY, a handheld console with two games. A or Space to play, B or Escape for the menu.",
+    dev_aria="RUNWAY, a handheld console with four games. A or Space to play, B or Escape for the menu.",
     nogame="RUNWAY needs JavaScript.<br><br>The rest of the page doesn't.", up="Up", left="Left", right="Right", down="Down",
     b_aria="B: back to the menu", a_aria="A: book or select", b_small="MENU", a_small="PLAY", send="Send to Rui", copy="Copy",
     ghint="A or Space to play · arrows or swipe to move · B or Esc for the menu",
+    award_label="Award", award_h="Transparency in Compensation Award, 2025",
+    award_p="Coverflex Compensation Awards, small-company category. Given to Weezie for the company-wide compensation framework and salary bands I designed there.",
+    award_alt1="The trophy: Prémios da Compensação 2025, powered by Coverflex, Líder em transparência na compensação, Pequenas Empresas, Weezie.",
+    award_cap1="Small companies, 2025.",
+    award_alt2="Rui Gomes on stage with the award, next to a screen that reads: Prémios da Compensação 2025, small companies, leader in compensation transparency, winner Weezie.",
+    award_cap2="Accepting it for the Weezie team.",
     close_h="Tell me the question on your table", close_sub="Portuguese, English and Italian. Based in the north of Portugal, open to remote.",
     cta="Book a call", full="My full trail",
     ai="I built this page with AI, the same way I now build most client models: the tool writes the first draft, and I check every number. Each circled letter shows where a number comes from.",
@@ -147,7 +157,9 @@ T = {
           ("B", "€3M seed round in 2024", '€3M round led by GED Ventures Portugal, February 2024: <a href="%s" rel="noopener" target="_blank">ECO, 6 Feb 2024</a>.' % ECO),
           ("C", "Transparency in Compensation Award, 2025", 'Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category: <a href="%s" rel="noopener" target="_blank">Weezie on LinkedIn, May 2025</a>.' % AWARD),
           ("D", "Founder, VCLevel", '<a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a>'),
-          ("E", "Master's in Finance, ISEG Lisbon, 2013", 'ISEG&#8217;s Master&#8217;s in Finance is 33rd worldwide and top 3 in Portugal in the Financial Times Masters in Finance ranking 2026 (pre-experience), where it has been ranked since 2020: <a href="%s" rel="noopener" target="_blank">ISEG</a>.' % ISEG)],
+          ("E", "Master's in Finance, ISEG Lisbon, 2013", 'ISEG&#8217;s Master&#8217;s in Finance is 33rd worldwide and top 3 in Portugal in the Financial Times Masters in Finance ranking 2026 (pre-experience), where it has been ranked since 2020: <a href="%s" rel="noopener" target="_blank">ISEG</a>.' % ISEG),
+          ("F", "€500M in transactions advised on under IFRS", "PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal."),
+          ("G", "−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people", 'Weezie management reporting; before-and-after figures on request. The attrition figure is public: <a href="%s" rel="noopener" target="_blank">my LinkedIn post, Aug 2025</a>.' % D_POST)],
     disclaim="A personal introduction, not affiliated with",
 ),
 "pt": dict(
@@ -157,18 +169,17 @@ T = {
     og_alt="Rui Gomes, CFO a tempo parcial para clínicas e consultórios.",
     from_="De", to="Para",
     hi2='os números da sua clínica, <span class="ul">vistos por dentro@@UL@@</span>',
-    lede="Sou o Rui, fundador da VCLevel. Um dos serviços que prestamos é o de CFO fracionado: o trabalho de diretor financeiro, a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
+    lede="Sou o Rui, fundador da VCLevel. Um dos serviços que prestamos é o de CFO fracionado: o trabalho de diretor financeiro, a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios de várias áreas da saúde: medicina, medicina dentária, fisioterapia, psicologia, estética e outras. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
     avail='<a data-link="mail" href="#contact">Marcar uma conversa</a>, <a href="#cases">ver os casos</a> ou <a href="index.html" hreflang="en">ler o percurso completo</a> (em inglês).',
     go="Ver os casos",
     card_label="Resumo", card_h="Diagnóstico · o que vejo primeiro",
     card_roles="<span>Fundador, VCLevel</span><span>CFO e Head of HR, Weezie</span>",
     card_rows=["Quanto vale uma hora da agenda", "Ocupação e faltas", "Convenções e particulares",
                "Ponto de equilíbrio e meses até lá chegar", "ENI ou sociedade"],
-    card_foot="Psicologia · Fisioterapia · Dentária · Medicina", card_btn="Marcar conversa",
+    card_foot="Medicina · Dentária · Fisioterapia · Psicologia · Estética · e outras", card_btn="Marcar conversa",
     cases_when="<b>Casos reais</b>, com a VCLevel", cases_h="A primeira pergunta raramente é a que importa",
     cases_p="Quatro clínicas com que trabalhei através da VCLevel. A maioria nunca tinha tido alguém de finanças a olhar para os números por dentro.",
     cases_stack="<li>Diagnóstico</li><li>Preços</li><li>Estrutura da empresa</li><li>Ponto de equilíbrio</li>",
-    cases_also='Também produtores de vinho, restauração e agências de comunicação: <a href="index.html#c4" hreflang="en">no percurso completo</a>.',
     tabs_label="Casos de clientes", tabs=PT_TABS, panels=PT_PANELS,
     anon="Casos reais, partilhados com autorização dos clientes: só o setor, sem nomes nem locais, e rácios em vez de valores.",
     how_when="<b>Como trabalho</b>", how_h="Alguém de dentro, a trabalhar de fora",
@@ -178,28 +189,37 @@ T = {
     md_aria="Exemplo de um painel mensal para uma clínica: faturação, ocupação, faltas e tesouraria no topo; faturação por serviço; pacientes de convenções e particulares. Sem números de clientes.",
     md_head="Painel mensal", md_view="Vista do mês", md_kpis=["Faturação", "Ocupação", "Faltas", "Tesouraria"],
     md_t1="Faturação por serviço", md_bars=["Consultas", "Tratamentos", "Avaliações", "Outros"],
-    md_t2="Convenções e particulares", md_legend=["Particulares", "Convenções", "Seguros"],
+    md_t2="Particulares e convenções", md_legend=["Particulares", "Convenções", "Seguros"],
     md_cap="Um exemplo da vista mensal, sem números de nenhum cliente.",
     path_when="<b>De onde vem o método</b>", path_h="Primeiro a auditoria, depois a cadeira de CFO",
     edu="Mestrado em Finanças, ISEG",
-    path_roles=[("2013 – 2022", "PwC: auditoria financeira e, depois, assessoria em mercados de capitais e contabilidade, com a Claranet e a ITEN pelo meio", "A"),
+    path_roles=[("2013 – 2022", "PwC: auditoria financeira e, depois, assessoria em mercados de capitais e contabilidade, com a Claranet pelo meio, a trabalhar diretamente com a Microsoft", "A"),
                 ("2022 – hoje", "CFO e Head of HR na Weezie, software para operadores de redes de fibra, com capital de risco", ""),
                 ("Em paralelo", "Fundador da VCLevel", "D")],
     path_p="Na PwC aprendi a perguntar de onde vem um número antes de confiar nele. Na Weezie os números são meus: o orçamento, a tesouraria, a ronda de investimento, as tabelas salariais. Nas clínicas faço o mesmo trabalho, de fora.",
-    facts_h="Resultados", facts=[("€3M", "ronda seed, 2024", "B"), ("2025", "Prémio de transparência na compensação", "C")],
+    facts_h="Resultados", facts=[("€500M", "em transações assessoradas em IFRS", "F"), ("€3M", "ronda seed, 2024: mais 18 meses de tesouraria", "B"),
+        ("−34%", "no tempo de fecho do mês", "G"), ("−28%", "na exposição cambial, com uma nova política de liquidez", "G"),
+        ("0%", "saídas voluntárias em 20 meses, equipa de 23", "G"), ("2025", "Prémio de transparência na compensação", "C")],
     fit_when="<b>Onde posso ajudar</b>", fit_h="Antes da próxima grande decisão",
     fit_lead="O trabalho é mais útil antes de uma decisão difícil de desfazer: uma tabela de preços, um arrendamento, uma empresa.",
     fit_h3="Provavelmente vai querer falar comigo se",
     fit=["Nunca fez as contas a quanto vale uma hora da agenda", "Não tem a certeza de que os preços das convenções ainda compensam",
          "As faltas preocupam, mas ninguém as pôs em números", "Está prestes a assinar o arrendamento de um novo espaço",
-         "Está a decidir entre ENI e sociedade"],
+         "Está a decidir entre ENI e sociedade",
+         "Quer candidatar-se a fundos ou aos incentivos ao interior", "Vai receber um sócio ou falar com o banco"],
     quest_when="<b>Uma pausa para jogar</b>", quest_h="Insira um cartucho",
-    quest_p=["Dois jogos pequenos. Em Agenda Cheia define o preço particular de uma clínica, escolhe que convenções assinar e marca os pacientes à medida que chegam. No fim, cada convenção tem um veredicto: o que pagou, os particulares que trouxe e os que deixou de fora com a agenda cheia. Em Tesouraria, o tema são as semanas em que o dinheiro entra e sai.",
+    quest_p=["Quatro jogos pequenos. Em Agenda Cheia define o preço particular de uma clínica, escolhe que convenções assinar e marca os pacientes à medida que chegam. No fim, cada convenção tem um veredicto: o que pagou, os particulares que trouxe e os que deixou de fora com a agenda cheia. Em Tesouraria, o tema são as semanas em que o dinheiro entra e sai; em Encontre o Erro, as faturas que não batem certo; em Fechar o Mês, chegar ao fecho a tempo.",
              "São brinquedos, e os números são do jogo, mas as regras vêm do trabalho. Ligue o som para ouvir a música."],
-    dev_aria="RUNWAY, uma consola portátil com dois jogos. A ou Espaço para jogar, B ou Escape para o menu.",
+    dev_aria="RUNWAY, uma consola portátil com quatro jogos. A ou Espaço para jogar, B ou Escape para o menu.",
     nogame="O RUNWAY precisa de JavaScript.<br><br>O resto da página não.", up="Cima", left="Esquerda", right="Direita", down="Baixo",
     b_aria="B: voltar ao menu", a_aria="A: marcar ou escolher", b_small="MENU", a_small="JOGAR", send="Enviar ao Rui", copy="Copiar",
     ghint="A ou Espaço para jogar · setas ou deslizar para mover · B ou Esc para o menu",
+    award_label="Prémio", award_h="Prémio «Líder em transparência na compensação», 2025",
+    award_p="Prémios da Compensação da Coverflex, categoria Pequenas empresas. Atribuído à Weezie pelo modelo de compensação e pelas tabelas salariais que desenhei para a empresa.",
+    award_alt1="O troféu: Prémios da Compensação 2025, powered by Coverflex, Líder em transparência na compensação, Pequenas Empresas, Weezie.",
+    award_cap1="Pequenas empresas, 2025.",
+    award_alt2="Rui Gomes em palco com o prémio, ao lado de um ecrã onde se lê: Prémios da Compensação 2025, pequenas empresas, líder em transparência na compensação, vencedor Weezie.",
+    award_cap2="A receber o prémio em nome da equipa da Weezie.",
     close_h="Diga-me qual é a pergunta em cima da mesa", close_sub="Português, inglês e italiano. No norte de Portugal, também à distância.",
     cta="Marcar uma conversa", full="O percurso completo (EN)",
     ai="Fiz esta página com IA, da mesma forma que hoje faço a maior parte dos modelos para clientes: a ferramenta escreve o primeiro rascunho e eu confirmo cada número. Cada letra num círculo mostra de onde vem um número.",
@@ -208,7 +228,9 @@ T = {
           ("B", "Ronda seed de €3M em 2024", 'Ronda de €3M liderada pela GED Ventures Portugal, fevereiro de 2024: <a href="%s" rel="noopener" target="_blank">ECO, 6.2.2024</a>.' % ECO),
           ("C", "Prémio «Líder em transparência na compensação», 2025", 'Prémios da Compensação 2025 (Coverflex), categoria Pequenas empresas: <a href="%s" rel="noopener" target="_blank">Weezie no LinkedIn, maio de 2025</a>.' % AWARD),
           ("D", "Fundador da VCLevel", '<a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a>'),
-          ("E", "Mestrado em Finanças, ISEG, 2013", 'O mestrado em Finanças do ISEG está em 33.º lugar no mundo e no top 3 nacional no ranking Masters in Finance 2026 do Financial Times (programas sem experiência profissional), onde aparece desde 2020: <a href="%s" rel="noopener" target="_blank">ISEG</a>.' % ISEG)],
+          ("E", "Mestrado em Finanças, ISEG, 2013", 'O mestrado em Finanças do ISEG está em 33.º lugar no mundo e no top 3 nacional no ranking Masters in Finance 2026 do Financial Times (programas sem experiência profissional), onde aparece desde 2020: <a href="%s" rel="noopener" target="_blank">ISEG</a>.' % ISEG),
+          ("F", "€500M em transações assessoradas em IFRS", "PwC Capital Markets &amp; Accounting Advisory, 2018–2022. Os clientes são confidenciais; posso explicar os tipos de operação."),
+          ("G", "−34% no tempo de fecho do mês, −28% na exposição cambial, 20 meses sem saídas voluntárias numa equipa de 23", 'Reporte de gestão da Weezie; números de antes e depois a pedido. O número das saídas é público: <a href="%s" rel="noopener" target="_blank">o meu post no LinkedIn, ago. 2025</a>.' % D_POST)],
     disclaim="Uma apresentação pessoal, sem ligação a",
 ),
 }
@@ -312,7 +334,6 @@ window.CONFIG = {
     <div class="copy rev">
       <p>%(cases_p)s</p>
       <ul class="stack">%(cases_stack)s</ul>
-      <p class="also">%(cases_also)s</p>
     </div>
     <div class="sectors rev" id="sectors">
       <div class="tabs" role="tablist" aria-label="%(tabs_label)s">
@@ -370,6 +391,21 @@ window.CONFIG = {
       </dl>
     </aside>
   </div>
+</section>
+
+<section class="award wrap rev" aria-label="%(award_label)s">
+  <div class="award-photos">
+    <figure class="award-photo">
+      <img src="award-trophy.jpg" srcset="award-trophy-360.jpg 360w, award-trophy.jpg 720w" sizes="(max-width: 760px) 45vw, 320px" width="720" height="720" loading="lazy" alt="%(award_alt1)s">
+      <figcaption>%(award_cap1)s</figcaption>
+    </figure>
+    <figure class="award-photo">
+      <img src="award.jpg" srcset="award-360.jpg 360w, award.jpg 720w" sizes="(max-width: 760px) 45vw, 320px" width="720" height="720" loading="lazy" alt="%(award_alt2)s">
+      <figcaption>%(award_cap2)s</figcaption>
+    </figure>
+  </div>
+  <h2>%(award_h)s%(refC)s</h2>
+  <p>%(award_p)s</p>
 </section>
 
 <section class="quest wrap" id="quest">
@@ -446,16 +482,20 @@ window.CONFIG = {
 <script src="page.js"></script>
 <script src="games/agenda.js"></script>
 <script src="games/blocks.js"></script>
+<script src="games/spot.js"></script>
+<script src="games/lanes.js"></script>
 <script src="games/music.js"></script>
 <script src="games/console.js"></script>
 <script src="games/carts/agenda.js"></script>
 <script src="games/carts/blocks.js"></script>
+<script src="games/carts/spot.js"></script>
+<script src="games/carts/lanes.js"></script>
 <script>if(window.RUNWAY) RUNWAY.boot(); else document.getElementById("device").classList.add("broken");</script>
 </body>
 </html>
 ''' % dict(t, url=URL, favicon=FAVICON,hi=("Olá," if t["lang"] == "pt" else "Hi there,"),
            hi2=t["hi2"].replace("@@UL@@", UL), quest_p0=t["quest_p"][0], quest_p1=t["quest_p"][1], rows=rows, steps=steps, k0=kpis[0], k1=kpis[1], k2=kpis[2], k3=kpis[3],
-           bars=bars, legend=legend, roles=roles, facts=facts, fit=fit, srcs=srcs, refD=ref("D", t), refE=ref("E", t))
+           bars=bars, legend=legend, roles=roles, facts=facts, fit=fit, srcs=srcs, refC=ref("C", t), refD=ref("D", t), refE=ref("E", t))
     return page
 
 
