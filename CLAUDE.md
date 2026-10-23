@@ -23,7 +23,7 @@ O objetivo é **branding com estrutura interativa**, não uma ferramenta de CFO.
 | Versão curta | `short.html`, gerada por `python tools/make_short.py`; nunca editar à mão. Depois de mexer no `index.html`: regenerar e confirmar com `python tools/make_short.py --check`. Se o script parar por causa dos capítulos PwC, atualizar o capítulo junto no script e o `SOURCE_HASH` |
 | Páginas para clínicas (clientes VCLevel, não recrutadores): EN e PT-PT | `health.html` e `saude.html`, geradas por `python tools/make_health.py` (e `--check`); nunca editar à mão. Os casos em inglês vêm do `index.html`; os portugueses estão no script, e o `CASES_HASH` obriga a atualizá-los quando os casos mudam |
 | Gerador de links por empresa | `link.html` (versões completa, curta e clínicas PT/EN) |
-| Regras de cada jogo (sem DOM, com seed) | `games/decisions.js`, `runner.js`, `fight.js`, `maze.js`, `blocks.js`, `spot.js`, `lanes.js`, `agenda.js` (AGENDA CHEIA / FULL DIARY: preço, convenções e agenda; só nas páginas das clínicas) |
+| Regras de cada jogo (sem DOM, com seed) | `games/decisions.js`, `runner.js`, `fight.js`, `maze.js`, `blocks.js`, `spot.js`, `lanes.js`, `agenda.js` (AGENDA CHEIA / FULLY BOOKED: preço, convenções e agenda; só nas páginas das clínicas) |
 | Desenho e texto de cada cartucho | `games/carts/*.js` (`classic.js` tem RUNWAY RUN, BOARD FIGHT e DECISIONS) |
 | Consola: controlos, menu, arranque, modo demo, recibo | `games/console.js` (o contrato dos cartuchos está no topo). Fala português quando a página tem `<html lang="pt">`; os quatro cartuchos das clínicas (`agenda`, `blocks`, `spot`, `lanes`) também (as regras com texto têm `setLang`). No menu com até quatro cartuchos aparece uma animação (`#gArt`) |
 | Música chiptune | `games/music.js` |
