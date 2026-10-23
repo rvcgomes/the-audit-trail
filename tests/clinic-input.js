@@ -1,5 +1,5 @@
 // Plays the clinic pages' console with real keys and taps in headless Chrome, in real time:
-// two cartridges in the menu, FULL DIARY's setup (price, agreements), booking and turning
+// four cartridges in the menu, FULL DIARY's setup (price, agreements), booking and turning
 // patients away, a tap on the screen, and the wording in each language.
 // Needs a local server at the repo root: python -m http.server 8765
 // Run: node tests/clinic-input.js
@@ -36,7 +36,7 @@ const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["
     await send("Page.navigate", { url: BASE + page + "?debug" }); await sleep(1500);
     const menu = await js(`(function(){document.getElementById("device").scrollIntoView(); RUNWAY_DEBUG.menu(true);
       return [].map.call(document.querySelectorAll("#gOpts button"), function(b){return b.textContent})})()`);
-    ok(menu.length === 2 && menu.some(t => t.indexOf(word) >= 0), page + ": menu has two cartridges, with " + word, JSON.stringify(menu));
+    ok(menu.length === 4 && menu.some(t => t.indexOf(word) >= 0), page + ": menu has four cartridges, with " + word, JSON.stringify(menu));
     await js(`RUNWAY_DEBUG.start("agenda"); document.getElementById("device").focus(); 1`);
     await sleep(1300);                                     // READY / GO
     for (let i = 0; i < 3; i++) await key("ArrowUp");        // START -> price row

@@ -63,7 +63,21 @@ var Lanes = (function(){
     return "fall";
   }
 
-  var WHY = {hit:"", fall:"NOT SIGNED OFF", off:"CARRIED OFF THE PAGE", time:"OUT OF HOURS", gap:"MISSED THE SLOT", twice:"ALREADY CLOSED"};
+  /* wording per language; the cartridge calls setLang before it registers */
+  var TXT = {
+    en:{slots:["CASH", "AR", "AP", "PAYROLL", "REPORT"], dl:["VAT", "PAYROLL", "BANK REC", "BOARD PACK", "INVOICES"],
+      why:{hit:"", fall:"NOT SIGNED OFF", off:"CARRIED OFF THE PAGE", time:"OUT OF HOURS", gap:"MISSED THE SLOT", twice:"ALREADY CLOSED"},
+      closed:function(n){return n + " CLOSED"}, month:"MONTH CLOSED", day:"DAY ", hitBy:function(t){return t + " HIT YOU"}, hitAny:"DEADLINE HIT"},
+    pt:{slots:["CAIXA", "CLIENT", "FORNEC", "SALÁR.", "RELAT."], dl:["IVA", "SALÁRIOS", "CONC. BANC.", "DOSSIÊ ADM.", "FATURAS"],
+      why:{hit:"", fall:"SEM APROVAÇÃO", off:"ARRASTADO PARA FORA", time:"SEM HORAS", gap:"FALHOU A TAREFA", twice:"TAREFA JÁ FECHADA"},
+      closed:function(n){return "FECHO: " + n}, month:"MÊS FECHADO", day:"DIA ", hitBy:function(t){return "ATINGIDO: " + t}, hitAny:"PRAZO ATINGIDO"}
+  };
+  var LANG = "en", WHY = TXT.en.why;
+  function setLang(l){
+    var X = TXT[l] || TXT.en; LANG = TXT[l] ? l : "en"; WHY = X.why;
+    SLOTS.forEach(function(sl, i){sl.name = X.slots[i]});
+    DEADLINES.forEach(function(d, i){d.t = X.dl[i]});
+  }
   function lose(s, kind, text){
     s.lives--; s.lost[kind]++; s.wait = DEAD_PAUSE; s.dead = kind; s.deadRow = s.row; s.deadX = s.px;
     ev(s, kind === "hit" ? "hit" : "hurt", text || WHY[kind]);
@@ -74,12 +88,12 @@ var Lanes = (function(){
     if(i < 0) return lose(s, "gap");
     if(s.filled[i]) return lose(s, "twice");
     s.filled[i] = true; s.closed++; s.mult = 1 + SPEED_UP*s.closed; s.wait = FILL_PAUSE; s.dead = null;
-    ev(s, "good", SLOTS[i].name + " CLOSED", (SLOTS[i].c + 1)*TILE, 0);
-    if(s.closed >= SLOTS.length){s.won = true; ev(s, "line", "MONTH CLOSED")}
+    ev(s, "good", TXT[LANG].closed(SLOTS[i].name), (SLOTS[i].c + 1)*TILE, 0);
+    if(s.closed >= SLOTS.length){s.won = true; ev(s, "line", TXT[LANG].month)}
   }
   function respawn(s){
     s.row = START_ROW; s.px = START_COL; s.cool = 0; s.queue = null; s.hours = HOURS; s.dead = null; s.day++; s.face = "up";
-    ev(s, "day", "DAY " + s.day);
+    ev(s, "day", TXT[LANG].day + s.day);
   }
   function hop(s, d){
     var dr = d === "up" ? -1 : d === "down" ? 1 : 0, dc = d === "left" ? -1 : d === "right" ? 1 : 0;
@@ -120,10 +134,10 @@ var Lanes = (function(){
   }
   function hitBy(s){
     var L = s.lanes[s.row];
-    for(var i=0;i<L.items.length;i++){var it = L.items[i]; if(s.px + 0.2 < it.x + it.len && s.px + 0.8 > it.x) return it.t + " HIT YOU"}
-    return "DEADLINE HIT";
+    for(var i=0;i<L.items.length;i++){var it = L.items[i]; if(s.px + 0.2 < it.x + it.len && s.px + 0.8 > it.x) return TXT[LANG].hitBy(it.t)}
+    return TXT[LANG].hitAny;
   }
 
   return {TILE:TILE, COLS:COLS, ROWS:ROWS, START_ROW:START_ROW, MID_ROW:MID_ROW, HOURS:HOURS, LIVES:LIVES, COOL:COOL,
-    SLOTS:SLOTS, create:create, step:step, check:check, vel:vel, posAt:posAt, slotAt:slotAt, wrap:wrap};
+    SLOTS:SLOTS, setLang:setLang, create:create, step:step, check:check, vel:vel, posAt:posAt, slotAt:slotAt, wrap:wrap};
 })();
