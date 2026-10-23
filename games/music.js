@@ -38,7 +38,11 @@ var Music = (function(){
     decisions:{bpm:96, key:9, minor:true,
       lead:"A4 . . . C5 . . . E5 . . . D5 . C5 . B4 . . . D5 . . . C5 . . . B4 . A4 .",
       bass:"A2 . . . . . . . F2 . . . . . . . G2 . . . . . . . E2 . . . . . . .",
-      drum:"k . . . h . . . s . . . h . . . k . . . h . . . s . . . h . h ."}
+      drum:"k . . . h . . . s . . . h . . . k . . . h . . . s . . . h . h ."},
+    agenda:{bpm:116, key:7,
+      lead:"G5 . B5 . D6 . B5 . C6 . . A5 . . F#5 . A5 . G5 . E5 . G5 . A5 . B5 . G5 . . .",
+      bass:"G2 . D3 . G2 . D3 . A2 . E3 . D3 . . . C3 . G3 . C3 . G3 . D3 . A2 . G2 . . .",
+      drum:"k . h . s . h . k . h . s . h . k . h . s . h . k . h . s . h h"}
   };
   var JINGLES = {
     win:{bpm:180, lead:"C5 E5 G5 C6 . G5 C6 . . .", bass:"C3 . . . . G2 C3 . . ."},

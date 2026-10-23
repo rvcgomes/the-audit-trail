@@ -30,6 +30,18 @@
   var W = cv.width, H = cv.height;
   var COL = {lcd:"#FFB547", dim:"#B08A48", dark:"#1C1812", hot:"#FF7A45", faint:"#3a2e18", mid:"#5a4524"};
   var FONT = "10px VT323, monospace", BIG = "16px VT323, monospace";
+  /* console wording in the page's language (the Portuguese pages set <html lang="pt">) */
+  var PT = document.documentElement.lang === "pt";
+  var L = PT ? {insert:"INSIRA UM CARTUCHO", insertSay:"Insira um cartucho.", demoLine:"DEMO · carregue A para jogar este", demo:"DEMO · CARREGUE A",
+      paused:"PAUSA", carry:"carregue A para continuar", ready:"PRONTO", go:"JÁ", talk:"FALAR COM O CFO A SÉRIO", again:"JOGAR OUTRA VEZ", menu:"MENU",
+      real:"Em 2024 fiz isto a sério:\n€3M angariados, mais 18 meses.", cart:"CARTUCHO", date:"DATA", result:"RESULTADO", passed:"PASSOU ✓", not:"FICA PARA A PRÓXIMA",
+      well:"Bem jogado.", next:"Há sempre uma próxima tentativa.", thanks:"Obrigado por jogar.", mDate:"Data: ", mResult:"Resultado: ", mPassed:"passou", mNot:"fica para a próxima",
+      sPassed:", passou", sMine:", a minha tentativa", copied:"Copiado", copy:"Copiar"}
+    : {insert:"INSERT A CARTRIDGE", insertSay:"Insert a cartridge.", demoLine:"DEMO · press A to play this one", demo:"DEMO · PRESS A",
+      paused:"PAUSED", carry:"press A to carry on", ready:"READY", go:"GO", talk:"TALK TO THE REAL CFO", again:"PLAY AGAIN", menu:"MENU",
+      real:"In 2024 I did this for real:\n€3M raised, 18 months added.", cart:"CARTRIDGE", date:"DATE", result:"RESULT", passed:"PASSED ✓", not:"NOT THIS TIME",
+      well:"Clean opinion. Well played.", next:"Every trail has a next attempt.", thanks:"Thanks for playing.", mDate:"Date: ", mResult:"Result: ", mPassed:"passed", mNot:"not this time",
+      sPassed:", passed", sMine:", my attempt", copied:"Copied", copy:"Copy"};
 
   /* ---------- sprites ('#' amber, 'd' dim, 'm' mid, 'f' faint, 'o' hot, 'x' dark) ---------- */
   var INK = {"#":COL.lcd, d:COL.dim, m:COL.mid, f:COL.faint, o:COL.hot, x:COL.dark};
@@ -147,7 +159,7 @@
   var floats = [], fx = {}, bannerText = "", hudT = 0, moodT = 0, demo = null, idleT = 0, idleTimer = 0, seen = false, booted = false;
   var inp = {down:false, dir:null, press:{}, taps:[]}, held = {}, guardUntil = 0;
 
-  var g = {ctx:ctx, W:W, H:H, COL:COL, FONT:FONT, BIG:BIG, SPR:SPR, fx:fx, reduce:reduce,
+  var g = {ctx:ctx, W:W, H:H, COL:COL, FONT:FONT, BIG:BIG, SPR:SPR, fx:fx, reduce:reduce, pt:PT,
     text:text, sprite:sprite, overlay:overlay, fmt:fmt, sign:sign, say:function(t){if(!demo) say(t)}, flash:flash,
     now:function(){return performance.now()},
     float:function(t, x, y, color){floats.push({text:t, x:x, y:y, life:0.9, color:color || COL.lcd})},
@@ -162,7 +174,7 @@
   function list(){return carts.filter(function(c){return !c.hidden}).sort(function(a, b){return (a.order || 99) - (b.order || 99)})}
   function menu(focus){
     stop(); endDemo(); mode = "menu"; cart = null; cartEl.textContent = "CFO EDITION"; hud.hidden = hud2.hidden = true; cv.hidden = true;
-    msg.classList.remove("line"); msg.textContent = "INSERT A CARTRIDGE"; if(seen) say("Insert a cartridge.");
+    msg.classList.remove("line"); msg.textContent = L.insert; if(seen) say(L.insertSay);
     options(list().map(function(c){return [c.name, c.sub, function(){start(c.id)}]}), focus, true);
     dev.classList.remove("on"); playTheme("menu"); armIdle();
   }
@@ -177,7 +189,7 @@
     try{S = c.create()}catch(err){return fail(err)}
     mode = "play"; floats = []; for(var k in fx) delete fx[k];
     opts.innerHTML = ""; opts.classList.remove("menu"); cv.hidden = false;
-    line(asDemo ? "DEMO · press A to play this one" : c.help || "");
+    line(asDemo ? L.demoLine : c.help || "");
     if(!asDemo) say(c.say || c.help || c.name);
     countdown = asDemo ? 0 : (c.countdown == null ? 1.2 : c.countdown); paused = false;
     if(!asDemo){dev.focus({preventScroll:true}); playTheme(c.id)}
@@ -238,17 +250,17 @@
       ctx.fillStyle = COL.dark; ctx.fillRect(12, 40, W - 24, 24); ctx.strokeStyle = COL.lcd; ctx.strokeRect(12.5, 40.5, W - 25, 23);
       text(bannerText, W/2, 57, COL.lcd, BIG, "center"); ctx.globalAlpha = 1;
     }
-    if(demo){ctx.fillStyle = COL.dark; ctx.fillRect(0, H - 13, W, 13); text(Math.floor(performance.now()/500) % 2 ? "DEMO · PRESS A" : "", W/2, H - 3, COL.lcd, FONT, "center")}
-    else if(paused) overlay("PAUSED", "press A to carry on");
-    else if(countdown > 0) overlay(countdown > 0.5 ? "READY" : "GO", "");
+    if(demo){ctx.fillStyle = COL.dark; ctx.fillRect(0, H - 13, W, 13); text(Math.floor(performance.now()/500) % 2 ? L.demo : "", W/2, H - 3, COL.lcd, FONT, "center")}
+    else if(paused) overlay(L.paused, L.carry);
+    else if(countdown > 0) overlay(countdown > 0.5 ? L.ready : L.go, "");
   }
 
   /* ---------- endings and the receipt ---------- */
-  function talk(){return C.email ? [["TALK TO THE REAL CFO", "", function(){var cta = $("cta"); location.href = cta ? cta.href : "mailto:" + C.email}]] : []}
-  function again(id){return [["PLAY AGAIN", "", function(){start(id)}], ["MENU", "", function(){menu(true)}]]}
+  function talk(){return C.email ? [[L.talk, "", function(){var cta = $("cta"); location.href = cta ? cta.href : "mailto:" + C.email}]] : []}
+  function again(id){return [[L.again, "", function(){start(id)}], [L.menu, "", function(){menu(true)}]]}
   function showEnd(c, r){
     cv.hidden = true;
-    var real = r.realLine || (r.real === false ? "" : "In 2024 I did this for real:\n€3M raised, 18 months added.");
+    var real = r.realLine || (r.real === false ? "" : L.real);
     var t = r.title + "\n\n" + (r.lines || []).join("\n") + (r.tip ? "\n\n" + r.tip : "") + (r.win && real ? "\n\n" + real : "");
     jingle(r.win ? "win" : "lose"); theme = "menu";
     guardUntil = performance.now() + 600;
@@ -261,24 +273,24 @@
   function center(t, w){w = w || 32; t = String(t); var n = Math.max(0, Math.floor((w - t.length)/2)); return new Array(n + 1).join(" ") + t}
   function printReceipt(c, r){
     var d = new Date(), date = ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-    var rule = new Array(33).join("-"), rows = [center("RUNWAY · CFO EDITION"), center("the audit trail"), rule, pad("CARTRIDGE", c.name), pad("DATE", date), rule];
+    var rule = new Array(33).join("-"), rows = [center("RUNWAY · CFO EDITION"), center("the audit trail"), rule, pad(L.cart, c.name), pad(L.date, date), rule];
     (r.rows || []).forEach(function(x){rows.push(pad(x[0], x[1]))});
-    rows.push(rule, pad("RESULT", r.win ? "PASSED ✓" : "NOT THIS TIME"), rule);
-    rows.push(center(r.win ? "Clean opinion. Well played." : "Every trail has a next attempt."), center("Thanks for playing."));
+    rows.push(rule, pad(L.result, r.win ? L.passed : L.not), rule);
+    rows.push(center(r.win ? L.well : L.next), center(L.thanks));
     var body = rows.join("\n");
     receiptText.textContent = body; receipt.hidden = false;
     receipt.classList.remove("print"); void receipt.offsetWidth; receipt.classList.add("print");
     var co = new URLSearchParams(location.search).get("co");
     var url = location.origin + location.pathname + (co ? "?co=" + encodeURIComponent(co) : "");
-    var mail = ["RUNWAY · " + c.name, "Date: " + date].concat((r.rows || []).map(function(x){return x[0] + ": " + x[1]}))
-      .concat(["Result: " + (r.win ? "passed" : "not this time"), "", url]).join("\n");
+    var mail = ["RUNWAY · " + c.name, L.mDate + date].concat((r.rows || []).map(function(x){return x[0] + ": " + x[1]}))
+      .concat([L.mResult + (r.win ? L.mPassed : L.mNot), "", url]).join("\n");
     if(C.email){
       sendBtn.hidden = false;
-      sendBtn.href = "mailto:" + C.email + "?subject=" + encodeURIComponent("RUNWAY: " + c.name + (r.win ? ", passed" : ", my attempt")) +
+      sendBtn.href = "mailto:" + C.email + "?subject=" + encodeURIComponent("RUNWAY: " + c.name + (r.win ? L.sPassed : L.sMine)) +
         "&body=" + encodeURIComponent(mail);
     }else sendBtn.hidden = true;
     copyBtn.onclick = function(){
-      var done = function(){copyBtn.textContent = "Copied"; setTimeout(function(){copyBtn.textContent = "Copy"}, 1500)};
+      var done = function(){copyBtn.textContent = L.copied; setTimeout(function(){copyBtn.textContent = L.copy}, 1500)};
       try{navigator.clipboard.writeText(body + "\n" + url).then(done, function(){})}catch(e){}
     };
   }

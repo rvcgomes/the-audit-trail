@@ -6,7 +6,8 @@
     python tools/make_health.py --check  # fails if either is out of date (writes nothing)
 
 The page is for clinic and practice owners (VCLevel work), not for recruiters:
-no games, no CV, and the main button books a call.
+no CV, two cartridges (FULL DIARY on pricing and agreements, CASH FLOW), and the
+main button books a call.
 The English case texts are copied from the health cases in index.html, so the two
 never disagree; the Portuguese ones are written below. If a health case in
 index.html changes, the script stops, so the Portuguese text can be updated too.
@@ -75,8 +76,8 @@ PT_PANELS = "".join([
     pt_case(2, "physio", "Fisioterapia", "ENI ou sociedade, antes do primeiro utente?",
             "A resposta certa veio do plano a três anos, não do imposto poupado no primeiro ano.",
             "Escolha a estrutura a pensar no terceiro ano."),
-    pt_case(3, "dental", "Medicina dentária", "Os nossos preços estão certos para os pacientes de acordos?",
-            "Os preços partiam do princípio de que havia cerca de sete vezes mais pacientes de acordos do que a clínica tinha na realidade. As faltas eram uma segunda fuga na margem.",
+    pt_case(3, "dental", "Medicina dentária", "Os nossos preços estão certos para os pacientes de convenções?",
+            "Os preços partiam do princípio de que havia cerca de sete vezes mais pacientes de convenções do que a clínica tinha na realidade. As faltas eram uma segunda fuga na margem.",
             "Primeiro os dados, depois o preço."),
     pt_case(4, "clinic", "Clínica médica", "O que precisamos de saber antes de assinar o arrendamento?",
             "Dois números: onde está o ponto de equilíbrio e quantos meses aguenta até lá chegar. Fora das grandes cidades, juntam-se os incentivos ao interior e uma sociedade que possa receber sócios mais tarde.",
@@ -95,11 +96,11 @@ T = {
     og_alt="Rui Gomes, fractional CFO for clinics and health practices.",
     from_="From", to="To",
     hi2='your practice&#8217;s numbers, <span class="ul">seen from the inside@@UL@@</span>',
-    lede="I'm Rui, a fractional CFO: I do a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and health practices. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
+    lede="I'm Rui, the founder of VCLevel. One of the things we do is fractional CFO work: a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and health practices. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
     avail='<a data-link="mail" href="#contact">Book a call</a>, <a href="#cases">see the cases</a> or <a href="index.html">read my full trail</a>.',
     go="See the cases",
     card_label="Summary", card_h="Diagnosis · what I check first",
-    card_roles="<span>Fractional CFO, VCLevel</span><span>CFO &amp; Head of HR, Weezie</span>",
+    card_roles="<span>Founder, VCLevel</span><span>CFO &amp; Head of HR, Weezie</span>",
     card_rows=["What an hour of the diary is worth", "Occupancy and no-shows", "Agreement patients against private ones",
                "Break-even, and the months to reach it", "Sole trader or a company"],
     card_foot="Psychology · Physio · Dental · Medical", card_btn="Book a call",
@@ -122,7 +123,7 @@ T = {
     edu="Master's in Finance, ISEG Lisbon",
     path_roles=[("2013 – 2022", "PwC: financial audit, then capital markets and accounting advisory, with Claranet and ITEN in between", "A"),
                 ("2022 – now", "CFO &amp; Head of HR, Weezie, venture-backed software for fibre-network operators", ""),
-                ("Alongside", "Founding partner, VCLevel", "D")],
+                ("Alongside", "Founder, VCLevel", "D")],
     path_p="At PwC I learnt to ask where a number comes from before trusting it. At Weezie the numbers are mine: the budget, the cash, the funding round, the pay bands. With clinics I do the same job, from the outside.",
     facts_h="Track record", facts=[("€3M", "seed round, 2024", "B"), ("2025", "Transparency in Compensation Award", "C")],
     fit_when="<b>Where I can help</b>", fit_h="Before the next big decision",
@@ -131,6 +132,13 @@ T = {
     fit=["You've never worked out what an hour of the diary is worth", "You're not sure your prices for agreement patients still pay",
          "No-shows worry you, but nobody has put a number on them", "You're about to sign the lease for a new practice",
          "You're choosing between sole trader and a company"],
+    quest_when="<b>A small side quest</b>", quest_h="Insert a cartridge",
+    quest_p=["Two small games. In Full Diary you set a practice's private price, decide which agreements to sign and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a full diary. Cash Flow is about the weeks when money comes in and goes out.",
+             "They're toys, and the numbers in them are game numbers, but the rules come from the job. Turn the sound on for the music."],
+    dev_aria="RUNWAY, a handheld console with two games. A or Space to play, B or Escape for the menu.",
+    nogame="RUNWAY needs JavaScript.<br><br>The rest of the page doesn't.", up="Up", left="Left", right="Right", down="Down",
+    b_aria="B: back to the menu", a_aria="A: book or select", b_small="MENU", a_small="PLAY", send="Send to Rui", copy="Copy",
+    ghint="A or Space to play · arrows or swipe to move · B or Esc for the menu",
     close_h="Tell me the question on your table", close_sub="Portuguese, English and Italian. Based in the north of Portugal, open to remote.",
     cta="Book a call", full="My full trail",
     ai="I built this page with AI, the same way I now build most client models: the tool writes the first draft, and I check every number. Each circled letter shows where a number comes from.",
@@ -138,7 +146,7 @@ T = {
     srcs=[("A", "Roles and dates, 2013 to now", '<a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a>'),
           ("B", "€3M seed round in 2024", '€3M round led by GED Ventures Portugal, February 2024: <a href="%s" rel="noopener" target="_blank">ECO, 6 Feb 2024</a>.' % ECO),
           ("C", "Transparency in Compensation Award, 2025", 'Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category: <a href="%s" rel="noopener" target="_blank">Weezie on LinkedIn, May 2025</a>.' % AWARD),
-          ("D", "Founding partner, VCLevel", '<a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a>'),
+          ("D", "Founder, VCLevel", '<a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a>'),
           ("E", "Master's in Finance, ISEG Lisbon, 2013", 'ISEG&#8217;s Master&#8217;s in Finance is 33rd worldwide and top 3 in Portugal in the Financial Times Masters in Finance ranking 2026 (pre-experience), where it has been ranked since 2020: <a href="%s" rel="noopener" target="_blank">ISEG</a>.' % ISEG)],
     disclaim="A personal introduction, not affiliated with",
 ),
@@ -149,12 +157,12 @@ T = {
     og_alt="Rui Gomes, CFO a tempo parcial para clínicas e consultórios.",
     from_="De", to="Para",
     hi2='os números da sua clínica, <span class="ul">vistos por dentro@@UL@@</span>',
-    lede="Sou o Rui e sou CFO fracionado: faço o trabalho de diretor financeiro, a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
+    lede="Sou o Rui, fundador da VCLevel. Um dos serviços que prestamos é o de CFO fracionado: o trabalho de diretor financeiro, a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
     avail='<a data-link="mail" href="#contact">Marcar uma conversa</a>, <a href="#cases">ver os casos</a> ou <a href="index.html" hreflang="en">ler o percurso completo</a> (em inglês).',
     go="Ver os casos",
     card_label="Resumo", card_h="Diagnóstico · o que vejo primeiro",
-    card_roles="<span>CFO fracionado, VCLevel</span><span>CFO e Head of HR, Weezie</span>",
-    card_rows=["Quanto vale uma hora da agenda", "Ocupação e faltas", "Pacientes de acordos e particulares",
+    card_roles="<span>Fundador, VCLevel</span><span>CFO e Head of HR, Weezie</span>",
+    card_rows=["Quanto vale uma hora da agenda", "Ocupação e faltas", "Convenções e particulares",
                "Ponto de equilíbrio e meses até lá chegar", "ENI ou sociedade"],
     card_foot="Psicologia · Fisioterapia · Dentária · Medicina", card_btn="Marcar conversa",
     cases_when="<b>Casos reais</b>, com a VCLevel", cases_h="A primeira pergunta raramente é a que importa",
@@ -164,27 +172,34 @@ T = {
     tabs_label="Casos de clientes", tabs=PT_TABS, panels=PT_PANELS,
     anon="Casos reais, partilhados com autorização dos clientes: só o setor, sem nomes nem locais, e rácios em vez de valores.",
     how_when="<b>Como trabalho</b>", how_h="Alguém de dentro, a trabalhar de fora",
-    steps=[("Diagnóstico", "Onde a clínica está hoje: quanto vale uma hora da agenda, a ocupação e as faltas, os pacientes de acordos face aos particulares, e quanto custa cada serviço."),
+    steps=[("Diagnóstico", "Onde a clínica está hoje: quanto vale uma hora da agenda, a ocupação e as faltas, os pacientes de convenções face aos particulares, e quanto custa cada serviço."),
            ("Ferramentas para decidir", "Feitas para a sua clínica: o modelo de preços, o ponto de equilíbrio, a previsão de tesouraria, o painel mensal."),
            ("As decisões", "A tabela de preços, o arrendamento, a estrutura da empresa, a conversa com o banco. Nestas decisões, ocupo o lugar do diretor financeiro.")],
-    md_aria="Exemplo de um painel mensal para uma clínica: faturação, ocupação, faltas e tesouraria no topo; faturação por serviço; pacientes de acordos e particulares. Sem números de clientes.",
+    md_aria="Exemplo de um painel mensal para uma clínica: faturação, ocupação, faltas e tesouraria no topo; faturação por serviço; pacientes de convenções e particulares. Sem números de clientes.",
     md_head="Painel mensal", md_view="Vista do mês", md_kpis=["Faturação", "Ocupação", "Faltas", "Tesouraria"],
     md_t1="Faturação por serviço", md_bars=["Consultas", "Tratamentos", "Avaliações", "Outros"],
-    md_t2="Acordos e particulares", md_legend=["Particulares", "Acordos", "Seguradoras"],
+    md_t2="Convenções e particulares", md_legend=["Particulares", "Convenções", "Seguros"],
     md_cap="Um exemplo da vista mensal, sem números de nenhum cliente.",
     path_when="<b>De onde vem o método</b>", path_h="Primeiro a auditoria, depois a cadeira de CFO",
     edu="Mestrado em Finanças, ISEG",
     path_roles=[("2013 – 2022", "PwC: auditoria financeira e, depois, assessoria em mercados de capitais e contabilidade, com a Claranet e a ITEN pelo meio", "A"),
                 ("2022 – hoje", "CFO e Head of HR na Weezie, software para operadores de redes de fibra, com capital de risco", ""),
-                ("Em paralelo", "Sócio fundador da VCLevel", "D")],
+                ("Em paralelo", "Fundador da VCLevel", "D")],
     path_p="Na PwC aprendi a perguntar de onde vem um número antes de confiar nele. Na Weezie os números são meus: o orçamento, a tesouraria, a ronda de investimento, as tabelas salariais. Nas clínicas faço o mesmo trabalho, de fora.",
     facts_h="Resultados", facts=[("€3M", "ronda seed, 2024", "B"), ("2025", "Prémio de transparência na compensação", "C")],
     fit_when="<b>Onde posso ajudar</b>", fit_h="Antes da próxima grande decisão",
     fit_lead="O trabalho é mais útil antes de uma decisão difícil de desfazer: uma tabela de preços, um arrendamento, uma empresa.",
     fit_h3="Provavelmente vai querer falar comigo se",
-    fit=["Nunca fez as contas a quanto vale uma hora da agenda", "Não tem a certeza de que os preços dos acordos ainda compensam",
+    fit=["Nunca fez as contas a quanto vale uma hora da agenda", "Não tem a certeza de que os preços das convenções ainda compensam",
          "As faltas preocupam, mas ninguém as pôs em números", "Está prestes a assinar o arrendamento de um novo espaço",
          "Está a decidir entre ENI e sociedade"],
+    quest_when="<b>Uma pausa para jogar</b>", quest_h="Insira um cartucho",
+    quest_p=["Dois jogos pequenos. Em Agenda Cheia define o preço particular de uma clínica, escolhe que convenções assinar e marca os pacientes à medida que chegam. No fim, cada convenção tem um veredicto: o que pagou, os particulares que trouxe e os que deixou de fora com a agenda cheia. Em Tesouraria, o tema são as semanas em que o dinheiro entra e sai.",
+             "São brinquedos, e os números são do jogo, mas as regras vêm do trabalho. Ligue o som para ouvir a música."],
+    dev_aria="RUNWAY, uma consola portátil com dois jogos. A ou Espaço para jogar, B ou Escape para o menu.",
+    nogame="O RUNWAY precisa de JavaScript.<br><br>O resto da página não.", up="Cima", left="Esquerda", right="Direita", down="Baixo",
+    b_aria="B: voltar ao menu", a_aria="A: marcar ou escolher", b_small="MENU", a_small="JOGAR", send="Enviar ao Rui", copy="Copiar",
+    ghint="A ou Espaço para jogar · setas ou deslizar para mover · B ou Esc para o menu",
     close_h="Diga-me qual é a pergunta em cima da mesa", close_sub="Português, inglês e italiano. No norte de Portugal, também à distância.",
     cta="Marcar uma conversa", full="O percurso completo (EN)",
     ai="Fiz esta página com IA, da mesma forma que hoje faço a maior parte dos modelos para clientes: a ferramenta escreve o primeiro rascunho e eu confirmo cada número. Cada letra num círculo mostra de onde vem um número.",
@@ -192,7 +207,7 @@ T = {
     srcs=[("A", "Cargos e datas, de 2013 até hoje", '<a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">Perfil no LinkedIn</a>'),
           ("B", "Ronda seed de €3M em 2024", 'Ronda de €3M liderada pela GED Ventures Portugal, fevereiro de 2024: <a href="%s" rel="noopener" target="_blank">ECO, 6.2.2024</a>.' % ECO),
           ("C", "Prémio «Líder em transparência na compensação», 2025", 'Prémios da Compensação 2025 (Coverflex), categoria Pequenas empresas: <a href="%s" rel="noopener" target="_blank">Weezie no LinkedIn, maio de 2025</a>.' % AWARD),
-          ("D", "Sócio fundador da VCLevel", '<a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a>'),
+          ("D", "Fundador da VCLevel", '<a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a>'),
           ("E", "Mestrado em Finanças, ISEG, 2013", 'O mestrado em Finanças do ISEG está em 33.º lugar no mundo e no top 3 nacional no ranking Masters in Finance 2026 do Financial Times (programas sem experiência profissional), onde aparece desde 2020: <a href="%s" rel="noopener" target="_blank">ISEG</a>.' % ISEG)],
     disclaim="Uma apresentação pessoal, sem ligação a",
 ),
@@ -248,7 +263,7 @@ def build(t):
 <link rel="icon" href="%(favicon)s">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Kalam:wght@400;700&family=VT323&display=swap" rel="stylesheet">
 <script>
 document.documentElement.className = "js";
 /* Generated by tools/make_health.py: edit the script, not this file.
@@ -357,6 +372,47 @@ window.CONFIG = {
   </div>
 </section>
 
+<section class="quest wrap" id="quest">
+  <div class="split">
+    <div class="copy rev">
+      <span class="when">%(quest_when)s</span>
+      <h2 style="margin:.4rem 0 1.5rem">%(quest_h)s</h2>
+      <p>%(quest_p0)s</p>
+      <p>%(quest_p1)s</p>
+    </div>
+    <div class="rev">
+      <div class="device" id="device" tabindex="0" role="group" aria-label="%(dev_aria)s">
+        <div class="brand"><span><i></i>RUNWAY</span><span id="gCart">CFO EDITION</span><button type="button" class="snd" id="gSnd" aria-pressed="false">♪ OFF</button></div>
+        <div class="screen">
+          <p class="nogame">%(nogame)s</p>
+          <div class="hud" id="gHud" aria-hidden="true" hidden>
+            <div><span id="gL1"></span><b id="gV1"></b></div>
+            <div><span id="gL2"></span><b id="gV2"></b></div>
+            <div><span id="gL3"></span><b id="gV3"></b></div>
+          </div>
+          <div class="hud2" id="gHud2" aria-hidden="true" hidden>
+            <div><span id="gL4"></span><b id="gV4"></b></div>
+            <div><span id="gL5"></span><div class="bar" id="gBar"><i id="gBarI" style="width:0%%"></i></div></div>
+          </div>
+          <canvas id="gCanvas" width="192" height="120" hidden aria-hidden="true"></canvas>
+          <div class="msg" id="gMsg" aria-hidden="true"></div>
+          <p class="sr" id="gLive" aria-live="polite"></p>
+          <div class="opts" id="gOpts"></div>
+        </div>
+        <div class="controls">
+          <div class="dpad"><button type="button" data-dir="up" class="u" aria-label="%(up)s">▲</button><button type="button" data-dir="left" class="l" aria-label="%(left)s">◀</button><span class="c"></span><button type="button" data-dir="right" class="r" aria-label="%(right)s">▶</button><button type="button" data-dir="down" class="d" aria-label="%(down)s">▼</button></div>
+          <div class="ab"><div><button type="button" id="gB" aria-label="%(b_aria)s">B</button><small>%(b_small)s</small></div><div><button type="button" id="gA" aria-label="%(a_aria)s">A</button><small>%(a_small)s</small></div></div>
+        </div>
+      </div>
+      <div class="receipt" id="gReceipt" hidden>
+        <pre id="gReceiptText"></pre>
+        <div class="rbtns"><a class="rbtn" id="gSend" href="#">%(send)s</a><button type="button" class="rbtn" id="gCopy">%(copy)s</button></div>
+      </div>
+      <p class="ghint">%(ghint)s</p>
+    </div>
+  </div>
+</section>
+
 <section class="why" id="why">
   <div class="wrap">
     <span class="when rev">%(fit_when)s</span>
@@ -388,10 +444,17 @@ window.CONFIG = {
 </footer>
 
 <script src="page.js"></script>
+<script src="games/agenda.js"></script>
+<script src="games/blocks.js"></script>
+<script src="games/music.js"></script>
+<script src="games/console.js"></script>
+<script src="games/carts/agenda.js"></script>
+<script src="games/carts/blocks.js"></script>
+<script>if(window.RUNWAY) RUNWAY.boot(); else document.getElementById("device").classList.add("broken");</script>
 </body>
 </html>
 ''' % dict(t, url=URL, favicon=FAVICON,hi=("Olá," if t["lang"] == "pt" else "Hi there,"),
-           hi2=t["hi2"].replace("@@UL@@", UL), rows=rows, steps=steps, k0=kpis[0], k1=kpis[1], k2=kpis[2], k3=kpis[3],
+           hi2=t["hi2"].replace("@@UL@@", UL), quest_p0=t["quest_p"][0], quest_p1=t["quest_p"][1], rows=rows, steps=steps, k0=kpis[0], k1=kpis[1], k2=kpis[2], k3=kpis[3],
            bars=bars, legend=legend, roles=roles, facts=facts, fit=fit, srcs=srcs, refD=ref("D", t), refE=ref("E", t))
     return page
 
