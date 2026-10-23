@@ -64,6 +64,7 @@ img,svg{max-width:100%}
 .steps li{counter-increment:st;display:grid;grid-template-columns:2.6rem minmax(0,1fr);column-gap:12px}
 .steps li::before{content:counter(st);grid-row:span 2;width:2.2rem;height:2.2rem;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700}
 .steps b{font-size:1.15rem}
+.how-lead{font-size:clamp(1.1rem,2vw,1.3rem);line-height:1.45;max-width:52ch;margin:-1rem 0 2.25rem}
 .steps span{color:var(--muted)}
 .health .hero-grid .hi2{font-size:clamp(1.7rem,3.9vw,2.7rem)}
 .health .mdash{margin:0;background:var(--card)}
