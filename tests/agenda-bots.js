@@ -1,4 +1,4 @@
-// Plays FULL DIARY with bots that set the price and the agreements differently,
+// Plays FULLY BOOKED with bots that set the price and the agreements differently,
 // and checks that the choices decide the result:
 //   - a careful bot (books agreement patients only into hours privates won't fill) wins most games;
 //   - booking everyone at the default price is a coin toss;

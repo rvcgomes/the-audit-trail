@@ -6,7 +6,7 @@
     python tools/make_health.py --check  # fails if either is out of date (writes nothing)
 
 The page is for clinic and practice owners (VCLevel work), not for recruiters:
-no CV, four cartridges (FULL DIARY on pricing and agreements, CASH FLOW, SPOT THE ERROR,
+no CV, four cartridges (FULLY BOOKED on pricing and agreements, CASH FLOW, SPOT THE ERROR,
 CLOSE THE MONTH), and the
 main button books a call.
 The English case texts are copied from the health cases in index.html, so the two
@@ -20,7 +20,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 URL = "https://rvcgomes.github.io/the-audit-trail/"
 CASES = ["therapy", "physio", "dental", "clinic"]
 # fingerprint of the four health cases in index.html when the Portuguese texts were last written
-CASES_HASH = "7311329ed1897881"
+CASES_HASH = "37acff9daa54c6a2"
 
 index = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read().replace("\r\n", "\n")
 
@@ -72,10 +72,10 @@ PT_TABS = '''        <button role="tab" id="t-therapy" aria-controls="p-therapy"
 '''
 PT_PANELS = "".join([
     pt_case(1, "therapy", "Psicologia", "“Precisamos de faturar mais.”",
-            "O problema não era a faturação. Eram a ocupação da agenda e o preço por sessão. Começámos por um diagnóstico de desempenho, não por um esforço comercial.",
+            "Os números apontaram para a ocupação da agenda e o preço por sessão. O trabalho começou por um diagnóstico de desempenho.",
             "Primeiro, saber quanto vale uma hora."),
     pt_case(2, "physio", "Fisioterapia", "ENI ou sociedade, antes do primeiro utente?",
-            "A resposta certa veio do plano a três anos, não do imposto poupado no primeiro ano.",
+            "A resposta veio do plano a três anos, onde o imposto poupado no primeiro ano pesava pouco.",
             "Escolha a estrutura a pensar no terceiro ano."),
     pt_case(3, "dental", "Medicina dentária", "Os nossos preços estão certos para os pacientes de convenções?",
             "Os preços partiam do princípio de que havia cerca de sete vezes mais pacientes de convenções do que a clínica tinha na realidade. As faltas eram uma segunda fuga na margem.",
@@ -93,17 +93,17 @@ D_POST = "https://www.linkedin.com/feed/update/urn:li:activity:73594898178746777
 T = {
 "en": dict(
     file="health.html", other="saude.html", lang="en", other_lang="pt", other_name="Versão em português",
-    title="Rui Gomes — fractional CFO for clinics",
+    title="Rui Gomes, fractional CFO for clinics",
     desc="Rui Gomes, fractional CFO for clinics and health practices: a diagnosis of where the practice stands, then the tools to decide.",
     og_alt="Rui Gomes, fractional CFO for clinics and health practices.",
     from_="From", to="To",
     hi2='your practice&#8217;s numbers, <span class="ul">seen from the inside@@UL@@</span>',
-    lede="I'm Rui, the founder of VCLevel. One of the things we do is fractional CFO work: a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and practices across health care: medical, dental, physiotherapy, psychology, aesthetics and others. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
+    lede="I'm Rui, the founder of VCLevel, where I do fractional CFO work: a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and practices across health care: medical, dental, physiotherapy, psychology, aesthetics and others. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
     avail='<a data-link="mail" href="#contact">Book a call</a>, <a href="#cases">see the cases</a> or <a href="index.html">read my full trail</a>.',
     go="See the cases",
     card_label="Summary", card_h="Diagnosis · what I check first",
     card_roles="<span>Founder, VCLevel</span><span>CFO &amp; Head of HR, Weezie</span>",
-    card_rows=["What an hour of the diary is worth", "Occupancy and no-shows", "Agreement patients against private ones",
+    card_rows=["What an hour in the schedule is worth", "Occupancy and no-shows", "Insurers and health plans against private patients",
                "Break-even, and the months to reach it", "Sole trader or a company"],
     card_foot="Medical · Dental · Physio · Psychology · Aesthetics · and more", card_btn="Book a call",
     cases_when="<b>Real cases</b>, with VCLevel", cases_h="The first question is rarely the one that matters",
@@ -112,13 +112,13 @@ T = {
     tabs_label="Client cases", tabs=EN_TABS, panels=EN_PANELS,
     anon="Real cases, shared with the clients&#8217; permission: sector only, no names or places, and ratios rather than amounts.",
     how_when="<b>How I work</b>", how_h="An insider, working from the outside",
-    steps=[("Diagnosis", "Where the practice stands today: what an hour of the diary is worth, occupancy and no-shows, agreement patients against private ones, and what each service costs."),
+    steps=[("Diagnosis", "Where the practice stands today: what an hour in the schedule is worth, occupancy and no-shows, patients through insurers and health plans against private ones, and what each service costs."),
            ("Tools to decide", "Built for your practice: the pricing model, the break-even, the cash forecast, the monthly dashboard."),
            ("The decisions", "The price list, the lease, the company structure, the conversation with the bank. For these, I take the finance seat.")],
-    md_aria="Example of a monthly dashboard for a practice: revenue, occupancy, no-shows and cash at the top; revenue by service; agreement and private patients. No client figures.",
+    md_aria="Example of a monthly dashboard for a practice: revenue, occupancy, no-shows and cash at the top; revenue by service; who pays: private patients, insurers and health plans. No client figures.",
     md_head="Monthly dashboard", md_view="Month view", md_kpis=["Revenue", "Occupancy", "No-shows", "Cash &amp; runway"],
     md_t1="Revenue by service", md_bars=["Consults", "Treatments", "Assessments", "Other"],
-    md_t2="Private and agreements", md_legend=["Private", "Agreements", "Insurers"],
+    md_t2="Who pays", md_legend=["Private", "Insurers &amp; health plans"],
     md_cap="An example of the monthly view, without any client&#8217;s figures.",
     path_when="<b>Where the method comes from</b>", path_h="Audit first, then the CFO seat",
     edu="Master's in Finance, ISEG Lisbon",
@@ -132,12 +132,12 @@ T = {
     fit_when="<b>Where I can help</b>", fit_h="Before the next big decision",
     fit_lead="The work is most useful before a decision that is hard to undo: a price list, a lease, a company.",
     fit_h3="You'll probably want to talk to me if",
-    fit=["You've never worked out what an hour of the diary is worth", "You're not sure your prices for agreement patients still pay",
+    fit=["You've never worked out what an hour in the schedule is worth", "You're not sure your prices for insurers and health plans still pay",
          "No-shows worry you, but nobody has put a number on them", "You're about to sign the lease for a new practice",
          "You're choosing between sole trader and a company",
          "You want to apply for public funding, or the incentives for the interior", "You're bringing in a partner, or about to talk to the bank"],
     quest_when="<b>A small side quest</b>", quest_h="Insert a cartridge",
-    quest_p=["Four small games. In Full Diary you set a practice's private price, decide which agreements to sign and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a full diary. Cash Flow is about the weeks when money comes in and goes out, Spot the Error about the invoices that don't add up, and Close the Month about getting it done on time.",
+    quest_p=["Four small games. In Fully Booked you set a practice's private price, decide which insurers and health plans to sign with, and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a fully booked schedule. Cash Flow is about the weeks when money comes in and goes out, Spot the Error about the invoices that don't add up, and Close the Month about getting it done on time.",
              "They're toys, and the numbers in them are game numbers, but the rules come from the job. Turn the sound on for the music."],
     dev_aria="RUNWAY, a handheld console with four games. A or Space to play, B or Escape for the menu.",
     nogame="RUNWAY needs JavaScript.<br><br>The rest of the page doesn't.", up="Up", left="Left", right="Right", down="Down",
@@ -164,12 +164,12 @@ T = {
 ),
 "pt": dict(
     file="saude.html", other="health.html", lang="pt", other_lang="en", other_name="English version",
-    title="Rui Gomes — CFO para clínicas",
+    title="Rui Gomes, CFO para clínicas",
     desc="Rui Gomes, CFO a tempo parcial para clínicas e consultórios: um diagnóstico de onde a clínica está hoje e, depois, as ferramentas para decidir.",
     og_alt="Rui Gomes, CFO a tempo parcial para clínicas e consultórios.",
     from_="De", to="Para",
     hi2='os números da sua clínica, <span class="ul">vistos por dentro@@UL@@</span>',
-    lede="Sou o Rui, fundador da VCLevel. Um dos serviços que prestamos é o de CFO fracionado: o trabalho de diretor financeiro, a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios de várias áreas da saúde: medicina, medicina dentária, fisioterapia, psicologia, estética e outras. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
+    lede="Sou o Rui, fundador da VCLevel, onde faço trabalho de CFO fracionado: as funções de diretor financeiro, a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios de várias áreas da saúde: medicina, medicina dentária, fisioterapia, psicologia, estética e outras. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
     avail='<a data-link="mail" href="#contact">Marcar uma conversa</a>, <a href="#cases">ver os casos</a> ou <a href="index.html" hreflang="en">ler o percurso completo</a> (em inglês).',
     go="Ver os casos",
     card_label="Resumo", card_h="Diagnóstico · o que vejo primeiro",
@@ -189,7 +189,7 @@ T = {
     md_aria="Exemplo de um painel mensal para uma clínica: faturação, ocupação, faltas e tesouraria no topo; faturação por serviço; pacientes de convenções e particulares. Sem números de clientes.",
     md_head="Painel mensal", md_view="Vista do mês", md_kpis=["Faturação", "Ocupação", "Faltas", "Tesouraria"],
     md_t1="Faturação por serviço", md_bars=["Consultas", "Tratamentos", "Avaliações", "Outros"],
-    md_t2="Particulares e convenções", md_legend=["Particulares", "Convenções", "Seguros"],
+    md_t2="Quem paga", md_legend=["Particulares", "Convenções"],
     md_cap="Um exemplo da vista mensal, sem números de nenhum cliente.",
     path_when="<b>De onde vem o método</b>", path_h="Primeiro a auditoria, depois a cadeira de CFO",
     edu="Mestrado em Finanças, ISEG",
@@ -364,7 +364,7 @@ window.CONFIG = {
         <div class="md-box"><span class="md-t">%(md_t1)s</span>%(bars)s
         </div>
         <div class="md-box"><span class="md-t">%(md_t2)s</span>
-          <div class="md-stack"><i style="--w:58%%"></i><i style="--w:30%%"></i><i style="--w:12%%"></i></div>
+          <div class="md-stack"><i style="--w:62%%"></i><i style="--w:38%%"></i></div>
           <ul class="md-legend">%(legend)s</ul>
         </div>
       </div>

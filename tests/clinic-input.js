@@ -1,5 +1,5 @@
 // Plays the clinic pages' console with real keys and taps in headless Chrome, in real time:
-// four cartridges in the menu, FULL DIARY's setup (price, agreements), booking and turning
+// four cartridges in the menu, FULLY BOOKED's setup (price, agreements), booking and turning
 // patients away, a tap on the screen, and the wording in each language.
 // Needs a local server at the repo root: python -m http.server 8765
 // Run: node tests/clinic-input.js
@@ -31,7 +31,7 @@ const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["
   let fails = 0;
   const ok = (cond, name, info) => { console.log((cond ? "PASS " : "FAIL ") + name + (info != null ? "  " + info : "")); if (!cond) fails++ };
 
-  for (const [page, word] of [["saude.html", "AGENDA CHEIA"], ["health.html", "FULL DIARY"]]) {
+  for (const [page, word] of [["saude.html", "AGENDA CHEIA"], ["health.html", "FULLY BOOKED"]]) {
     errors.length = 0;
     await send("Page.navigate", { url: BASE + page + "?debug" }); await sleep(1500);
     const menu = await js(`(function(){document.getElementById("device").scrollIntoView(); RUNWAY_DEBUG.menu(true);
@@ -49,7 +49,7 @@ const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["
     await key("ArrowDown"); await key("ArrowDown"); await key("Enter");
     await sleep(900);
     s = await js(`(function(){var s = RUNWAY_DEBUG.state(); return {phase:s.phase, cur:!!s.cur, week:s.week}})()`);
-    ok(s.phase === "week" && s.week === 1 && s.cur, page + ": A opens the diary, a patient arrives", JSON.stringify(s));
+    ok(s.phase === "week" && s.week === 1 && s.cur, page + ": A opens the schedule, a patient arrives", JSON.stringify(s));
     await key("Enter");
     s = await js(`RUNWAY_DEBUG.state().slots.length`);
     ok(s === 1, page + ": A books the patient", s);

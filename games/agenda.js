@@ -1,14 +1,14 @@
-/* ================= FULL DIARY: game rules (no DOM) =================
+/* ================= FULLY BOOKED: game rules (no DOM) =================
    A clinic for four weeks. Before the first week: set the private price and
    choose which agreements to sign. Then patients arrive one at a time; book
-   them or turn them away. The diary has eight hours a week, and each hour costs
+   them or turn them away. The schedule has eight hours a week, and each hour costs
    the same whether it's booked or not.
    - A higher private price brings fewer private patients.
    - An agreement sends patients at its own tariff. Some of them come back
      later as private patients (acquisition through the agreement).
-   - When the diary is full, a private patient who arrives is lost.
+   - When the schedule is fully booked, a private patient who arrives is lost.
    At the end each agreement gets a verdict: what it paid, what it brought
-   in private patients, and what it pushed out of a full diary.
+   in private patients, and what it pushed out of a fully booked schedule.
    These are game numbers, not market data. */
 var Agenda = (function(){
   var WEEKS = 4, SLOTS = 8, HOUR = 34, DECIDE = 2.7, GAP = 0.25, NOSHOW = 0.1, BREAK = 1.4;
@@ -87,7 +87,7 @@ var Agenda = (function(){
         if(r() < deal(c.kind).refer){st.referred++; s.carry++; s.carry_from.push(c.kind)}
       }
     });
-    /* private patients lost to a full diary are put down to the agreement patients holding hours that week */
+    /* private patients lost to a fully booked schedule are put down to the agreement patients holding hours that week */
     var held = 0, id;
     for(id in s.wk.byDeal) held += s.wk.byDeal[id];
     if(s.wk.lost && held){
@@ -133,7 +133,7 @@ var Agenda = (function(){
   }
 
   /* verdict for each signed agreement: what it paid, plus the private patients it
-     brought, minus the private revenue it pushed out of a full diary */
+     brought, minus the private revenue it pushed out of a fully booked schedule */
   function verdicts(s){
     var p = price(s);
     return DEALS.filter(function(d){return s.signed[d.id]}).map(function(d){

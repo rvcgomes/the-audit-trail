@@ -1,4 +1,4 @@
-/* ================= Cartridge: FULL DIARY / AGENDA CHEIA =================
+/* ================= Cartridge: FULLY BOOKED / AGENDA CHEIA =================
    Drawing and wording only; the rules are in agenda.js.
    Set the private price, sign agreements or not, then book patients into an
    eight-hour week. At the end each agreement gets a verdict.
@@ -53,9 +53,9 @@
   }
 
   RUNWAY.register({
-    id:"agenda", order:1, name:T("FULL DIARY", "AGENDA CHEIA"), sub:T("pricing", "preços"), countdown:1, canvas:"tap",
+    id:"agenda", order:1, name:T("FULLY BOOKED", "AGENDA CHEIA"), sub:T("pricing", "preços"), countdown:1, canvas:"tap",
     help:T("Set the price and the agreements, then A books, ▼ turns away.", "Defina o preço e as convenções; depois A marca, ▼ recusa."),
-    say:T("Full Diary. You run a practice for four weeks. First set the private price with left and right, and sign or drop each agreement. Then patients arrive one at a time: A or a tap books them, down turns them away. The diary has eight hours a week and each hour costs " + A.HOUR + " euros, booked or not. When the diary is full, a private patient who arrives is lost.",
+    say:T("Fully Booked. You run a practice for four weeks. First set the private price with left and right, and sign or drop each agreement. Then patients arrive one at a time: A or a tap books them, down turns them away. The schedule has eight hours a week and each hour costs " + A.HOUR + " euros, booked or not. When the schedule is fully booked, a private patient who arrives is lost.",
       "Agenda Cheia. Gere uma clínica durante quatro semanas. Primeiro defina o preço particular com esquerda e direita, e assine ou recuse cada convenção. Depois os pacientes chegam um a um: A ou um toque marca, baixo recusa. A agenda tem oito horas por semana e cada hora custa " + A.HOUR + " euros, ocupada ou não. Com a agenda cheia, um particular que chega perde-se."),
     create:function(){return A.create()},
     step:function(s, dt, inp){A.step(s, dt, fromTaps(s, inp))},
@@ -64,7 +64,7 @@
     hud:function(s){
       var used = s.phase === "setup" ? 0 : s.slots.length;
       return {cells:[[T("WEEK", "SEMANA"), Math.max(1, s.week) + "/" + A.WEEKS], [T("PROFIT", "LUCRO"), eur(s.cash)], [T("FREE", "LIVRES"), (A.SLOTS - used) + "h"]],
-        row2:[T("PRICE", "PREÇO"), eur(A.price(s)), T("DIARY", "AGENDA"), 100*used/A.SLOTS, used >= A.SLOTS]};
+        row2:[T("PRICE", "PREÇO"), eur(A.price(s)), T("BOOKED", "AGENDA"), 100*used/A.SLOTS, used >= A.SLOTS]};
     },
     onEvent:function(e, g, s){
       var C = g.COL;
@@ -75,11 +75,11 @@
         g.line(NAME[e.id] + " " + eur(d.tariff) + (e.on ? T(" signed: ", " assinada: ") + perWeek(d) + T(", some come back as private.", ", alguns voltam como particulares.") : T(" not signed.", " recusada.")));
       }
       else if(e.type === "week"){g.sfx("gate"); g.banner(T("WEEK ", "SEMANA ") + e.week, 1)}
-      else if(e.type === "arrive"){g.sfx("tick"); g.line(kindName(e.kind) + " · " + eur(e.price) + (e.full ? T(" · diary full", " · agenda cheia") : ""))}
+      else if(e.type === "arrive"){g.sfx("tick"); g.line(kindName(e.kind) + " · " + eur(e.price) + (e.full ? T(" · fully booked", " · agenda cheia") : ""))}
       else if(e.type === "book"){g.sfx("coin"); g.float("+" + eur(e.price), 10 + e.slot*22, 40, e.kind === "private" ? C.lcd : C.dim)}
       else if(e.type === "full"){
         g.sfx("bad"); g.fx.shake = 0.15; g.float(T("FULL", "CHEIA"), 84, 40, C.hot);
-        if(e.kind === "private") g.line(T("Diary full: a private patient lost.", "Agenda cheia: perdeu um particular."));
+        if(e.kind === "private") g.line(T("Fully booked: a private patient lost.", "Agenda cheia: perdeu um particular."));
       }
       else if(e.type === "left"){g.sfx("fizzle"); g.line(T("They didn't wait.", "Não esperou."))}
       else if(e.type === "turn") g.sfx("drop");
@@ -88,8 +88,8 @@
         g.line(T("Week ", "Semana ") + e.week + ": " + eur(e.revenue) + T(" in, ", " de receita, ") + eur(e.cost) + T(" for the hours = ", " das horas = ") + signedEur(e.profit) +
           (e.noShows ? T(" · no-shows ", " · faltas ") + e.noShows : "") + ".");
       }
-      else if(e.type === "won") g.say(T("Four weeks. The diary pays.", "Quatro semanas. A agenda dá lucro."));
-      else if(e.type === "over") g.say(T("Four weeks. The diary doesn't pay.", "Quatro semanas. A agenda não dá lucro."));
+      else if(e.type === "won") g.say(T("Four weeks. The schedule pays.", "Quatro semanas. A agenda dá lucro."));
+      else if(e.type === "over") g.say(T("Four weeks. The schedule doesn't pay.", "Quatro semanas. A agenda não dá lucro."));
     },
     draw:function(g, s){
       var ctx = g.ctx, C = g.COL, W = g.W, i;
@@ -105,13 +105,13 @@
             var d = A.DEALS[i - 1], signed = s.signed[d.id];
             g.text(NAME[d.id] + " " + eur(d.tariff) + " · " + perWeek(d), 9, y, signed ? C.lcd : C.dim);
             g.text(signed ? T("SIGNED", "ASSINADA") : T("NO", "NÃO"), W - 9, y, signed ? C.lcd : C.mid, null, "right");
-          }else g.text(T("▸ OPEN THE DIARY", "▸ ABRIR A AGENDA"), W/2, y, on ? C.lcd : C.dim, null, "center");
+          }else g.text(T("▸ OPEN THE SCHEDULE", "▸ ABRIR A AGENDA"), W/2, y, on ? C.lcd : C.dim, null, "center");
         }
         g.text(demandText(s) + T(" · an hour €", " · hora €") + A.HOUR, W/2, 108, C.dim, null, "center");
         g.text(T("▲▼ choose · ◀▶ change · A", "▲▼ escolher · ◀▶ mudar · A"), W/2, 117, C.mid, null, "center");
         return;
       }
-      /* the week's diary */
+      /* the week's schedule */
       for(i=0;i<A.SLOTS;i++){
         var x = 8 + i*22, c = s.slots[i];
         if(c){
@@ -120,7 +120,7 @@
           g.text(String(c.price), x + 10, 31, C.dark, null, "center");
         }else{ctx.strokeStyle = C.faint; ctx.strokeRect(x + 0.5, 15.5, 19, 17)}
       }
-      g.text(T("DIARY ", "AGENDA ") + s.slots.length + "/" + A.SLOTS, 8, 42, C.dim);
+      g.text(T("BOOKED ", "AGENDA ") + s.slots.length + "/" + A.SLOTS, 8, 42, C.dim);
       if(s.phase === "week") g.text(T("WAITING ", "EM ESPERA ") + (s.queue.length + (s.cur ? 1 : 0)), W - 8, 42, C.dim, null, "right");
 
       if(s.phase === "break" || s.phase === "done"){
@@ -134,7 +134,7 @@
         }
         if(s.phase === "done"){
           ctx.fillStyle = C.dark; ctx.fillRect(0, 50, W, 22);
-          g.text(s.won ? T("THE DIARY PAYS", "A AGENDA DÁ LUCRO") : T("IT DOESN'T PAY", "NÃO DÁ LUCRO"), W/2, 66, s.won ? C.lcd : C.hot, g.BIG, "center");
+          g.text(s.won ? T("THE SCHEDULE PAYS", "A AGENDA DÁ LUCRO") : T("IT DOESN'T PAY", "NÃO DÁ LUCRO"), W/2, 66, s.won ? C.lcd : C.hot, g.BIG, "center");
         }
         return;
       }
@@ -148,7 +148,7 @@
         var left = Math.max(0, s.timer/A.DECIDE);
         ctx.fillStyle = C.faint; ctx.fillRect(CARD.x + 8, CARD.y + 33, CARD.w - 16, 3);
         ctx.fillStyle = left < 0.3 ? C.hot : C.lcd; ctx.fillRect(CARD.x + 8, CARD.y + 33, Math.round((CARD.w - 16)*left), 3);
-        if(full) g.text(T("DIARY FULL", "AGENDA CHEIA"), W/2, CARD.y - 2, C.hot, null, "center");
+        if(full) g.text(T("FULLY BOOKED", "AGENDA CHEIA"), W/2, CARD.y - 2, C.hot, null, "center");
       }
       ctx.strokeStyle = C.mid; ctx.strokeRect(8.5, BTN_Y + 0.5, 84, 16); ctx.strokeRect(100.5, BTN_Y + 0.5, 84, 16);
       g.text(T("▼ TURN AWAY", "▼ RECUSAR"), 50, BTN_Y + 11, C.dim, null, "center");
@@ -168,18 +168,18 @@
           (Math.round(x.pushed) ? T(", pushed out ", ", tirou o lugar a ") + Math.round(x.pushed) : "") + " → " + (x.pays ? T("pays", "compensa") : T("doesn't pay", "não compensa"));
       });
       if(!v.length) lines.push(T("No agreements signed.", "Sem convenções."));
-      var rows = [[T("Private price", "Preço particular"), eur(A.price(s))], [T("Profit", "Lucro"), signedEur(s.cash)], [T("Diary booked", "Agenda ocupada"), Math.round(100*occ) + "%"],
+      var rows = [[T("Private price", "Preço particular"), eur(A.price(s))], [T("Profit", "Lucro"), signedEur(s.cash)], [T("Schedule booked", "Agenda ocupada"), Math.round(100*occ) + "%"],
         [T("Private lost", "Particulares perdidos"), lost]];
       v.forEach(function(x){rows.push([NAME[x.id] + " " + eur(x.tariff), x.pays ? T("pays", "compensa") : T("doesn't pay", "não compensa")])});
       var cheapPays = v.some(function(x){return x.belowHour && x.pays}), cheapLoses = v.some(function(x){return x.belowHour && !x.pays});
-      var tip = cheapLoses && lost ? T("A full diary isn't a profitable one: every cheap hour can cost a private patient.", "Agenda cheia não é agenda rentável: cada hora barata pode custar um particular.") :
+      var tip = cheapLoses && lost ? T("A fully booked schedule isn't a profitable one: every cheap hour can cost a private patient.", "Agenda cheia não é agenda rentável: cada hora barata pode custar um particular.") :
         occ < 0.75 ? T("Empty hours cost the same as booked ones. A lower price or an agreement can fill them.", "As horas vazias custam o mesmo que as ocupadas. Um preço mais baixo ou uma convenção podem enchê-las.") :
         cheapPays ? T("Below the cost of an hour, an agreement pays only by filling hours the private patients wouldn't.", "Abaixo do custo de uma hora, uma convenção só compensa se encher horas que os particulares não iam ocupar.") :
         T("Check what each agreement pays against what an hour costs.", "Compare o que cada convenção paga com o que custa uma hora.");
-      var real = T("The dental case on this page: prices that assumed seven times as many agreement patients as the clinic had.",
+      var real = T("The dental case on this page: prices that assumed seven times as many patients through insurers and health plans as the clinic had.",
         "O caso da clínica dentária desta página: preços que contavam com sete vezes mais pacientes de convenções do que a clínica tinha.");
-      if(s.won) return {win:true, title:T("THE DIARY PAYS.\nPROFIT ", "A AGENDA DÁ LUCRO.\nLUCRO DE ") + eur(s.cash) + T(" IN FOUR WEEKS.", " EM QUATRO SEMANAS."), lines:lines, tip:tip, rows:rows, realLine:real};
-      var title = occ >= 0.85 ? T("FULL DIARY, EMPTY MARGIN.", "AGENDA CHEIA, MARGEM VAZIA.") : T("EMPTY HOURS STILL COST.", "AS HORAS VAZIAS TAMBÉM CUSTAM.");
+      if(s.won) return {win:true, title:T("THE SCHEDULE PAYS.\nPROFIT ", "A AGENDA DÁ LUCRO.\nLUCRO DE ") + eur(s.cash) + T(" IN FOUR WEEKS.", " EM QUATRO SEMANAS."), lines:lines, tip:tip, rows:rows, realLine:real};
+      var title = occ >= 0.85 ? T("FULLY BOOKED, NO MARGIN.", "AGENDA CHEIA, MARGEM VAZIA.") : T("EMPTY HOURS STILL COST.", "AS HORAS VAZIAS TAMBÉM CUSTAM.");
       return {win:false, title:title + T("\nLOSS OF ", "\nPREJUÍZO DE ") + eur(-s.cash) + ".", lines:lines, tip:tip, rows:rows, real:false};
     }
   });
