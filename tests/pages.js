@@ -1,7 +1,9 @@
 // Checks the four pages in a real Chrome, with the local server on:
 //   python -m http.server 8765      then      node tests/pages.js
 // For each page, at desktop and phone width: no script errors, the ?co= greeting,
-// the case tabs, every circled letter has its source, and no sideways scroll.
+// the case tabs, every circled letter has its source (in reading order), and no sideways scroll.
+// Then: no request to another site, local fonts, games loaded only near the console,
+// the page without JavaScript, print, and the links link.html builds.
 const { spawn } = require("child_process"), os = require("os"), path = require("path");
 const BASE = process.argv[2] || "http://localhost:8765/";
 const PORT = 9000 + Math.floor(Math.random()*300);   // a fresh port and profile each run
@@ -52,6 +54,47 @@ const CHECK = `(async function(){
       ok(!r.wide, n + ": no sideways scroll");
     }
   }
+  const js = async e => (await send("Runtime.evaluate", { expression: e, awaitPromise: true, returnByValue: true })).result.value;
+  await send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 800, deviceScaleFactor: 1, mobile: false });
+  await send("Network.enable");
+  for (const p of PAGES) {
+    // no request leaves the site (fonts are local), and the games wait until the console is near
+    const hosts = new Set();
+    const watch = e => { const d = JSON.parse(e.data); if (d.method === "Network.requestWillBeSent") hosts.add(new URL(d.params.request.url).host) };
+    ws.addEventListener("message", watch);
+    await send("Page.navigate", { url: BASE + p }); await sleep(1200);
+    const early = await js(`[!!window.RUNWAY, document.fonts.check("16px 'Schibsted Grotesk'")]`);
+    await js(`document.getElementById("device").scrollIntoView(); 1`);
+    let menu = 0;
+    for (let k = 0; k < 30 && !menu; k++) { await sleep(200); menu = await js(`document.querySelectorAll("#gOpts button").length`); }
+    ws.removeEventListener("message", watch);
+    const foreign = [...hosts].filter(h => h && !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(h) && h !== new URL(BASE).host);
+    ok(foreign.length === 0, p + ": no request to another site", foreign.join(", "));
+    ok(early[1], p + ": the page font is served locally");
+    ok(!early[0] && menu > 0, p + ": the games load only when the console is near", "before " + early[0] + ", menu " + menu);
+    // without JavaScript the content is all there
+    await send("Emulation.setScriptExecutionDisabled", { value: true });
+    await send("Page.navigate", { url: BASE + p }); await sleep(900);
+    await send("Emulation.setScriptExecutionDisabled", { value: false });
+    const nojs = await js(`[document.body.innerText.length, document.querySelectorAll(".wp").length, [].filter.call(document.querySelectorAll(".wp"), function(w){return w.offsetHeight > 0}).length]`);
+    ok(nojs[0] > 3000 && nojs[1] > 0 && nojs[1] === nojs[2], p + ": readable without JavaScript, every case shown", nojs.join(" / "));
+    // in print the console goes, the text stays
+    await send("Emulation.setEmulatedMedia", { media: "print" });
+    const pr = await js(`[getComputedStyle(document.querySelector(".quest")).display, getComputedStyle(document.querySelector("h2")).color]`);
+    await send("Emulation.setEmulatedMedia", { media: "" });
+    ok(pr[0] === "none" && pr[1] === "rgb(0, 0, 0)", p + ": print hides the games and prints black text", pr.join(" / "));
+  }
+  // link.html builds the right link for each version, and leaves "why" out for the clinics
+  await send("Page.navigate", { url: BASE + "link.html" }); await sleep(600);
+  const links = await js(`(function(){
+    var co = document.getElementById("co"), why = document.getElementById("why"), out = [];
+    co.value = "Acme & Co"; why.value = "Because"; co.dispatchEvent(new Event("input"));
+    document.querySelectorAll('input[name="v"]').forEach(function(r){ r.checked = true; r.dispatchEvent(new Event("change"));
+      out.push([r.value, document.getElementById("out").textContent, why.disabled]) });
+    return out })()`);
+  const want = { "": /the-audit-trail\/\?co=Acme\+%26\+Co&why=Because$/, "short.html": /short\.html\?co=Acme\+%26\+Co&why=Because$/,
+    "saude.html": /saude\.html\?co=Acme\+%26\+Co$/, "health.html": /health\.html\?co=Acme\+%26\+Co$/ };
+  for (const [v, url, off] of links) ok(want[v] && want[v].test(url) && off === /health|saude/.test(v), "link.html: " + (v || "full") + " link", url);
   console.log(fails ? "\n" + fails + " FAILED" : "\nOK: all pages work.");
   ws.close(); chrome.kill(); process.exit(fails ? 1 : 0);
 })();

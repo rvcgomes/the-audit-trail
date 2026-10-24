@@ -101,6 +101,24 @@
   addEventListener("beforeprint",function(){document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){el.classList.add("in")})});
   onScroll();
 
+  /* the games load when the console comes near the screen (at once with ?debug), so a visit that never
+     gets there doesn't download them. The list is in the console's data-games, in load order. */
+  var dev=$("device");
+  if(dev && dev.getAttribute("data-games")){
+    var files=dev.getAttribute("data-games").split(/\s+/), started=false;
+    var loadGames=function(){
+      if(started) return; started=true; var done=0;
+      files.forEach(function(src){
+        var s=document.createElement("script"); s.src=src; s.async=false;
+        s.onload=function(){if(++done===files.length){if(window.RUNWAY) RUNWAY.boot(); else dev.classList.add("broken")}};
+        s.onerror=function(){dev.classList.add("broken")};
+        document.body.appendChild(s);
+      });
+    };
+    if(/[?&]debug\b/.test(location.search) || !window.IntersectionObserver) loadGames();
+    else{var near=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){near.disconnect(); loadGames()}},{rootMargin:"900px 0px"}); near.observe(dev)}
+  }
+
   /* sector tabs */
   var tabs=[].slice.call(document.querySelectorAll('#sectors [role="tab"]'));
   function select(tab,focus){

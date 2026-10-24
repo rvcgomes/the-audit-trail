@@ -6,7 +6,7 @@ Live at <https://rvcgomes.github.io/the-audit-trail/> (full) and <https://rvcgom
 
 ## Two versions
 
-`index.html` is the full page. `short.html` is about a third shorter: one PwC chapter instead of two, no interlude, and less space between sections. It is **generated** from `index.html`; never edit it by hand. After any change to `index.html`:
+`index.html` is the full page. `short.html` is about a fifth shorter: one PwC chapter instead of two, no interlude, and less space between sections. It is **generated** from `index.html`; never edit it by hand. After any change to `index.html`:
 
 ```
 python tools/make_short.py

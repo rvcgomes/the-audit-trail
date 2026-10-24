@@ -1,4 +1,4 @@
-/* the audit trail: page styles (the handheld's styles are here too). Shared by index.html and short.html. */
+/* the audit trail: page styles (the handheld's styles are here too). Shared by every page (index, short, health, saude). */
 :root{
   /* VCLevel palette: ouro #9F8E6A, verde #8CB979, floresta #0C271F, salva #969C7D, claro #F2F2F2.
      Text uses the darkened tones from the VCLevel brand kit so every pair passes AA. */
@@ -385,7 +385,9 @@ footer{padding-block:28px 40px;border-top:1px solid var(--rule);font-size:.8125r
   .why .when b,.fit li::before{color:#000!important}
   .receipt,.ghint{display:none!important}
   body{background:#fff;color:#000;font-size:11pt}
-  .progress,.quest,.go,.cta,.seal{display:none!important}
+  .progress,.quest,.go,.cta,.seal,.actions,.also-play,.lang-switch{display:none!important}
+  h2,h3,.chap-head{break-after:avoid}
+  .file-cv{color:#000!important}
   .js .rev,.js .hi2,.js .lede,.js .avail,.js .file,.js .ledger .foot,.js .chart .late,.js .chart .ext.draw{opacity:1!important;transform:none!important}
   .file{box-shadow:none;break-inside:avoid}
   .js .ledger td.t span{transform:rotate(-8deg)!important}
