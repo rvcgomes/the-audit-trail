@@ -112,9 +112,12 @@ T = {
     tabs_label="Client cases", tabs=EN_TABS, panels=EN_PANELS,
     anon="Real cases, shared with the clients&#8217; permission: sector only, no names or places, and ratios rather than amounts.",
     how_when="<b>How I work</b>", how_h="An insider, working from the outside",
+    how_lead="I work with every part of the practice, from the front desk to the clinical team, so that each number turns into something someone does.",
     steps=[("Diagnosis", "Where the practice stands today: what an hour in the schedule is worth, occupancy and no-shows, patients through insurers and health plans against private ones, and what each service costs."),
-           ("Tools to decide", "Built for your practice: the pricing model, the break-even, the cash forecast, the monthly dashboard."),
-           ("The decisions", "The price list, the lease, the company structure, the conversation with the bank. For these, I take the finance seat.")],
+           ("Thinking the business through", "I look at the practice as a whole with the owners: the services, the prices, the team, and where growth could come from."),
+           ("Tools to decide", "Built for your practice: the pricing model, the break-even, the cash forecast, the monthly dashboard. With them I take the finance seat in the big decisions: the price list, the lease, the conversation with the bank."),
+           ("Pay and structure", "I design how each role is paid and the structure behind it: salary bands, roles, and the company structure."),
+           ("The next level", "I get the practice ready for the next step, organic or not: a second site, a partner or an investor coming in, a merger or a sale.")],
     md_aria="Example of a monthly dashboard for a practice: revenue, occupancy, no-shows and cash at the top; revenue by service; who pays: private patients, insurers and health plans. No client figures.",
     md_head="Monthly dashboard", md_view="Month view", md_kpis=["Revenue", "Occupancy", "No-shows", "Cash &amp; runway"],
     md_t1="Revenue by service", md_bars=["Consults", "Treatments", "Assessments", "Other"],
@@ -135,7 +138,7 @@ T = {
     fit=["You've never worked out what an hour in the schedule is worth", "You're not sure your prices for insurers and health plans still pay",
          "No-shows worry you, but nobody has put a number on them", "You're about to sign the lease for a new practice",
          "You're choosing between sole trader and a company",
-         "You want to apply for public funding, or the incentives for the interior", "You're bringing in a partner, or about to talk to the bank"],
+         "You want to apply for public funding, or the incentives for the interior", "You're bringing in a partner, or about to talk to the bank", "Your team is growing and nobody has decided what each role is paid"],
     quest_when="<b>A small side quest</b>", quest_h="Insert a cartridge",
     quest_p=["Four small games. In Fully Booked you set a practice's private price, decide which insurers and health plans to sign with, and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a fully booked schedule. Cash Flow is about the weeks when money comes in and goes out, Spot the Error about the invoices that don't add up, and Close the Month about getting it done on time.",
              "They're toys, and the numbers in them are game numbers, but the rules come from the job. Turn the sound on for the music."],
@@ -183,9 +186,12 @@ T = {
     tabs_label="Casos de clientes", tabs=PT_TABS, panels=PT_PANELS,
     anon="Casos reais, partilhados com autorização dos clientes: só o setor, sem nomes nem locais, e rácios em vez de valores.",
     how_when="<b>Como trabalho</b>", how_h="Alguém de dentro, a trabalhar de fora",
+    how_lead="Trabalho com todas as áreas da clínica, da receção à equipa clínica, para que cada número se transforme numa ação.",
     steps=[("Diagnóstico", "Onde a clínica está hoje: quanto vale uma hora da agenda, a ocupação e as faltas, os pacientes de convenções face aos particulares, e quanto custa cada serviço."),
-           ("Ferramentas para decidir", "Feitas para a sua clínica: o modelo de preços, o ponto de equilíbrio, a previsão de tesouraria, o painel mensal."),
-           ("As decisões", "A tabela de preços, o arrendamento, a estrutura da empresa, a conversa com o banco. Nestas decisões, ocupo o lugar do diretor financeiro.")],
+           ("Pensar o negócio", "Olho para a clínica como um todo, com os sócios: os serviços, os preços, a equipa e de onde pode vir o crescimento."),
+           ("Ferramentas para decidir", "Feitas para a sua clínica: o modelo de preços, o ponto de equilíbrio, a previsão de tesouraria, o painel mensal. Com elas, ocupo o lugar do diretor financeiro nas grandes decisões: a tabela de preços, o arrendamento, a conversa com o banco."),
+           ("Compensação e estrutura", "Desenho como se paga cada função e a estrutura por trás: tabelas salariais, funções e a estrutura da empresa."),
+           ("O próximo nível", "Preparo a clínica para o passo seguinte, orgânico ou não: uma segunda unidade, a entrada de um sócio ou de um investidor, uma fusão ou uma venda.")],
     md_aria="Exemplo de um painel mensal para uma clínica: faturação, ocupação, faltas e tesouraria no topo; faturação por serviço; pacientes de convenções e particulares. Sem números de clientes.",
     md_head="Painel mensal", md_view="Vista do mês", md_kpis=["Faturação", "Ocupação", "Faltas", "Tesouraria"],
     md_t1="Faturação por serviço", md_bars=["Consultas", "Tratamentos", "Avaliações", "Outros"],
@@ -206,7 +212,7 @@ T = {
     fit=["Nunca fez as contas a quanto vale uma hora da agenda", "Não tem a certeza de que os preços das convenções ainda compensam",
          "As faltas preocupam, mas ninguém as pôs em números", "Está prestes a assinar o arrendamento de um novo espaço",
          "Está a decidir entre ENI e sociedade",
-         "Quer candidatar-se a fundos ou aos incentivos ao interior", "Vai receber um sócio ou falar com o banco"],
+         "Quer candidatar-se a fundos ou aos incentivos ao interior", "Vai receber um sócio ou falar com o banco", "A equipa está a crescer e ainda não há regras para quanto ganha cada função"],
     quest_when="<b>Uma pausa para jogar</b>", quest_h="Insira um cartucho",
     quest_p=["Quatro jogos pequenos. Em Agenda Cheia define o preço particular de uma clínica, escolhe que convenções assinar e marca os pacientes à medida que chegam. No fim, cada convenção tem um veredicto: o que pagou, os particulares que trouxe e os que deixou de fora com a agenda cheia. Em Tesouraria, o tema são as semanas em que o dinheiro entra e sai; em Encontre o Erro, as faturas que não batem certo; em Fechar o Mês, chegar ao fecho a tempo.",
              "São brinquedos, e os números são do jogo, mas as regras vêm do trabalho. Ligue o som para ouvir a música."],
@@ -348,6 +354,7 @@ window.CONFIG = {
     <span class="when">%(how_when)s</span>
     <h2>%(how_h)s</h2>
   </div>
+  <p class="how-lead rev">%(how_lead)s</p>
   <div class="split">
     <ol class="steps rev">
 %(steps)s
