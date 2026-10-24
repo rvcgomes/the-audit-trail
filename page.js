@@ -26,8 +26,14 @@
   /* links */
   var cta=$("cta");
   document.querySelectorAll('[data-link="email"]').forEach(function(a){if(C.email){a.href="mailto:"+C.email;a.textContent=C.email}else a.hidden=true});
-  document.querySelectorAll('[data-link="mail"]').forEach(function(a){if(C.email)a.href="mailto:"+C.email+(co?"?subject="+encodeURIComponent(T.subject+coT):"");else a.hidden=true});
-  if(cta){ if(C.email) cta.href="mailto:"+C.email+(co?"?subject="+encodeURIComponent(T.subject+coT):""); else cta.hidden=true }
+  /* "book a call": the calendar link when there is one, otherwise an email */
+  document.querySelectorAll('[data-link="mail"]').forEach(function(a){
+    if(C.booking){a.href=C.booking; a.target="_blank"; a.rel="noopener"}
+    else if(C.email) a.href="mailto:"+C.email+(co?"?subject="+encodeURIComponent(T.subject+coT):"");
+    else a.hidden=true;
+  });
+  if(cta && C.booking){cta.href=C.booking; cta.target="_blank"; cta.rel="noopener"}
+  else if(cta){ if(C.email) cta.href="mailto:"+C.email+(co?"?subject="+encodeURIComponent(T.subject+coT):""); else cta.hidden=true }
   document.querySelectorAll('[data-link="linkedin"]').forEach(function(a){if(C.linkedin)a.href=C.linkedin});
   document.querySelectorAll('[data-link="vclevel"]').forEach(function(a){if(C.vclevel)a.href=C.vclevel});
   document.querySelectorAll('[data-link="cv"]').forEach(function(a){if(C.cv){a.href=C.cv}else a.hidden=true});

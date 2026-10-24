@@ -51,7 +51,9 @@ function build(){
   var q = new URLSearchParams(), co = document.getElementById("co").value.trim(), why = document.getElementById("why").value.trim();
   if (co) q.set("co", co);
   var v = document.querySelector('input[name="v"]:checked').value;
-  if (why && !/health|saude/.test(v)) q.set("why", why);
+  var clinic = /health|saude/.test(v);
+  document.getElementById("why").disabled = clinic;   // the clinic pages leave the "why" out
+  if (why && !clinic) q.set("why", why);
   var url = base + v + (q.toString() ? "?" + q : "");
   document.getElementById("out").textContent = url;
   document.getElementById("open").href = url;

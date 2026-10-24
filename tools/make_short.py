@@ -20,7 +20,7 @@ import hashlib, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # fingerprint of c1 + c2 in index.html when the merged chapter below was last written
-SOURCE_HASH = "709b7de71edebc98"
+SOURCE_HASH = "b5bb05de4be17cd8"
 
 s = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read().replace("\r\n", "\n")
 
@@ -95,8 +95,8 @@ merged = '''<section class="chap wrap" id="c1">
   </div>
   <div class="split">
     <div class="copy rev">
-      <p class="edu">Before that: Master's in Finance, ISEG Lisbon<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></p>
-      <p class="role">Financial audit at PwC, then Claranet<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
+      <p class="edu">Before that: Master's in Finance, ISEG Lisbon<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
+      <p class="role">Financial audit at PwC, then Claranet<button type="button" class="ref" popovertarget="src-B" aria-label="Source B">B</button></p>
       <p class="where">2013–2017 · banks, insurers and venture capital funds</p>
       <p>At PwC I audited some of the most regulated balance sheets there are, under IFRS. It gave me the habit I still work by: before you trust a number, find out where it came from. At Claranet I moved into operational finance, reporting and change management, working directly with Microsoft.</p>
       <p class="role next">Associate Manager, Capital Markets &amp; Accounting Advisory, PwC</p>
