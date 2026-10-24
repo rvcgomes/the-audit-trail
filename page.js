@@ -85,10 +85,13 @@
   document.querySelectorAll("#ledger td.t span").forEach(function(s,k){s.style.transitionDelay=(0.3+k*0.25)+"s"});
   document.querySelectorAll("#chart .cash.draw").forEach(function(p){p.style.setProperty("--len",Math.ceil(p.getTotalLength()))});
 
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(!e.isIntersecting)return; var el=e.target; el.classList.add("in"); io.unobserve(el);
-  })},{threshold:.2,rootMargin:"0px 0px -8% 0px"});
-  document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){io.observe(el)});
+  /* reveal on scroll; a browser without IntersectionObserver shows everything at once */
+  if(window.IntersectionObserver){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return; var el=e.target; el.classList.add("in"); io.unobserve(el);
+    })},{threshold:.2,rootMargin:"0px 0px -8% 0px"});
+    document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){io.observe(el)});
+  }else document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){el.classList.add("in")});
   addEventListener("beforeprint",function(){document.querySelectorAll(".rev,#ledger,#chart").forEach(function(el){el.classList.add("in")})});
   onScroll();
 

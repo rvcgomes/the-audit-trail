@@ -25,7 +25,7 @@ O objetivo é **branding com estrutura interativa**, não uma ferramenta de CFO.
 | Gerador de links por empresa | `link.html` (versões completa, curta e clínicas PT/EN) |
 | Regras de cada jogo (sem DOM, com seed) | `games/decisions.js`, `runner.js`, `fight.js`, `maze.js`, `blocks.js`, `spot.js`, `lanes.js`, `agenda.js` (AGENDA CHEIA / FULLY BOOKED: preço, convenções e agenda; só nas páginas das clínicas) |
 | Desenho e texto de cada cartucho | `games/carts/*.js` (`classic.js` tem RUNWAY RUN, BOARD FIGHT e DECISIONS) |
-| Consola: controlos, menu, arranque, modo demo, recibo | `games/console.js` (o contrato dos cartuchos está no topo). Fala português quando a página tem `<html lang="pt">`; os quatro cartuchos das clínicas (`agenda`, `blocks`, `spot`, `lanes`) também (as regras com texto têm `setLang`). No menu com até quatro cartuchos aparece uma animação (`#gArt`) |
+| Consola: controlos, menu, arranque, modo demo, recibo | `games/console.js` (o contrato dos cartuchos está no topo). Fala português quando a página tem `<html lang="pt">`; os quatro cartuchos das clínicas (`agenda`, `blocks`, `spot`, `lanes`) também (as regras com texto têm `setLang`). No menu com até quatro cartuchos aparece uma animação (`#gArt`). O ecrã trabalha em 192×120 e desenha a 2–4× (tamanho do ecrã × densidade), para o texto ficar nítido; `?debug` expõe também `status()` |
 | Música chiptune | `games/music.js` |
 | Imagens de partilha 1200×630 | `og.png` (geral), `og-en-health.png` e `og-pt-health.png` (clínicas) |
 

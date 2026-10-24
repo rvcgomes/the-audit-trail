@@ -120,7 +120,7 @@
           g.text(String(c.price), x + 10, 31, C.dark, null, "center");
         }else{ctx.strokeStyle = C.faint; ctx.strokeRect(x + 0.5, 15.5, 19, 17)}
       }
-      g.text(T("BOOKED ", "AGENDA ") + s.slots.length + "/" + A.SLOTS, 8, 42, C.dim);
+      g.text(T("FREE ", "LIVRES ") + A.free(s) + "h", 8, 42, C.dim);
       if(s.phase === "week") g.text(T("WAITING ", "EM ESPERA ") + (s.queue.length + (s.cur ? 1 : 0)), W - 8, 42, C.dim, null, "right");
 
       if(s.phase === "break" || s.phase === "done"){
