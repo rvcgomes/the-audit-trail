@@ -6,12 +6,13 @@
 const { spawn } = require("child_process"), os = require("os"), path = require("path");
 const BASE = process.argv[2] || "http://localhost:8765/";
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+const PORT = 9600 + Math.floor(Math.random()*300);   // a fresh port and profile each run, so a Chrome still closing does not get in the way
 const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["--headless=new", "--disable-gpu",
-  "--remote-debugging-port=9336", "--window-size=900,1000", "--user-data-dir=" + path.join(os.tmpdir(), "clinic-input-test"), "about:blank"], { stdio: "ignore" });
+  "--remote-debugging-port=" + PORT, "--window-size=900,1000", "--user-data-dir=" + path.join(os.tmpdir(), "clinic-input-" + PORT), "about:blank"], { stdio: "ignore" });
 
 (async () => {
   let tabs;
-  for (let i = 0; i < 40 && !tabs; i++) { try { tabs = await (await fetch("http://127.0.0.1:9336/json")).json() } catch (e) { await sleep(250) } }
+  for (let i = 0; i < 40 && !tabs; i++) { try { tabs = await (await fetch("http://127.0.0.1:" + PORT + "/json")).json() } catch (e) { await sleep(250) } }
   const ws = new WebSocket(tabs.find(t => t.type === "page").webSocketDebuggerUrl);
   let id = 0; const pend = {}, errors = [];
   const send = (m, p) => new Promise(r => { const i = ++id; pend[i] = r; ws.send(JSON.stringify({ id: i, method: m, params: p })) });
@@ -20,6 +21,7 @@ const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["
     if (d.method === "Runtime.exceptionThrown") errors.push(d.params.exceptionDetails.exception ? d.params.exceptionDetails.exception.description : d.params.exceptionDetails.text) };
   await new Promise(r => ws.onopen = r);
   await send("Page.enable"); await send("Runtime.enable"); await send("Network.enable"); await send("Network.setCacheDisabled", { cacheDisabled: true });
+  await send("Emulation.setFocusEmulationEnabled", { enabled: true });   // the page keeps focus, so the console does not pause on blur
   const js = async expr => (await send("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true })).result.value;
   const KEYS = { ArrowUp: 38, ArrowDown: 40, ArrowLeft: 37, ArrowRight: 39, Enter: 13 };
   const key = async k => {
@@ -33,12 +35,15 @@ const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["
 
   for (const [page, word] of [["saude.html", "AGENDA CHEIA"], ["health.html", "FULLY BOOKED"]]) {
     errors.length = 0;
-    await send("Page.navigate", { url: BASE + page + "?debug" }); await sleep(1500);
+    await send("Page.navigate", { url: BASE + page + "?debug" }); await sleep(500);
+    for (let k = 0; k < 40 && !(await js("!!(window.RUNWAY_DEBUG && document.querySelector(\"#gOpts\"))")); k++) await sleep(250);  // wait for the console
+    await sleep(300);
     const menu = await js(`(function(){document.getElementById("device").scrollIntoView(); RUNWAY_DEBUG.menu(true);
       return [].map.call(document.querySelectorAll("#gOpts button"), function(b){return b.textContent})})()`);
     ok(menu.length === 4 && menu.some(t => t.indexOf(word) >= 0), page + ": menu has four cartridges, with " + word, JSON.stringify(menu));
     await js(`RUNWAY_DEBUG.start("agenda"); document.getElementById("device").focus(); 1`);
-    await sleep(1300);                                     // READY / GO
+    for (let k = 0; k < 40 && (await js("RUNWAY_DEBUG.status().countdown")) > 0; k++) await sleep(100);   // wait out READY / GO
+    await sleep(150);
     for (let i = 0; i < 3; i++) await key("ArrowUp");        // START -> price row
     await key("ArrowRight");
     let s = await js(`(function(){var s = RUNWAY_DEBUG.state(); return {sel:s.sel, price:Agenda.price(s), phase:s.phase}})()`);
@@ -47,7 +52,7 @@ const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["
     s = await js(`(function(){var s = RUNWAY_DEBUG.state(); return s.signed.care})()`);
     ok(s === false, page + ": ▶ on an agreement drops it");
     await key("ArrowDown"); await key("ArrowDown"); await key("Enter");
-    await sleep(900);
+    for (let k = 0; k < 40 && !(await js("!!RUNWAY_DEBUG.state().cur")); k++) await sleep(100);   // the first patient comes in
     s = await js(`(function(){var s = RUNWAY_DEBUG.state(); return {phase:s.phase, cur:!!s.cur, week:s.week}})()`);
     ok(s.phase === "week" && s.week === 1 && s.cur, page + ": A opens the schedule, a patient arrives", JSON.stringify(s));
     await key("Enter");

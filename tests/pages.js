@@ -4,10 +4,11 @@
 // the case tabs, every circled letter has its source, and no sideways scroll.
 const { spawn } = require("child_process"), os = require("os"), path = require("path");
 const BASE = process.argv[2] || "http://localhost:8765/";
+const PORT = 9000 + Math.floor(Math.random()*300);   // a fresh port and profile each run
 const PAGES = ["index.html", "short.html", "health.html", "saude.html"];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["--headless=new", "--disable-gpu",
-  "--remote-debugging-port=9335", "--window-size=1280,800", "--user-data-dir=" + path.join(os.tmpdir(), "pages-test"), "about:blank"], { stdio: "ignore" });
+  "--remote-debugging-port=" + PORT, "--window-size=1280,800", "--user-data-dir=" + path.join(os.tmpdir(), "pages-" + PORT), "about:blank"], { stdio: "ignore" });
 
 const CHECK = `(async function(){
   await new Promise(function(r){setTimeout(r,1800)});
@@ -24,7 +25,7 @@ const CHECK = `(async function(){
 
 (async () => {
   let tabs;
-  for (let i = 0; i < 40 && !tabs; i++) { try { tabs = await (await fetch("http://127.0.0.1:9335/json")).json() } catch (e) { await sleep(250) } }
+  for (let i = 0; i < 40 && !tabs; i++) { try { tabs = await (await fetch("http://127.0.0.1:" + PORT + "/json")).json() } catch (e) { await sleep(250) } }
   const ws = new WebSocket(tabs.find(t => t.type === "page").webSocketDebuggerUrl);
   let id = 0; const pend = {}, errors = [];
   const send = (m, p) => new Promise(r => { const i = ++id; pend[i] = r; ws.send(JSON.stringify({ id: i, method: m, params: p })) });

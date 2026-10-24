@@ -27,7 +27,11 @@
   var cv = $("gCanvas"), ctx = cv.getContext("2d"), msg = $("gMsg"), live = $("gLive"), opts = $("gOpts");
   var hud = $("gHud"), hud2 = $("gHud2"), cartEl = $("gCart"), aBtn = $("gA"), bBtn = $("gB"), sndBtn = $("gSnd");
   var receipt = $("gReceipt"), receiptText = $("gReceiptText"), sendBtn = $("gSend"), copyBtn = $("gCopy");
+  /* the games work in 192x120 units; the canvas draws them at 2-4x (screen size times pixel density) so text stays sharp when the screen is scaled up */
   var W = cv.width, H = cv.height;
+  var K = Math.max(2, Math.min(4, Math.ceil((dev.clientWidth || 400)*(window.devicePixelRatio || 1)/W)));
+  cv.width = W*K; cv.height = H*K;
+  function base(c){c.setTransform(K, 0, 0, K, 0, 0)}
   var COL = {lcd:"#FFB547", dim:"#B08A48", dark:"#1C1812", hot:"#FF7A45", faint:"#3a2e18", mid:"#5a4524"};
   var FONT = "10px VT323, monospace", BIG = "16px VT323, monospace";
   /* console wording in the page's language (the Portuguese pages set <html lang="pt">) */
@@ -158,7 +162,7 @@
   /* ---------- the menu screen: a small animation in the empty space ----------
      A heartbeat that turns into a cash line, with the runner jogging on it.
      Only when the menu leaves room for it (up to four cartridges). */
-  var art = document.createElement("canvas"); art.id = "gArt"; art.width = 192; art.height = 64; art.hidden = true; art.setAttribute("aria-hidden", "true");
+  var art = document.createElement("canvas"); art.id = "gArt"; art.width = 192*K; art.height = 64*K; art.hidden = true; art.setAttribute("aria-hidden", "true");
   msg.parentNode.insertBefore(art, opts);
   var actx = art.getContext("2d"), artRaf = 0, artT0 = 0;
   var PULSE = [0, 0, -1, -2, -1, 0, 3, -16, 6, 0, 0, -2, -3, -2, -1, 0];
@@ -167,8 +171,8 @@
     return 40 + beat - 6*Math.sin(u/37) - 3*Math.sin(u/11);
   }
   function drawArt(t){
-    var w = art.width, h = art.height, scroll = t*28, x, y;
-    actx.setTransform(1, 0, 0, 1, 0, 0); actx.imageSmoothingEnabled = false;
+    var w = 192, h = 64, scroll = t*28, x, y;
+    base(actx); actx.imageSmoothingEnabled = false;
     actx.fillStyle = COL.dark; actx.fillRect(0, 0, w, h);
     actx.fillStyle = COL.faint;
     for(y=4;y<h;y+=8) for(x=((-Math.floor(scroll*0.5)) % 8 + 8) % 8;x<w;x+=8) actx.fillRect(x, y, 1, 1);
@@ -196,7 +200,7 @@
     if(artRaf) return;
     artT0 = performance.now();
     (function loop(now){
-      if(mode !== "menu" || demo){stopArt(); return}
+      if((mode !== "menu" && mode !== "idle") || demo){stopArt(); return}
       drawArt((now - artT0)/1000); artRaf = requestAnimationFrame(loop);
     })(artT0);
   }
@@ -286,12 +290,12 @@
     var m = music(); if(m && cart.mood && !demo) m.setTension(cart.mood(S));
   }
   function draw(){
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
+    base(ctx); ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = COL.dark; ctx.fillRect(0, 0, W, H);
     if(fx.shake && !reduce) ctx.translate(Math.round((Math.random() - .5)*4), Math.round((Math.random() - .5)*3));
     ctx.save(); cart.draw(g, S); ctx.restore();
     floats.forEach(function(f){ctx.globalAlpha = Math.min(1, f.life*2); text(f.text, Math.round(f.x), Math.round(f.y), f.color); ctx.globalAlpha = 1});
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    base(ctx);
     if(cart.overlay) cart.overlay(g, S);
     if(fx.banner){
       ctx.globalAlpha = Math.min(1, fx.banner*2);
@@ -358,7 +362,7 @@
     (function b(now){
       if(mode !== "boot") return;
       var t = (now - t0)/1000;
-      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = COL.dark; ctx.fillRect(0, 0, W, H);
+      base(ctx); ctx.fillStyle = COL.dark; ctx.fillRect(0, 0, W, H);
       var y = Math.min(56, -10 + t*90);
       text("RUNWAY", W/2, y, COL.lcd, "24px VT323, monospace", "center");
       if(t > 0.8){
@@ -481,6 +485,7 @@
   /* ?debug: step a game by hand (for screenshots and testing) */
   if(/[?&]debug\b/.test(location.search)) window.RUNWAY_DEBUG = {
     carts:carts, start:function(id){booted = true; start(id)}, state:function(){return S}, menu:menu,
+    status:function(){return {mode:mode, running:running, paused:paused, countdown:countdown, demo:!!demo}},
     step:function(sec, bot){
       running = false; countdown = 0; var mem = {};
       for(var i=0;i<sec*60 && !(S.over || S.won);i++){cart.step(S, 1/60, bot ? bot(S, mem) : {down:false, dir:null, press:{}, taps:[]}); events(); tickFx(1/60)}

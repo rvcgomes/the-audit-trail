@@ -5,13 +5,14 @@
 const { spawn } = require("child_process");
 const os = require("os"), path = require("path");
 const CHROME = process.env.CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
+const PORT = 9300 + Math.floor(Math.random()*300);   // a fresh port and profile each run
 const URL_ = process.argv[2] || "http://localhost:8765/tests/input.html";
-const chrome = spawn(CHROME, ["--headless=new", "--disable-gpu", "--remote-debugging-port=9333", "--window-size=900,1000",
-  "--autoplay-policy=user-gesture-required", "--user-data-dir=" + path.join(os.tmpdir(), "runway-input-test"), "about:blank"], { stdio: "ignore" });
+const chrome = spawn(CHROME, ["--headless=new", "--disable-gpu", "--remote-debugging-port=" + PORT, "--window-size=900,1000",
+  "--autoplay-policy=user-gesture-required", "--user-data-dir=" + path.join(os.tmpdir(), "runway-input-" + PORT), "about:blank"], { stdio: "ignore" });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 (async () => {
   let tabs;
-  for (let i = 0; i < 40 && !tabs; i++) { try { tabs = await (await fetch("http://127.0.0.1:9333/json")).json() } catch (e) { await sleep(250) } }
+  for (let i = 0; i < 40 && !tabs; i++) { try { tabs = await (await fetch("http://127.0.0.1:" + PORT + "/json")).json() } catch (e) { await sleep(250) } }
   if (!tabs) { console.error("Chrome did not start"); process.exit(2) }
   const ws = new WebSocket(tabs.find(t => t.type === "page").webSocketDebuggerUrl);
   let id = 0; const pending = {};

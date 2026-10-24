@@ -109,7 +109,7 @@
         g.sfx("line");
         var n = e.rows.length, first = Math.min(e.week, s.weeks - n + 1), span = first < e.week ? T("Weeks ", "Semanas ") + first + "–" + e.week : T("Week ", "Semana ") + e.week;
         var head = e.bonus ? T("BATCH RUN", "LOTE") : span.toUpperCase();
-        g.banner(head + " " + signed(e.net), 1.1);
+        g.banner(head + " " + signed(e.net), 0.7);
         var detail = "+" + e.ins + T(" in, −", " entra, −") + e.outs + T(" out", " sai");
         if(e.fee) g.line(span + T(" in the red: ", " no vermelho: ") + detail + ", €" + e.fee + T("k overdraft fee", "k de descoberto") + (e.bonus ? T(", batch bonus on the rest", ", bónus de lote no resto") : "") + ".");
         else if(e.bonus) g.line(T("Batch run: ", "Lote: ") + detail + ", ×" + Blocks.BATCH + T(" on the net. ", " no saldo. ") + signed(e.net) + ".");
