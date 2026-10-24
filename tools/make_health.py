@@ -312,7 +312,7 @@ document.documentElement.className = "js";
    For a specific clinic, build a link with link.html (?co=…). */
 window.CONFIG = {
   company: "",
-  email: "ruimcamposgomes@gmail.com",
+  email: "rui.gomes@vclevel.pt",
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
   booking: "",                 // the calendar link (Calendly) once it exists; empty = the button opens an email
@@ -488,8 +488,8 @@ window.CONFIG = {
 <section class="close wrap" id="contact">
   <h2 class="rev">%(close_h)s</h2>
   <p class="sub rev">%(close_sub)s</p>
-  <a class="cta rev" id="cta" href="mailto:ruimcamposgomes@gmail.com">%(cta)s <span aria-hidden="true">↗</span></a>
-  <p class="links"><a data-link="email" href="mailto:ruimcamposgomes@gmail.com">ruimcamposgomes@gmail.com</a><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">VCLevel</a><a href="index.html" hreflang="en">%(full)s</a></p>
+  <a class="cta rev" id="cta" href="mailto:rui.gomes@vclevel.pt">%(cta)s <span aria-hidden="true">↗</span></a>
+  <p class="links"><a data-link="email" href="mailto:rui.gomes@vclevel.pt">rui.gomes@vclevel.pt</a><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn</a><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">VCLevel</a><a href="index.html" hreflang="en">%(full)s</a></p>
   <p class="ai">%(ai)s</p>
 </section>
 <div class="srcs">
