@@ -15,6 +15,8 @@ index.html changes, the script stops, so the Portuguese text can be updated too.
 Run it after changing index.html, this script or the page structure.
 """
 import hashlib, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from refs import relabel
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 URL = "https://rvcgomes.github.io/the-audit-trail/"
@@ -67,14 +69,14 @@ def pt_case(i, cid, sector, q, b, note):
 
 PT_TABS = '''        <button role="tab" id="t-therapy" aria-controls="p-therapy" aria-selected="true">Psicologia</button>
         <button role="tab" id="t-physio" aria-controls="p-physio" aria-selected="false" tabindex="-1">Fisioterapia</button>
-        <button role="tab" id="t-dental" aria-controls="p-dental" aria-selected="false" tabindex="-1">Dentária</button>
+        <button role="tab" id="t-dental" aria-controls="p-dental" aria-selected="false" tabindex="-1">Medicina dentária</button>
         <button role="tab" id="t-clinic" aria-controls="p-clinic" aria-selected="false" tabindex="-1">Clínica médica</button>
 '''
 PT_PANELS = "".join([
     pt_case(1, "therapy", "Psicologia", "“Precisamos de faturar mais.”",
             "Os números apontaram para a ocupação da agenda e o preço por sessão. O trabalho começou por um diagnóstico de desempenho.",
             "Primeiro, saber quanto vale uma hora."),
-    pt_case(2, "physio", "Fisioterapia", "ENI ou sociedade, antes do primeiro utente?",
+    pt_case(2, "physio", "Fisioterapia", "ENI ou sociedade, antes do primeiro paciente?",
             "A resposta veio do plano a três anos, onde o imposto poupado no primeiro ano pesava pouco.",
             "Escolha a estrutura a pensar no terceiro ano."),
     pt_case(3, "dental", "Medicina dentária", "Os nossos preços estão certos para os pacientes de convenções?",
@@ -92,22 +94,23 @@ D_POST = "https://www.linkedin.com/feed/update/urn:li:activity:73594898178746777
 
 T = {
 "en": dict(
-    file="health.html", other="saude.html", lang="en", other_lang="pt", other_name="Versão em português",
+    file="health.html", other="saude.html", lang="en", other_lang="pt", other_name="Versão em português", other_short="Português", hero_label="Introduction",
     title="Rui Gomes, fractional CFO for clinics",
     desc="Rui Gomes, fractional CFO for clinics and health practices: a diagnosis of where the practice stands, then the tools to decide.",
     og_alt="Rui Gomes, fractional CFO for clinics and health practices.",
     from_="From", to="To",
     hi2='your practice&#8217;s numbers, <span class="ul">seen from the inside@@UL@@</span>',
-    lede="I'm Rui, the founder of VCLevel, where I do fractional CFO work: a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and practices across health care: medical, dental, physiotherapy, psychology, aesthetics and others. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
-    avail='<a data-link="mail" href="#contact">Book a call</a>, <a href="#cases">see the cases</a> or <a href="index.html">read my full trail</a>.',
-    go="See the cases",
+    lede="I'm Rui, the founder of VCLevel. There I work as a fractional CFO: a part-time finance director for businesses that don't need a full-time one yet. I work with clinics and practices across health care: medical, dental, physiotherapy, psychology, aesthetics and others. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.",
+    actions='<a class="btn primary" data-link="mail" href="#contact">Book a call</a><a class="btn ghost" href="#cases">See the cases</a>',
+    avail='Or <a href="index.html">read my full trail</a>.',
     card_label="Summary", card_h="Diagnosis · what I check first",
     card_roles="<span>Founder, VCLevel</span><span>CFO &amp; Head of HR, Weezie</span>",
     card_rows=["What an hour in the schedule is worth", "Occupancy and no-shows", "Insurers and health plans against private patients",
                "Break-even, and the months to reach it", "Sole trader or a company"],
-    card_foot="Medical · Dental · Physio · Psychology · Aesthetics · and more", card_btn="Book a call",
+    card_foot="Medical, dental, physio, psychology, aesthetics", card_btn="Book a call",
     cases_when="<b>Real cases</b>, with VCLevel", cases_h="The first question is rarely the one that matters",
     cases_p="Four practices I've worked with through VCLevel. Most of them had never had a finance person look at their numbers from the inside.",
+    refs_hint="Each circled letter on this page opens the source of that fact.",
     cases_stack="<li>Diagnosis</li><li>Pricing</li><li>Company structure</li><li>Break-even</li>",
     tabs_label="Client cases", tabs=EN_TABS, panels=EN_PANELS,
     anon="Real cases, shared with the clients&#8217; permission: sector only, no names or places, and ratios rather than amounts.",
@@ -140,6 +143,10 @@ T = {
          "You're choosing between sole trader and a company",
          "You want to apply for public funding, or the incentives for the interior", "You're bringing in a partner, or about to talk to the bank", "Your team is growing and nobody has decided what each role is paid"],
     quest_when="<b>A small side quest</b>", quest_h="Insert a cartridge",
+    quest_list=["<b>Fully Booked</b>: set the private price, choose the insurers and health plans, fill the schedule. Each agreement gets a verdict.",
+                "<b>Cash Flow</b>: the weeks when money comes in and goes out, with payroll due every 13 seconds.",
+                "<b>Spot the Error</b>: invoices and totals that don't add up.",
+                "<b>Close the Month</b>: get the five closing tasks done before the deadlines."],
     quest_p=["Four small games. In Fully Booked you set a practice's private price, decide which insurers and health plans to sign with, and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a fully booked schedule. Cash Flow is about the weeks when money comes in and goes out, Spot the Error about the invoices that don't add up, and Close the Month about getting it done on time.",
              "They're toys, and the numbers in them are game numbers, but the rules come from the job. Turn the sound on for the music."],
     dev_aria="RUNWAY, a handheld console with four games. A or Space to play, B or Escape for the menu.",
@@ -166,22 +173,23 @@ T = {
     disclaim="A personal introduction, not affiliated with",
 ),
 "pt": dict(
-    file="saude.html", other="health.html", lang="pt", other_lang="en", other_name="English version",
+    file="saude.html", other="health.html", lang="pt", other_lang="en", other_name="English version", other_short="English", hero_label="Introdução",
     title="Rui Gomes, CFO para clínicas",
-    desc="Rui Gomes, CFO a tempo parcial para clínicas e consultórios: um diagnóstico de onde a clínica está hoje e, depois, as ferramentas para decidir.",
-    og_alt="Rui Gomes, CFO a tempo parcial para clínicas e consultórios.",
+    desc="Rui Gomes, CFO fracionado para clínicas e consultórios: um diagnóstico de onde a clínica está hoje e, depois, as ferramentas para decidir.",
+    og_alt="Rui Gomes, CFO fracionado para clínicas e consultórios.",
     from_="De", to="Para",
     hi2='os números da sua clínica, <span class="ul">vistos por dentro@@UL@@</span>',
-    lede="Sou o Rui, fundador da VCLevel, onde faço trabalho de CFO fracionado: as funções de diretor financeiro, a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios de várias áreas da saúde: medicina, medicina dentária, fisioterapia, psicologia, estética e outras. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
-    avail='<a data-link="mail" href="#contact">Marcar uma conversa</a>, <a href="#cases">ver os casos</a> ou <a href="index.html" hreflang="en">ler o percurso completo</a> (em inglês).',
-    go="Ver os casos",
+    lede="Sou o Rui, fundador da VCLevel. Lá trabalho como CFO fracionado: diretor financeiro a tempo parcial, em empresas que ainda não precisam de um a tempo inteiro. Trabalho com clínicas e consultórios de várias áreas da saúde: medicina, medicina dentária, fisioterapia, psicologia, estética e outras. Começo por um diagnóstico de onde a clínica está hoje e depois construo as ferramentas com que decide.",
+    actions='<a class="btn primary" data-link="mail" href="#contact">Marcar uma conversa</a><a class="btn ghost" href="#cases">Ver os casos</a>',
+    avail='Ou <a href="index.html" hreflang="en">ler o percurso completo</a> (em inglês).',
     card_label="Resumo", card_h="Diagnóstico · o que vejo primeiro",
     card_roles="<span>Fundador, VCLevel</span><span>CFO e Head of HR, Weezie</span>",
     card_rows=["Quanto vale uma hora da agenda", "Ocupação e faltas", "Convenções e particulares",
                "Ponto de equilíbrio e meses até lá chegar", "ENI ou sociedade"],
-    card_foot="Medicina · Dentária · Fisioterapia · Psicologia · Estética · e outras", card_btn="Marcar conversa",
+    card_foot="Medicina, dentária, fisioterapia, psicologia, estética", card_btn="Marcar uma conversa",
     cases_when="<b>Casos reais</b>, com a VCLevel", cases_h="A primeira pergunta raramente é a que importa",
     cases_p="Quatro clínicas com que trabalhei através da VCLevel. A maioria nunca tinha tido alguém de finanças a olhar para os números por dentro.",
+    refs_hint="Cada letra num círculo, nesta página, abre a fonte desse dado.",
     cases_stack="<li>Diagnóstico</li><li>Preços</li><li>Estrutura da empresa</li><li>Ponto de equilíbrio</li>",
     tabs_label="Casos de clientes", tabs=PT_TABS, panels=PT_PANELS,
     anon="Casos reais, partilhados com autorização dos clientes: só o setor, sem nomes nem locais, e rácios em vez de valores.",
@@ -205,7 +213,7 @@ T = {
     path_p="Na PwC aprendi a perguntar de onde vem um número antes de confiar nele. Na Weezie os números são meus: o orçamento, a tesouraria, a ronda de investimento, as tabelas salariais. Nas clínicas faço o mesmo trabalho, de fora.",
     facts_h="Resultados", facts=[("€500M", "em transações assessoradas em IFRS", "F"), ("€3M", "ronda seed, 2024: mais 18 meses de tesouraria", "B"),
         ("−34%", "no tempo de fecho do mês", "G"), ("−28%", "na exposição cambial, com uma nova política de liquidez", "G"),
-        ("0%", "saídas voluntárias em 20 meses, equipa de 23", "G"), ("2025", "Prémio de transparência na compensação", "C")],
+        ("0%", "saídas voluntárias em 20 meses, equipa de 23", "G"), ("2025", "Prémio «Líder em transparência na compensação»", "C")],
     fit_when="<b>Onde posso ajudar</b>", fit_h="Antes da próxima grande decisão",
     fit_lead="O trabalho é mais útil antes de uma decisão difícil de desfazer: uma tabela de preços, um arrendamento, uma empresa.",
     fit_h3="Provavelmente vai querer falar comigo se",
@@ -214,6 +222,10 @@ T = {
          "Está a decidir entre ENI e sociedade",
          "Quer candidatar-se a fundos ou aos incentivos ao interior", "Vai receber um sócio ou falar com o banco", "A equipa está a crescer e ainda não há regras para quanto ganha cada função"],
     quest_when="<b>Uma pausa para jogar</b>", quest_h="Insira um cartucho",
+    quest_list=["<b>Agenda Cheia</b>: defina o preço particular, escolha as convenções e encha a agenda. Cada convenção tem um veredicto.",
+                "<b>Tesouraria</b>: as semanas em que o dinheiro entra e sai, com salários a cada 13 segundos.",
+                "<b>Encontre o Erro</b>: faturas e totais que não batem certo.",
+                "<b>Fechar o Mês</b>: as cinco tarefas do fecho antes dos prazos."],
     quest_p=["Quatro jogos pequenos. Em Agenda Cheia define o preço particular de uma clínica, escolhe que convenções assinar e marca os pacientes à medida que chegam. No fim, cada convenção tem um veredicto: o que pagou, os particulares que trouxe e os que deixou de fora com a agenda cheia. Em Tesouraria, o tema são as semanas em que o dinheiro entra e sai; em Encontre o Erro, as faturas que não batem certo; em Fechar o Mês, chegar ao fecho a tempo.",
              "São brinquedos, e os números são do jogo, mas as regras vêm do trabalho. Ligue o som para ouvir a música."],
     dev_aria="RUNWAY, uma consola portátil com quatro jogos. A ou Espaço para jogar, B ou Escape para o menu.",
@@ -301,6 +313,7 @@ window.CONFIG = {
   email: "ruimcamposgomes@gmail.com",
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
+  booking: "",                 // the calendar link (Calendly) once it exists; empty = the button opens an email
   cv: ""
 };
 </script>
@@ -310,15 +323,16 @@ window.CONFIG = {
 <div class="progress" aria-hidden="true"><i id="bar"></i></div>
 
 <main>
-<section class="wrap hero" id="hero" aria-label="%(card_label)s">
+<p class="wrap lang-switch"><a href="%(other)s" hreflang="%(other_lang)s" lang="%(other_lang)s">%(other_short)s</a></p>
+<section class="wrap hero" id="hero" aria-label="%(hero_label)s">
   <div class="hero-grid">
   <div class="hero-copy">
   <p class="meta">%(from_)s <strong>Rui Gomes</strong> (V.N. Famalicão, PT)<span id="toLine" hidden><br>%(to)s <strong data-co></strong></span></p>
   <h1 class="hi"><span class="sr" id="greetSr">%(hi)s</span><span class="typed" id="typed" aria-hidden="true">%(hi)s</span></h1>
   <p class="hi2">%(hi2)s</p>
   <p class="lede">%(lede)s</p>
+  <p class="actions">%(actions)s</p>
   <p class="avail">%(avail)s</p>
-  <a class="go" href="#cases"><span class="c" aria-hidden="true">↓</span>%(go)s</a>
   </div>
   <aside class="file" aria-label="%(card_label)s">
     <p class="file-h"><span>%(card_h)s</span><b aria-hidden="true">✓</b></p>
@@ -339,6 +353,7 @@ window.CONFIG = {
   <div class="split">
     <div class="copy rev">
       <p>%(cases_p)s</p>
+      <p class="refs-hint">%(refs_hint)s</p>
       <ul class="stack">%(cases_stack)s</ul>
     </div>
     <div class="sectors rev" id="sectors">
@@ -420,7 +435,7 @@ window.CONFIG = {
     <div class="copy rev">
       <span class="when">%(quest_when)s</span>
       <h2 style="margin:.4rem 0 1.5rem">%(quest_h)s</h2>
-      <p>%(quest_p0)s</p>
+      <ul class="games">%(quest_list)s</ul>
       <p>%(quest_p1)s</p>
     </div>
     <div class="rev">
@@ -501,9 +516,11 @@ window.CONFIG = {
 </body>
 </html>
 ''' % dict(t, url=URL, favicon=FAVICON,hi=("Olá," if t["lang"] == "pt" else "Hi there,"),
-           hi2=t["hi2"].replace("@@UL@@", UL), quest_p0=t["quest_p"][0], quest_p1=t["quest_p"][1], rows=rows, steps=steps, k0=kpis[0], k1=kpis[1], k2=kpis[2], k3=kpis[3],
+           hi2=t["hi2"].replace("@@UL@@", UL), quest_list="".join("<li>%s</li>" % x for x in t["quest_list"]), quest_p1=t["quest_p"][1], rows=rows, steps=steps, k0=kpis[0], k1=kpis[1], k2=kpis[2], k3=kpis[3],
            bars=bars, legend=legend, roles=roles, facts=facts, fit=fit, srcs=srcs, refC=ref("C", t), refD=ref("D", t), refE=ref("E", t))
-    return page
+    why = re.search(r'<section class="why" id="why">.*?</section>\n\n', page, re.S).group(0)
+    page = page.replace(why, "").replace('<section class="chap wrap" id="how">', why + '<section class="chap wrap" id="how">')
+    return relabel(page)
 
 
 bad = []

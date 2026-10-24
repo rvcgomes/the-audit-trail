@@ -21,6 +21,7 @@ const CHECK = `(async function(){
   out.missing=[].filter.call(document.querySelectorAll("[popovertarget]"),function(b){return !document.getElementById(b.getAttribute("popovertarget"))}).length;
   out.wide=document.documentElement.scrollWidth>innerWidth;
   out.lang=document.documentElement.lang;
+  var seen={}; out.order=[].map.call(document.querySelectorAll(".ref"),function(b){return b.textContent}).filter(function(l){return seen[l]?false:(seen[l]=true)}).join("");
   return out})()`;
 
 (async () => {
@@ -47,6 +48,7 @@ const CHECK = `(async function(){
       ok(/Acme/.test(r.title) && r.toLine, n + ": greets the company", r.title);
       ok(r.tab !== false, n + ": case tabs switch");
       ok(r.missing === 0, n + ": every letter has a source", r.missing ? r.missing + " missing" : "");
+      ok(r.order === "ABCDEFG".slice(0, r.order.length), n + ": letters appear in reading order", r.order);
       ok(!r.wide, n + ": no sideways scroll");
     }
   }

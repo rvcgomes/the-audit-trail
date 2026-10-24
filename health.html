@@ -30,6 +30,7 @@ window.CONFIG = {
   email: "ruimcamposgomes@gmail.com",
   linkedin: "https://www.linkedin.com/in/ruimcgomes/",
   vclevel: "https://vclevel.pt",
+  booking: "",                 // the calendar link (Calendly) once it exists; empty = the button opens an email
   cv: ""
 };
 </script>
@@ -39,15 +40,16 @@ window.CONFIG = {
 <div class="progress" aria-hidden="true"><i id="bar"></i></div>
 
 <main>
-<section class="wrap hero" id="hero" aria-label="Summary">
+<p class="wrap lang-switch"><a href="saude.html" hreflang="pt" lang="pt">Português</a></p>
+<section class="wrap hero" id="hero" aria-label="Introduction">
   <div class="hero-grid">
   <div class="hero-copy">
   <p class="meta">From <strong>Rui Gomes</strong> (V.N. Famalicão, PT)<span id="toLine" hidden><br>To <strong data-co></strong></span></p>
   <h1 class="hi"><span class="sr" id="greetSr">Hi there,</span><span class="typed" id="typed" aria-hidden="true">Hi there,</span></h1>
   <p class="hi2">your practice&#8217;s numbers, <span class="ul">seen from the inside<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 C 50 6, 120 18, 198 8"/></svg></span></p>
-  <p class="lede">I'm Rui, the founder of VCLevel, where I do fractional CFO work: a finance director's job, part-time, for businesses that don't need a full-time one yet. I work with clinics and practices across health care: medical, dental, physiotherapy, psychology, aesthetics and others. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.</p>
-  <p class="avail"><a data-link="mail" href="#contact">Book a call</a>, <a href="#cases">see the cases</a> or <a href="index.html">read my full trail</a>.</p>
-  <a class="go" href="#cases"><span class="c" aria-hidden="true">↓</span>See the cases</a>
+  <p class="lede">I'm Rui, the founder of VCLevel. There I work as a fractional CFO: a part-time finance director for businesses that don't need a full-time one yet. I work with clinics and practices across health care: medical, dental, physiotherapy, psychology, aesthetics and others. I start with a diagnosis of where the practice stands today, then build the tools you use to decide.</p>
+  <p class="actions"><a class="btn primary" data-link="mail" href="#contact">Book a call</a><a class="btn ghost" href="#cases">See the cases</a></p>
+  <p class="avail">Or <a href="index.html">read my full trail</a>.</p>
   </div>
   <aside class="file" aria-label="Summary">
     <p class="file-h"><span>Diagnosis · what I check first</span><b aria-hidden="true">✓</b></p>
@@ -59,19 +61,20 @@ window.CONFIG = {
       <div><dt>4</dt><dd>Break-even, and the months to reach it</dd></div>
       <div><dt>5</dt><dd>Sole trader or a company</dd></div>
     </dl>
-    <p class="file-foot"><span>Medical · Dental · Physio · Psychology · Aesthetics · and more</span><a class="file-cv" data-link="mail" href="#contact">Book a call</a></p>
+    <p class="file-foot"><span>Medical, dental, physio, psychology, aesthetics</span><a class="file-cv" data-link="mail" href="#contact">Book a call</a></p>
   </aside>
   </div>
 </section>
 
 <section class="chap wrap" id="cases">
   <div class="chap-head rev">
-    <span class="when"><b>Real cases</b>, with VCLevel<button type="button" class="ref" popovertarget="src-D" aria-label="Source D">D</button></span>
+    <span class="when"><b>Real cases</b>, with VCLevel<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></span>
     <h2>The first question is rarely the one that matters</h2>
   </div>
   <div class="split">
     <div class="copy rev">
       <p>Four practices I've worked with through VCLevel. Most of them had never had a finance person look at their numbers from the inside.</p>
+      <p class="refs-hint">Each circled letter on this page opens the source of that fact.</p>
       <ul class="stack"><li>Diagnosis</li><li>Pricing</li><li>Company structure</li><li>Break-even</li></ul>
     </div>
     <div class="sectors rev" id="sectors">
@@ -115,6 +118,25 @@ window.CONFIG = {
       </div>
       <p class="anon">Real cases, shared with the clients&#8217; permission: sector only, no names or places, and ratios rather than amounts.</p>
     </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="wrap">
+    <span class="when rev"><b>Where I can help</b></span>
+    <h2 class="rev">Before the next big decision</h2>
+    <p class="lead rev">The work is most useful before a decision that is hard to undo: a price list, a lease, a company.</p>
+    <h3 class="rev">You'll probably want to talk to me if</h3>
+    <ul class="fit rev">
+      <li>You've never worked out what an hour in the schedule is worth</li>
+      <li>You're not sure your prices for insurers and health plans still pay</li>
+      <li>No-shows worry you, but nobody has put a number on them</li>
+      <li>You're about to sign the lease for a new practice</li>
+      <li>You're choosing between sole trader and a company</li>
+      <li>You want to apply for public funding, or the incentives for the interior</li>
+      <li>You're bringing in a partner, or about to talk to the bank</li>
+      <li>Your team is growing and nobody has decided what each role is paid</li>
+    </ul>
   </div>
 </section>
 
@@ -164,24 +186,24 @@ window.CONFIG = {
   </div>
   <div class="split">
     <div class="copy rev">
-      <p class="edu">Master's in Finance, ISEG Lisbon<button type="button" class="ref" popovertarget="src-E" aria-label="Source E">E</button></p>
-      <p class="role">PwC: financial audit, then capital markets and accounting advisory, with Claranet in between, working directly with Microsoft<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
+      <p class="edu">Master's in Finance, ISEG Lisbon<button type="button" class="ref" popovertarget="src-B" aria-label="Source B">B</button></p>
+      <p class="role">PwC: financial audit, then capital markets and accounting advisory, with Claranet in between, working directly with Microsoft<button type="button" class="ref" popovertarget="src-C" aria-label="Source C">C</button></p>
       <p class="where">2013 – 2022</p>
       <p class="role">CFO &amp; Head of HR, Weezie, venture-backed software for fibre-network operators</p>
       <p class="where">2022 – now</p>
-      <p class="role">Founder, VCLevel<button type="button" class="ref" popovertarget="src-D" aria-label="Source D">D</button></p>
+      <p class="role">Founder, VCLevel<button type="button" class="ref" popovertarget="src-A" aria-label="Source A">A</button></p>
       <p class="where">Alongside</p>
       <p>At PwC I learnt to ask where a number comes from before trusting it. At Weezie the numbers are mine: the budget, the cash, the funding round, the pay bands. With clinics I do the same job, from the outside.</p>
     </div>
     <aside class="file flat rev" aria-label="Track record">
       <p class="file-h"><span>Track record</span><b aria-hidden="true">✓</b></p>
       <dl>
-      <div><dt>€500M</dt><dd>in transactions advised on under IFRS<button type="button" class="ref" popovertarget="src-F" aria-label="Source F">F</button></dd></div>
-      <div><dt>€3M</dt><dd>seed round, 2024: 18 more months of runway<button type="button" class="ref" popovertarget="src-B" aria-label="Source B">B</button></dd></div>
-      <div><dt>−34%</dt><dd>time to close the month<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></dd></div>
-      <div><dt>−28%</dt><dd>FX exposure, after a new liquidity policy<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></dd></div>
-      <div><dt>0%</dt><dd>voluntary attrition in 20 months, team of 23<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></dd></div>
-      <div><dt>2025</dt><dd>Transparency in Compensation Award<button type="button" class="ref" popovertarget="src-C" aria-label="Source C">C</button></dd></div>
+      <div><dt>€500M</dt><dd>in transactions advised on under IFRS<button type="button" class="ref" popovertarget="src-D" aria-label="Source D">D</button></dd></div>
+      <div><dt>€3M</dt><dd>seed round, 2024: 18 more months of runway<button type="button" class="ref" popovertarget="src-E" aria-label="Source E">E</button></dd></div>
+      <div><dt>−34%</dt><dd>time to close the month<button type="button" class="ref" popovertarget="src-F" aria-label="Source F">F</button></dd></div>
+      <div><dt>−28%</dt><dd>FX exposure, after a new liquidity policy<button type="button" class="ref" popovertarget="src-F" aria-label="Source F">F</button></dd></div>
+      <div><dt>0%</dt><dd>voluntary attrition in 20 months, team of 23<button type="button" class="ref" popovertarget="src-F" aria-label="Source F">F</button></dd></div>
+      <div><dt>2025</dt><dd>Transparency in Compensation Award<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></dd></div>
       </dl>
     </aside>
   </div>
@@ -198,7 +220,7 @@ window.CONFIG = {
       <figcaption>Accepting it for the Weezie team.</figcaption>
     </figure>
   </div>
-  <h2>Transparency in Compensation Award, 2025<button type="button" class="ref" popovertarget="src-C" aria-label="Source C">C</button></h2>
+  <h2>Transparency in Compensation Award, 2025<button type="button" class="ref" popovertarget="src-G" aria-label="Source G">G</button></h2>
   <p>Coverflex Compensation Awards, small-company category. Given to Weezie for the company-wide compensation framework and salary bands I designed there.</p>
 </section>
 
@@ -207,7 +229,7 @@ window.CONFIG = {
     <div class="copy rev">
       <span class="when"><b>A small side quest</b></span>
       <h2 style="margin:.4rem 0 1.5rem">Insert a cartridge</h2>
-      <p>Four small games. In Fully Booked you set a practice's private price, decide which insurers and health plans to sign with, and book the patients as they arrive. At the end each agreement gets a verdict: what it paid, the private patients it brought, and the ones it pushed out of a fully booked schedule. Cash Flow is about the weeks when money comes in and goes out, Spot the Error about the invoices that don't add up, and Close the Month about getting it done on time.</p>
+      <ul class="games"><li><b>Fully Booked</b>: set the private price, choose the insurers and health plans, fill the schedule. Each agreement gets a verdict.</li><li><b>Cash Flow</b>: the weeks when money comes in and goes out, with payroll due every 13 seconds.</li><li><b>Spot the Error</b>: invoices and totals that don't add up.</li><li><b>Close the Month</b>: get the five closing tasks done before the deadlines.</li></ul>
       <p>They're toys, and the numbers in them are game numbers, but the rules come from the job. Turn the sound on for the music.</p>
     </div>
     <div class="rev">
@@ -243,25 +265,6 @@ window.CONFIG = {
   </div>
 </section>
 
-<section class="why" id="why">
-  <div class="wrap">
-    <span class="when rev"><b>Where I can help</b></span>
-    <h2 class="rev">Before the next big decision</h2>
-    <p class="lead rev">The work is most useful before a decision that is hard to undo: a price list, a lease, a company.</p>
-    <h3 class="rev">You'll probably want to talk to me if</h3>
-    <ul class="fit rev">
-      <li>You've never worked out what an hour in the schedule is worth</li>
-      <li>You're not sure your prices for insurers and health plans still pay</li>
-      <li>No-shows worry you, but nobody has put a number on them</li>
-      <li>You're about to sign the lease for a new practice</li>
-      <li>You're choosing between sole trader and a company</li>
-      <li>You want to apply for public funding, or the incentives for the interior</li>
-      <li>You're bringing in a partner, or about to talk to the bank</li>
-      <li>Your team is growing and nobody has decided what each role is paid</li>
-    </ul>
-  </div>
-</section>
-
 <section class="close wrap" id="contact">
   <h2 class="rev">Tell me the question on your table</h2>
   <p class="sub rev">Portuguese, English and Italian. Based in the north of Portugal, open to remote.</p>
@@ -273,44 +276,44 @@ window.CONFIG = {
   <h2 class="print-only">Sources</h2>
   <div class="src" id="src-A" popover role="dialog" aria-labelledby="src-A-k" tabindex="-1">
     <p class="src-k" id="src-A-k">Source A</p>
-    <p class="src-claim">Roles and dates, 2013 to now</p>
-    <p class="src-where"><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></p>
+    <p class="src-claim">Founder, VCLevel</p>
+    <p class="src-where"><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></p>
     <button type="button" class="src-x" popovertarget="src-A" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
   <div class="src" id="src-B" popover role="dialog" aria-labelledby="src-B-k" tabindex="-1">
     <p class="src-k" id="src-B-k">Source B</p>
-    <p class="src-claim">€3M seed round in 2024</p>
-    <p class="src-where">€3M round led by GED Ventures Portugal, February 2024: <a href="https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/" rel="noopener" target="_blank">ECO, 6 Feb 2024</a>.</p>
+    <p class="src-claim">Master's in Finance, ISEG Lisbon, 2013</p>
+    <p class="src-where">ISEG&#8217;s Master&#8217;s in Finance is 33rd worldwide and top 3 in Portugal in the Financial Times Masters in Finance ranking 2026 (pre-experience), where it has been ranked since 2020: <a href="https://www.iseg.ulisboa.pt/en/?p=70573" rel="noopener" target="_blank">ISEG</a>.</p>
     <button type="button" class="src-x" popovertarget="src-B" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
   <div class="src" id="src-C" popover role="dialog" aria-labelledby="src-C-k" tabindex="-1">
     <p class="src-k" id="src-C-k">Source C</p>
-    <p class="src-claim">Transparency in Compensation Award, 2025</p>
-    <p class="src-where">Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/" rel="noopener" target="_blank">Weezie on LinkedIn, May 2025</a>.</p>
+    <p class="src-claim">Roles and dates, 2013 to now</p>
+    <p class="src-where"><a data-link="linkedin" href="https://www.linkedin.com/in/ruimcgomes/" rel="noopener" target="_blank">LinkedIn profile</a></p>
     <button type="button" class="src-x" popovertarget="src-C" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
   <div class="src" id="src-D" popover role="dialog" aria-labelledby="src-D-k" tabindex="-1">
     <p class="src-k" id="src-D-k">Source D</p>
-    <p class="src-claim">Founder, VCLevel</p>
-    <p class="src-where"><a data-link="vclevel" href="https://vclevel.pt" rel="noopener" target="_blank">vclevel.pt</a></p>
+    <p class="src-claim">€500M in transactions advised on under IFRS</p>
+    <p class="src-where">PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</p>
     <button type="button" class="src-x" popovertarget="src-D" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
   <div class="src" id="src-E" popover role="dialog" aria-labelledby="src-E-k" tabindex="-1">
     <p class="src-k" id="src-E-k">Source E</p>
-    <p class="src-claim">Master's in Finance, ISEG Lisbon, 2013</p>
-    <p class="src-where">ISEG&#8217;s Master&#8217;s in Finance is 33rd worldwide and top 3 in Portugal in the Financial Times Masters in Finance ranking 2026 (pre-experience), where it has been ranked since 2020: <a href="https://www.iseg.ulisboa.pt/en/?p=70573" rel="noopener" target="_blank">ISEG</a>.</p>
+    <p class="src-claim">€3M seed round in 2024</p>
+    <p class="src-where">€3M round led by GED Ventures Portugal, February 2024: <a href="https://eco.sapo.pt/2024/02/06/weezie-fecha-ronda-de-3-milhoes-e-a-recrutar-para-dar-forca-a-entrada-na-america-do-sul/" rel="noopener" target="_blank">ECO, 6 Feb 2024</a>.</p>
     <button type="button" class="src-x" popovertarget="src-E" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
   <div class="src" id="src-F" popover role="dialog" aria-labelledby="src-F-k" tabindex="-1">
     <p class="src-k" id="src-F-k">Source F</p>
-    <p class="src-claim">€500M in transactions advised on under IFRS</p>
-    <p class="src-where">PwC Capital Markets &amp; Accounting Advisory, 2018–2022. The clients are confidential; I'm happy to walk through the types of deal.</p>
+    <p class="src-claim">−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</p>
+    <p class="src-where">Weezie management reporting; before-and-after figures on request. The attrition figure is public: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/" rel="noopener" target="_blank">my LinkedIn post, Aug 2025</a>.</p>
     <button type="button" class="src-x" popovertarget="src-F" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
   <div class="src" id="src-G" popover role="dialog" aria-labelledby="src-G-k" tabindex="-1">
     <p class="src-k" id="src-G-k">Source G</p>
-    <p class="src-claim">−34% close time, −28% FX exposure, 20 months with zero voluntary attrition across 23 people</p>
-    <p class="src-where">Weezie management reporting; before-and-after figures on request. The attrition figure is public: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7359489817874677761/" rel="noopener" target="_blank">my LinkedIn post, Aug 2025</a>.</p>
+    <p class="src-claim">Transparency in Compensation Award, 2025</p>
+    <p class="src-where">Coverflex Compensation Awards 2025 (Prémios da Compensação), small-company category: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7328690408580972544/" rel="noopener" target="_blank">Weezie on LinkedIn, May 2025</a>.</p>
     <button type="button" class="src-x" popovertarget="src-G" popovertargetaction="hide" aria-label="Close">×</button>
   </div>
 </div>
