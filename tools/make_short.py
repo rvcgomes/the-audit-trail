@@ -59,7 +59,7 @@ def block(text, start):
 
 URL = "https://rvcgomes.github.io/the-audit-trail/"
 sub('<meta property="og:url" content="%s">' % URL, '<meta property="og:url" content="%sshort.html">' % URL)
-sub('<link rel="canonical" href="%s">' % URL, '<link rel="canonical" href="%sshort.html">' % URL)
+sub('<link rel="canonical" href="%s">' % URL, '<link rel="canonical" href="%sshort.html">\n<meta name="robots" content="noindex, follow">' % URL)
 
 # --- less empty space (screen only, so print keeps its own spacing) ---
 sub('<link rel="stylesheet" href="styles.css">\n', '''<link rel="stylesheet" href="styles.css">

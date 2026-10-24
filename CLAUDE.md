@@ -27,9 +27,12 @@ O objetivo é **branding com estrutura interativa**, não uma ferramenta de CFO.
 | Desenho e texto de cada cartucho | `games/carts/*.js` (`classic.js` tem RUNWAY RUN, BOARD FIGHT e DECISIONS) |
 | Consola: controlos, menu, arranque, modo demo, recibo | `games/console.js` (o contrato dos cartuchos está no topo). Fala português quando a página tem `<html lang="pt">`; os quatro cartuchos das clínicas (`agenda`, `blocks`, `spot`, `lanes`) também (as regras com texto têm `setLang`). No menu com até quatro cartuchos aparece uma animação (`#gArt`). O ecrã trabalha em 192×120 e desenha a 2–4× (tamanho do ecrã × densidade), para o texto ficar nítido; `?debug` expõe também `status()` |
 | Música chiptune | `games/music.js` |
+| Fontes (Schibsted Grotesk, Kalam, VT323; OFL), servidas pelo próprio site | `fonts/` (`fonts.css` e os woff2); nenhuma página pede nada a outro site |
+| Mapa do site para os motores de busca (a versão curta fica de fora, tem `noindex`) | `sitemap.xml` |
+| Letras das fontes por ordem de leitura | `tools/refs.py` (o `make_health.py` aplica-o; no `index.html` corre-se à mão: `python tools/refs.py index.html`) |
 | Imagens de partilha 1200×630 | `og.png` (geral), `og-en-health.png` e `og-pt-health.png` (clínicas) |
 
-Um cartucho novo fica num ficheiro de regras mais um `games/carts/<id>.js` que chama `RUNWAY.register({...})`. Depois junta-se o `<script>` no fim do `index.html` e cria-se um teste de bots em `tests/`.
+Um cartucho novo fica num ficheiro de regras mais um `games/carts/<id>.js` que chama `RUNWAY.register({...})`. Depois junta-se o ficheiro à lista `data-games` do `#device` (no `index.html` ou no `make_health.py`, pela ordem de carregamento) e cria-se um teste de bots em `tests/`. O `page.js` carrega os jogos só quando a consola se aproxima do ecrã (logo, com `?debug`).
 
 ## Comandos
 
@@ -37,7 +40,7 @@ Um cartucho novo fica num ficheiro de regras mais um `games/carts/<id>.js` que c
 - Testes, depois de mexer nas regras de um jogo (todos têm de terminar em `OK`):
   `node tests/decisions-balance.js`, `arcade-bots.js` (runner e fight), `maze-bots.js`, `blocks-bots.js`, `spot-bots.js`, `lanes-bots.js`, `agenda-bots.js`
 - Teste de input em tempo real (teclado, toque, swipe, demo), com o servidor local ligado: `node tests/input.js` (versão curta: `node tests/input.js "http://localhost:8765/tests/input.html?page=short.html"`)
-- Teste das quatro páginas (erros, `?co=`, separadores, fontes, largura no telemóvel): `node tests/pages.js`
+- Teste das quatro páginas (erros, `?co=`, separadores, letras por ordem, largura no telemóvel, nenhum pedido a outro site, jogos só perto da consola, sem JavaScript, impressão, link.html): `node tests/pages.js`
 - Teste da consola das clínicas com teclas e toques reais: `node tests/clinic-input.js`
 - Capturas: o browser embutido do Claude costuma estar escondido e corre a menos de 10 fps. Usar o Chrome headless com `?debug&shot=<id>:<segundos>` (acrescentar `&end` para o ecrã final e o recibo), que mostra só a consola, ou com `?debug&from=<secção>`, que mostra a página a partir dessa secção. A janela tem de ter pelo menos 500 px de largura.
 - `?debug` expõe `window.RUNWAY_DEBUG` (`start`, `step(segundos, bot)`, `state`, `menu`).
