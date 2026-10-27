@@ -2,8 +2,10 @@
     health.html  (English)
     saude.html   (Portuguese, PT-PT)
 
-    python tools/make_health.py          # writes both
-    python tools/make_health.py --check  # fails if either is out of date (writes nothing)
+    saude-demo.html, health-demo.html (test pages: the same plus a guided demo, noindex)
+
+    python tools/make_health.py          # writes all four
+    python tools/make_health.py --check  # fails if any is out of date (writes nothing)
 
 The page is for clinic and practice owners (VCLevel work), not for recruiters:
 no CV, four cartridges (FULLY BOOKED on pricing and agreements, CASH FLOW, SPOT THE ERROR,
@@ -514,19 +516,153 @@ window.CONFIG = {
     return relabel(page)
 
 
+# Test pages with a guided demo (saude-demo.html, health-demo.html): the same page plus a demo
+# section between "how" and "path". Not in the sitemap, noindex, and nothing links to them.
+# Screenshots in demo/ come from the client builds of two VCLevel tools, with their own made-up
+# data; the insurer names in f5 were replaced by letters before the capture.
+# Each step: screenshot, highlighted boxes (x y w h, as fractions of the image; ";" between boxes).
+DEMO_STEPS = [
+    ("m1", "0.075 0.115 0.85 0.29"),
+    ("m2", "0.08 0.467 0.85 0.4"),
+    ("m3", "0.075 0.66 0.85 0.25"),
+    ("m4", "0.075 0.52 0.85 0.365"),
+    ("m5", "0.075 0.18 0.85 0.21"),
+    ("m6", "0.075 0.39 0.85 0.18"),
+    ("f1", "0.058 0.235 0.535 0.23"),
+    ("f2", "0.06 0.183 0.88 0.245"),
+    ("f3", "0.06 0.316 0.18 0.178; 0.215 0.775 0.24 0.06"),
+    ("f4", "0.075 0.15 0.85 0.6"),
+    ("f5", "0.078 0.16 0.84 0.425"),
+    ("f6", "0.078 0.195 0.84 0.295"),
+]
+DEMO = dict(
+    en=dict(
+        file="health-demo.html", other="saude-demo.html",
+        when="Demo", h="See how it works",
+        lead="A guided tour of two tools I use with practices: the dashboard for the month that just closed, and the cash forecast for the next 13 weeks.",
+        chaps=["1 · The month that just closed", "2 · The next 13 weeks"],
+        tools=["Practice dashboard", "Practice cash flow · 13 weeks"],
+        steps=[
+            ("Month at a glance", "Revenue, how far it sits above break-even, and how much of it depends on each payer."),
+            ("Alerts in plain words", "The dashboard says what is fine and what is not. Here, the schedule delivers fewer of its booked appointments than the 80% target."),
+            ("No-shows and cancellations", "Month by month: booked, seen, cancelled and missed, and what the lost appointments cost."),
+            ("Actual, budget and last year", "Revenue, costs and profit against the budget and the same month last year, with the gap in euros and in percent."),
+            ("How the year closes", "Three cases for the year, next to the break-even point. The rule behind each case is written under the table."),
+            ("Cash against profit", "When cash does not follow profit, the dashboard shows the gap and says where to look."),
+            ("The answer first", "Can the practice pay everything? The forecast opens with the answer, the lowest balance and the bad case."),
+            ("The same week, twenty times", "The week is run twenty times with what can vary. Each dot shows whether the cash held."),
+            ("What if insurers pay 30 days later?", "One tap tests it. The balance at week 13 drops by €4,053 and the practice still pays everything."),
+            ("Week by week", "What comes in, split into already billed, booked and not yet booked, and what goes out. Most of the uncertainty is the schedule still to fill."),
+            ("Where the margin is", "Each insurer or health plan with what it produces, when it pays and what the wait costs. The figure that decides is the contribution per hour."),
+            ("Assumptions in plain sight", "Until the practice has its own history, the forecast uses reference values. They are all here, ready to be swapped for the real numbers."),
+        ],
+        alt="Screenshot of %s: %s",
+        note="The data is made up and the insurer names are replaced with letters. The tools are in Portuguese; the captions explain each screen. Tap a screenshot to open it full size.",
+        labels=dict(play="▶ Play the demo", playAria="Play the demo", pause="❚❚ Pause"),
+        prev="Previous step", next="Next step", chaps_aria="Parts of the demo", tour_aria="Guided demo",
+    ),
+    pt=dict(
+        file="saude-demo.html", other="health-demo.html",
+        when="Demonstração", h="Veja como funciona",
+        lead="Uma volta guiada por duas ferramentas que uso com as clínicas: o painel do mês que fechou e a tesouraria das próximas 13 semanas.",
+        chaps=["1 · O mês que fechou", "2 · As próximas 13 semanas"],
+        tools=["Painel da clínica", "Tesouraria da clínica · 13 semanas"],
+        steps=[
+            ("O mês num relance", "A receita, a distância ao ponto de equilíbrio e quanto dela depende de cada pagador."),
+            ("Alertas escritos", "O painel diz em frases o que está em ordem e o que não está. Aqui, a agenda realiza menos consultas marcadas do que a meta de 80%."),
+            ("Faltas e desmarcações", "Mês a mês, as consultas marcadas, realizadas, desmarcadas e faltadas, e quanto custaram as que se perderam."),
+            ("Real, orçamento e ano anterior", "Receita, custos e resultado contra o orçamento e contra o mesmo mês do ano passado, com o desvio em euros e em percentagem."),
+            ("Como fecha o ano", "Três cenários para o ano, ao lado do ponto de equilíbrio. A regra de cada cenário está escrita por baixo da tabela."),
+            ("Caixa contra resultado", "Quando a caixa não acompanha o resultado, o painel mostra a diferença e diz onde procurar."),
+            ("A resposta primeiro", "Consegue pagar tudo? A previsão abre com a resposta, o ponto mais baixo do saldo e o mau cenário."),
+            ("A mesma semana, vinte vezes", "A semana corre vinte vezes com o que pode variar. Cada círculo diz se o dinheiro chegou."),
+            ("E se as convenções pagarem 30 dias mais tarde?", "Um toque testa a hipótese. O saldo à semana 13 desce 4.053 € e a clínica continua a pagar tudo."),
+            ("Semana a semana", "O que entra, separado entre já faturado, na agenda e por marcar, e o que sai. Quase toda a incerteza vem da agenda por encher."),
+            ("Onde está a margem", "Cada convenção com o que produz, quando paga e quanto custa esperar. A conta que decide é a contribuição por hora."),
+            ("Pressupostos à vista", "Enquanto a clínica não tem histórico, a previsão usa valores de referência. Estão todos aqui e trocam-se pelos números reais."),
+        ],
+        alt="Captura de %s: %s",
+        note="Os dados são fictícios e os nomes das convenções foram trocados por letras. Toque numa captura para a abrir inteira.",
+        labels=dict(play="▶ Ver a demonstração", playAria="Ver a demonstração", pause="❚❚ Pausa"),
+        prev="Passo anterior", next="Passo seguinte", chaps_aria="Partes da demonstração", tour_aria="Demonstração guiada",
+    ),
+)
+
+
+def demo_section(d):
+    import json
+    items = []
+    for i, ((shot, box), (title, text)) in enumerate(zip(DEMO_STEPS, d["steps"])):
+        tool = d["tools"][0 if shot[0] == "m" else 1]
+        marks = "".join('<b class="tour-box" style="left:%s%%;top:%s%%;width:%s%%;height:%s%%"></b>'
+                        % tuple(("%g" % (float(v) * 100)) for v in b.split()) for b in box.split(";"))
+        items.append('''      <li class="tour-step" data-box="%s">
+        <figure>
+          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · %s</span></div>
+            <div class="tour-view"><div class="tour-layer"><a href="demo/%s.webp" target="_blank" rel="noopener"><img src="demo/%s.webp" width="1800" height="1125" loading="%s" alt="%s"></a>%s</div></div>
+          </div>
+          <figcaption><span class="tour-n">%d / %d</span><b>%s</b>%s</figcaption>
+        </figure>
+      </li>''' % (box, tool, shot, shot, "eager" if i == 0 else "lazy", d["alt"] % (tool, title), marks, i + 1, len(DEMO_STEPS), title, text))
+    return '''<section class="chap wrap" id="demo">
+  <div class="chap-head rev">
+    <span class="when">%s</span>
+    <h2>%s</h2>
+  </div>
+  <p class="how-lead rev">%s</p>
+  <div class="tour" id="tour" role="group" aria-label="%s" data-labels='%s'>
+    <div class="tour-chaps" role="group" aria-label="%s"><button type="button" data-chap="0" aria-pressed="true">%s</button><button type="button" data-chap="6" aria-pressed="false">%s</button></div>
+    <div class="tour-ctl">
+      <button type="button" id="tourPrev" aria-label="%s">◀</button>
+      <button type="button" id="tourPlay">%s</button>
+      <button type="button" id="tourNext" aria-label="%s">▶</button>
+      <div class="tour-track" aria-hidden="true"><i id="tourBar"></i></div>
+      <output id="tourCount">1 / %d</output>
+    </div>
+    <ol class="tour-steps" aria-live="polite">
+%s
+    </ol>
+  </div>
+  <p class="tour-note">%s</p>
+</section>
+
+''' % (d["when"], d["h"], d["lead"], d["tour_aria"], json.dumps(d["labels"], ensure_ascii=False), d["chaps_aria"], d["chaps"][0], d["chaps"][1],
+       d["prev"], d["labels"]["play"], d["next"], len(DEMO_STEPS), "\n".join(items), d["note"])
+
+
+def build_demo(t, page):
+    d = DEMO[t["lang"]]
+    for line in re.findall(r'<link rel="(?:canonical|alternate)"[^>]*>\n', page):
+        page = page.replace(line, "")
+    page = page.replace('<meta name="viewport"', '<meta name="robots" content="noindex, nofollow">\n<meta name="viewport"', 1)
+    page = page.replace('content="%s%s"' % (URL, t["file"]), 'content="%s%s"' % (URL, d["file"]))
+    page = page.replace('href="%s"' % t["other"], 'href="%s"' % d["other"])
+    page = page.replace('<link rel="stylesheet" href="styles.css">', '<link rel="stylesheet" href="styles.css">\n<link rel="stylesheet" href="demo/tour.css">', 1)
+    page = page.replace('<script src="page.js"></script>', '<script src="page.js"></script>\n<script src="demo/tour.js"></script>', 1)
+    page = page.replace('<section class="chap wrap" id="path">', demo_section(d) + '<section class="chap wrap" id="path">', 1)
+    return page
+
+
+def write(out, s, bad):
+    name = os.path.basename(out)
+    if "--check" in sys.argv:
+        cur = open(out, encoding="utf-8").read().replace("\r\n", "\n") if os.path.exists(out) else ""
+        if cur != s:
+            bad.append(name)
+    else:
+        open(out, "w", encoding="utf-8", newline="\n").write(s)
+        print(name, "written,", len(s.splitlines()), "lines")
+
+
 bad = []
 for key in ("en", "pt"):
     t = T[key]
     out = os.path.join(ROOT, t["file"])
     s = build(t)
-    if "--check" in sys.argv:
-        cur = open(out, encoding="utf-8").read().replace("\r\n", "\n") if os.path.exists(out) else ""
-        if cur != s:
-            bad.append(t["file"])
-    else:
-        open(out, "w", encoding="utf-8", newline="\n").write(s)
-        print(t["file"], "written,", len(s.splitlines()), "lines")
+    pages = [(out, s), (os.path.join(ROOT, DEMO[key]["file"]), build_demo(t, s))]
+    for out, s in pages:
+        write(out, s, bad)
 if "--check" in sys.argv:
     if bad:
         stop(", ".join(bad) + " out of date: run python tools/make_health.py")
-    print("health.html and saude.html are up to date")
+    print("health.html, saude.html and the two demo pages are up to date")

@@ -1,4 +1,4 @@
-// Checks the four pages in a real Chrome, with the local server on:
+// Checks the pages (and the two demo test pages) in a real Chrome, with the local server on:
 //   python -m http.server 8765      then      node tests/pages.js
 // For each page, at desktop and phone width: no script errors, the ?co= greeting,
 // the case tabs, every circled letter has its source (in reading order), and no sideways scroll.
@@ -7,7 +7,7 @@
 const { spawn } = require("child_process"), os = require("os"), path = require("path");
 const BASE = process.argv[2] || "http://localhost:8765/";
 const PORT = 9000 + Math.floor(Math.random()*300);   // a fresh port and profile each run
-const PAGES = ["index.html", "short.html", "health.html", "saude.html"];
+const PAGES = ["index.html", "short.html", "health.html", "saude.html", "health-demo.html", "saude-demo.html"];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const chrome = spawn("C:/Program Files/Google/Chrome/Application/chrome.exe", ["--headless=new", "--disable-gpu",
   "--remote-debugging-port=" + PORT, "--window-size=1280,800", "--user-data-dir=" + path.join(os.tmpdir(), "pages-" + PORT), "about:blank"], { stdio: "ignore" });
@@ -95,6 +95,36 @@ const CHECK = `(async function(){
   const want = { "": /the-audit-trail\/\?co=Acme\+%26\+Co&why=Because$/, "short.html": /short\.html\?co=Acme\+%26\+Co&why=Because$/,
     "saude.html": /saude\.html\?co=Acme\+%26\+Co$/, "health.html": /health\.html\?co=Acme\+%26\+Co$/ };
   for (const [v, url, off] of links) ok(want[v] && want[v].test(url) && off === /health|saude/.test(v), "link.html: " + (v || "full") + " link", url);
+  // the demo test pages: noindex, one step at a time, the buttons move it, play advances, every screenshot loads
+  for (const p of ["saude-demo.html", "health-demo.html"]) {
+    await send("Page.navigate", { url: BASE + p }); await sleep(900);
+    const d = await js(`(async function(){
+      var wait = function(ms){ return new Promise(function(r){ setTimeout(r, ms) }) };
+      var shown = function(){ return [].map.call(document.querySelectorAll(".tour-step"), function(li, i){ return li.hidden ? -1 : i }).filter(function(i){ return i >= 0 }) };
+      var o = { noindex: !!document.querySelector('meta[name="robots"][content*="noindex"]'), canonical: !!document.querySelector('link[rel="canonical"]'),
+                steps: document.querySelectorAll(".tour-step").length, first: shown().join() };
+      document.getElementById("tourNext").click(); o.next = shown().join();
+      document.getElementById("tourPrev").click(); document.getElementById("tourPrev").click(); o.prev = shown().join();
+      document.querySelector('[data-chap="6"]').click(); o.chap = shown().join() + ":" + document.querySelector('[data-chap="6"]').getAttribute("aria-pressed");
+      document.querySelector('[data-chap="0"]').click();
+      document.getElementById("tourPlay").click(); await wait(7600); o.played = shown().join();
+      document.getElementById("tourPlay").click(); await wait(300);
+      o.zoom = document.querySelector(".tour-step:not([hidden]) .tour-layer").style.transform;
+      var imgs = [].slice.call(document.querySelectorAll(".tour-step img"));
+      imgs.forEach(function(i){ i.loading = "eager" });
+      await Promise.all(imgs.map(function(i){ return i.complete ? 0 : new Promise(function(r){ i.onload = i.onerror = r }) }));
+      o.loaded = imgs.filter(function(i){ return i.naturalWidth === 1800 }).length;
+      return o })()`);
+    ok(d.noindex && !d.canonical, p + ": noindex and no canonical");
+    ok(d.steps === 12 && d.first === "0" && d.next === "1" && d.prev === "11" && d.chap === "6:true", p + ": one step at a time; previous, next and parts work", JSON.stringify(d));
+    ok(d.played === "1" && /scale/.test(d.zoom), p + ": play moves on and zooms", d.played + " " + d.zoom);
+    ok(d.loaded === 12, p + ": all 12 screenshots load", d.loaded + "/12");
+    await send("Emulation.setScriptExecutionDisabled", { value: true });
+    await send("Page.navigate", { url: BASE + p }); await sleep(900);
+    await send("Emulation.setScriptExecutionDisabled", { value: false });
+    const nj = await js(`[].filter.call(document.querySelectorAll(".tour-step"), function(li){ return li.offsetHeight > 0 }).length`);
+    ok(nj === 12, p + ": without JavaScript every step is listed", nj + "/12");
+  }
   console.log(fails ? "\n" + fails + " FAILED" : "\nOK: all pages work.");
   ws.close(); chrome.kill(); process.exit(fails ? 1 : 0);
 })();
