@@ -22,6 +22,7 @@ O objetivo é **branding com estrutura interativa**, não uma ferramenta de CFO.
 | Comportamento da página (saudação `?co=`, popovers, separadores dos casos, revelação) | `page.js`, partilhado por todas as versões; tudo verifica se o elemento existe |
 | Versão curta | `short.html`, gerada por `python tools/make_short.py`; nunca editar à mão. Depois de mexer no `index.html`: regenerar e confirmar com `python tools/make_short.py --check`. Se o script parar por causa dos capítulos PwC, atualizar o capítulo junto no script e o `SOURCE_HASH` |
 | Páginas para clínicas (clientes VCLevel, não recrutadores): EN e PT-PT | `health.html` e `saude.html`, geradas por `python tools/make_health.py` (e `--check`); nunca editar à mão. Os casos em inglês vêm do `index.html`; os portugueses estão no script, e o `CASES_HASH` obriga a atualizá-los quando os casos mudam |
+| Páginas de teste com demonstração guiada (as mesmas das clínicas e mais uma secção entre «como trabalho» e o percurso); `noindex`, fora do sitemap, sem ligações a partir das outras | `saude-demo.html` e `health-demo.html`, geradas pelo mesmo `make_health.py` (`DEMO_STEPS` e `DEMO`). Capturas, leitor e estilos em `demo/` (`tour.js`, `tour.css`); as capturas vêm das versões para clientes de duas ferramentas da VCLevel, com os dados fictícios delas e sem nomes de seguradoras |
 | Gerador de links por empresa | `link.html` (versões completa, curta e clínicas PT/EN) |
 | Regras de cada jogo (sem DOM, com seed) | `games/decisions.js`, `runner.js`, `fight.js`, `maze.js`, `blocks.js`, `spot.js`, `lanes.js`, `agenda.js` (AGENDA CHEIA / FULLY BOOKED: preço, convenções e agenda; só nas páginas das clínicas) |
 | Desenho e texto de cada cartucho | `games/carts/*.js` (`classic.js` tem RUNWAY RUN, BOARD FIGHT e DECISIONS) |
@@ -40,7 +41,7 @@ Um cartucho novo fica num ficheiro de regras mais um `games/carts/<id>.js` que c
 - Testes, depois de mexer nas regras de um jogo (todos têm de terminar em `OK`):
   `node tests/decisions-balance.js`, `arcade-bots.js` (runner e fight), `maze-bots.js`, `blocks-bots.js`, `spot-bots.js`, `lanes-bots.js`, `agenda-bots.js`
 - Teste de input em tempo real (teclado, toque, swipe, demo), com o servidor local ligado: `node tests/input.js` (versão curta: `node tests/input.js "http://localhost:8765/tests/input.html?page=short.html"`)
-- Teste das quatro páginas (erros, `?co=`, separadores, letras por ordem, largura no telemóvel, nenhum pedido a outro site, jogos só perto da consola, sem JavaScript, impressão, link.html): `node tests/pages.js`
+- Teste das páginas, incluindo as duas de demonstração (erros, `?co=`, separadores, letras por ordem, largura no telemóvel, nenhum pedido a outro site, jogos só perto da consola, sem JavaScript, impressão, link.html): `node tests/pages.js`
 - Teste da consola das clínicas com teclas e toques reais: `node tests/clinic-input.js`
 - Capturas: o browser embutido do Claude costuma estar escondido e corre a menos de 10 fps. Usar o Chrome headless com `?debug&shot=<id>:<segundos>` (acrescentar `&end` para o ecrã final e o recibo), que mostra só a consola, ou com `?debug&from=<secção>`, que mostra a página a partir dessa secção. A janela tem de ter pelo menos 500 px de largura.
 - `?debug` expõe `window.RUNWAY_DEBUG` (`start`, `step(segundos, bot)`, `state`, `menu`).
