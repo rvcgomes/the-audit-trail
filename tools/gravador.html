@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Gravador da demonstração</title>
+<!-- Local tool, not on the site (_config.yml leaves tools/ out).
+     Open it with the local server on: python -m http.server 8765, then http://localhost:8765/tools/gravador.html
+     Reads the script (data-say) and the screenshots from the demo page, records one clip per step
+     (square 480 x 480, small bitrate) and saves it as demo/video/<pt|en>/sNN.mp4 (or .webm).
+     Then run python tools/make_health.py: the demo page picks up the clips once all twelve exist. -->
+<style>
+  :root{--paper:#F2F2F2;--ink:#0C271F;--muted:#46584F;--rule:#D5D9CB;--pencil:#50793F;--red:#8B2635}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,"Segoe UI",sans-serif}
+  header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--rule);background:#fff}
+  header h1{font-size:1.1rem;margin:0 12px 0 0}
+  main{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:20px;padding:20px;max-width:1300px;margin:0 auto}
+  @media (max-width:860px){main{grid-template-columns:1fr}}
+  .cam{position:relative;aspect-ratio:1;background:#000;border-radius:50%;overflow:hidden;border:4px solid #fff;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+  .cam canvas,.cam video{width:100%;height:100%;object-fit:cover;display:block}
+  .cam canvas{transform:scaleX(-1)}
+  .cam video{position:absolute;inset:0}
+  .count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:6rem;font-weight:800;color:#fff;text-shadow:0 2px 12px #000}
+  .rec{position:absolute;top:10%;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-weight:700;border-radius:999px;padding:2px 12px;font-size:.9rem}
+  .prompt{font-size:clamp(1.3rem,2.4vw,2rem);line-height:1.45;font-weight:600;margin:6px 0 14px;max-width:46ch}
+  .shot{width:100%;max-width:640px;border:1px solid var(--rule);border-radius:6px;display:block}
+  .meta{color:var(--muted);font-size:.95rem}
+  button,select{font:inherit;min-height:44px;padding:8px 16px;border-radius:4px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+  button.go{background:var(--pencil);border-color:var(--pencil);color:#fff;font-weight:700}
+  button.stop{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}
+  button:disabled{opacity:.4;cursor:default}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+  ol.list{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+  ol.list button{min-height:36px;padding:4px 10px;font-size:.9rem}
+  ol.list button.on{background:var(--ink);color:#fff}
+  ol.list button.done::after{content:" ✓";color:var(--pencil);font-weight:700}
+  ol.list button.on.done::after{color:#8CB979}
+  .tips{font-size:.9rem;color:var(--muted);max-width:60ch}
+  #msg{font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>Gravador da demonstração</h1>
+  <label>Língua <select id="lang"><option value="pt">Português</option><option value="en">English</option></select></label>
+  <button type="button" id="folder">Escolher a pasta do site</button>
+  <span class="meta" id="where">Sem pasta escolhida: os ficheiros vão para Transferências.</span>
+</header>
+<main>
+  <section>
+    <div class="cam"><canvas id="cv" width="480" height="480"></canvas><video id="take" playsinline hidden></video><div class="count" id="count" hidden></div><span class="rec" id="rec" hidden>● a gravar</span></div>
+    <div class="row">
+      <button type="button" class="go" id="go">⏺ Gravar (espaço)</button>
+      <button type="button" id="listen" disabled>▶ Ouvir</button>
+      <button type="button" id="save" disabled>Guardar</button>
+    </div>
+    <p id="msg" aria-live="polite"></p>
+    <p class="tips">Luz de frente, fundo simples, câmara à altura dos olhos. Olhe para a câmara, não para o texto, e fale como numa conversa: pode dizer por palavras suas, desde que os números fiquem certos. Espere meio segundo antes de começar e no fim. Para parar, carregue em espaço.</p>
+  </section>
+  <section>
+    <p class="meta"><span id="pos"></span> · <span id="secs"></span></p>
+    <h2 id="title" style="margin:0"></h2>
+    <p class="prompt" id="say"></p>
+    <img class="shot" id="shot" alt="">
+    <div class="row"><button type="button" id="prev">◀ Anterior</button><button type="button" id="next">Seguinte ▶</button></div>
+    <ol class="list" id="list"></ol>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id) };
+  var steps = [], cur = 0, lang = "pt", dir = null, stream = null, cam = document.createElement("video");
+  var rec = null, chunks = [], blob = null, recording = false, t0 = 0, tick = 0;
+  var TYPES = ["video/mp4;codecs=avc1.42E01E,mp4a.40.2", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm"];
+  var type = TYPES.filter(function (t) { return window.MediaRecorder && MediaRecorder.isTypeSupported(t) })[0] || "";
+  var ext = /mp4/.test(type) ? "mp4" : "webm";
+  var msg = function (t) { $("msg").textContent = t };
+  var name = function (i) { return "s" + (i < 9 ? "0" : "") + (i + 1) + "." + ext };
+
+  function load() {
+    var page = lang === "pt" ? "../saude-demo.html" : "../health-demo.html";
+    return fetch(page).then(function (r) { return r.text() }).then(function (h) {
+      var doc = new DOMParser().parseFromString(h, "text/html");
+      steps = [].map.call(doc.querySelectorAll(".tour-step"), function (li) {
+        return { say: li.getAttribute("data-say"), title: li.querySelector("figcaption b").textContent,
+                 img: "../" + li.querySelector("img").getAttribute("src"), done: false };
+      });
+      return Promise.all(steps.map(function (s, i) {
+        return fetch("../demo/video/" + lang + "/" + name(i), { method: "HEAD" }).then(function (r) { s.done = r.ok }, function () {});
+      }));
+    }).then(function () { show(0) });
+  }
+
+  function show(i) {
+    if (recording) return;
+    cur = Math.max(0, Math.min(steps.length - 1, i));
+    var s = steps[cur];
+    $("pos").textContent = "Passo " + (cur + 1) + " de " + steps.length;
+    $("secs").textContent = "cerca de " + Math.round(s.say.split(/\s+/).length / 2.6) + " s a falar";
+    $("title").textContent = s.title; $("say").textContent = s.say; $("shot").src = s.img;
+    $("list").innerHTML = "";
+    steps.forEach(function (x, k) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = k + 1;
+      b.className = (k === cur ? "on " : "") + (x.done ? "done" : "");
+      b.onclick = function () { show(k) };
+      var li = document.createElement("li"); li.appendChild(b); $("list").appendChild(li);
+    });
+    blob = null; $("listen").disabled = true; $("save").disabled = true;
+    $("take").hidden = true; $("take").pause();
+    msg(s.done ? "Este passo já tem vídeo. Pode gravar de novo por cima." : "");
+  }
+
+  // the camera, cropped to a square in the canvas; the canvas is what gets recorded
+  function camera() {
+    return navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" },
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+    }).then(function (s) {
+      stream = s; cam.srcObject = s; cam.muted = true; cam.playsInline = true; return cam.play();
+    }).then(function () {
+      var cv = $("cv"), ctx = cv.getContext("2d");
+      (function draw() {
+        var w = cam.videoWidth, h = cam.videoHeight, m = Math.min(w, h);
+        if (m) ctx.drawImage(cam, (w - m) / 2, (h - m) / 2, m, m, 0, 0, cv.width, cv.height);
+        requestAnimationFrame(draw);
+      })();
+    });
+  }
+
+  function countdown(n, done) {
+    $("count").hidden = false; $("count").textContent = n;
+    if (!n) { $("count").hidden = true; return done() }
+    setTimeout(function () { countdown(n - 1, done) }, 800);
+  }
+
+  function start() {
+    if (!stream) return;
+    $("take").hidden = true; $("take").pause();
+    $("go").disabled = true;
+    countdown(3, function () {
+      var out = $("cv").captureStream(30);
+      stream.getAudioTracks().forEach(function (t) { out.addTrack(t) });
+      chunks = [];
+      rec = new MediaRecorder(out, { mimeType: type, videoBitsPerSecond: 600000, audioBitsPerSecond: 64000 });
+      rec.ondataavailable = function (e) { if (e.data.size) chunks.push(e.data) };
+      rec.onstop = function () {
+        blob = new Blob(chunks, { type: type.split(";")[0] });
+        $("listen").disabled = false; $("save").disabled = false;
+        msg("Gravado: " + ((Date.now() - t0) / 1000).toFixed(1) + " s, " + Math.round(blob.size / 1024) + " KB. Ouça e guarde, ou grave de novo.");
+      };
+      rec.start(); recording = true; t0 = Date.now();
+      $("rec").hidden = false; $("go").disabled = false;
+      $("go").textContent = "⏹ Parar (espaço)"; $("go").className = "stop";
+      tick = setInterval(function () { $("rec").textContent = "● a gravar " + Math.floor((Date.now() - t0) / 1000) + " s" }, 250);
+    });
+  }
+
+  function stop() {
+    recording = false; clearInterval(tick);
+    rec.stop(); $("rec").hidden = true;
+    $("go").textContent = "⏺ Gravar de novo (espaço)"; $("go").className = "go";
+  }
+
+  function save() {
+    if (!blob) return;
+    var file = name(cur), s = steps[cur];
+    var after = function () { s.done = true; show(cur + 1); msg(file + " guardado. Segue o passo " + (cur + 1) + "."); };
+    if (dir) {
+      dir.getDirectoryHandle("demo", { create: true })
+        .then(function (d) { return d.getDirectoryHandle("video", { create: true }) })
+        .then(function (d) { return d.getDirectoryHandle(lang, { create: true }) })
+        .then(function (d) { return d.getFileHandle(file, { create: true }) })
+        .then(function (f) { return f.createWritable() })
+        .then(function (w) { return w.write(blob).then(function () { return w.close() }) })
+        .then(after, function (e) { msg("Não consegui guardar na pasta: " + e.message) });
+    } else {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = lang + "-" + file;
+      document.body.appendChild(a); a.click(); a.remove(); after();
+    }
+  }
+
+  $("go").onclick = function () { if (recording) stop(); else start() };
+  $("listen").onclick = function () { var v = $("take"); v.src = URL.createObjectURL(blob); v.hidden = false; v.play() };
+  $("save").onclick = save;
+  $("prev").onclick = function () { show(cur - 1) };
+  $("next").onclick = function () { show(cur + 1) };
+  $("lang").onchange = function () { lang = this.value; load() };
+  $("folder").onclick = function () {
+    if (!window.showDirectoryPicker) { msg("Este browser não deixa escolher pastas: os ficheiros vão para Transferências."); return }
+    window.showDirectoryPicker({ mode: "readwrite" }).then(function (d) {
+      dir = d; $("where").textContent = "Guarda em " + d.name + "/demo/video/<língua>/ (escolha a pasta the-audit-trail).";
+    }, function () {});
+  };
+  document.addEventListener("keydown", function (e) {
+    if (e.code === "Space" && e.target.tagName !== "BUTTON" && e.target.tagName !== "SELECT") { e.preventDefault(); $("go").click() }
+  });
+
+  if (!type) msg("Este browser não grava vídeo. Use o Chrome.");
+  load().then(camera).catch(function (e) { msg("Sem câmara ou sem microfone: " + e.message) });
+})();
+</script>
+</body>
+</html>

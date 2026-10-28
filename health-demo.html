@@ -185,113 +185,119 @@ window.CONFIG = {
     <h2>See how it works</h2>
   </div>
   <p class="how-lead rev">A guided tour of two tools I use with practices: the dashboard for the month that just closed, and the cash forecast for the next 13 weeks.</p>
-  <div class="tour" id="tour" role="group" aria-label="Guided demo" data-labels='{"play": "▶ Play the demo", "playAria": "Play the demo", "pause": "❚❚ Pause"}'>
+  <div class="tour" id="tour" role="group" aria-label="Guided demo" data-labels='{"play": "▶ Play the demo", "playAria": "Play the demo", "pause": "❚❚ Pause", "subs": "Subtitles", "sound": "Sound", "face": "Rui Gomes", "todo": "video to record"}' data-video="" data-ext="">
     <div class="tour-chaps" role="group" aria-label="Parts of the demo"><button type="button" data-chap="0" aria-pressed="true">1 · The month that just closed</button><button type="button" data-chap="6" aria-pressed="false">2 · The next 13 weeks</button></div>
     <div class="tour-ctl">
       <button type="button" id="tourPrev" aria-label="Previous step">◀</button>
       <button type="button" id="tourPlay">▶ Play the demo</button>
-      <button type="button" id="tourNext" aria-label="Next step">▶</button>
+      <button type="button" id="tourNext" aria-label="Next step">Next ▶</button>
       <div class="tour-track" aria-hidden="true"><i id="tourBar"></i></div>
       <output id="tourCount">1 / 12</output>
+      <button type="button" class="tour-opt" id="tourSubs" aria-pressed="false">Subtitles</button>
+      <button type="button" class="tour-opt" id="tourSound" aria-pressed="true" hidden>Sound</button>
     </div>
+    <div class="tour-stage">
     <ol class="tour-steps" aria-live="polite">
-      <li class="tour-step" data-box="0.075 0.115 0.85 0.29">
+      <li class="tour-step" data-box="0.075 0.187 0.85 0.29" data-say="Hi, I&#x27;m Rui Gomes. I&#x27;ll show you two tools I use with practices. The first is the monthly dashboard: revenue, how far it sits above break-even, and how much depends on each payer.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice dashboard</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m1.webp" target="_blank" rel="noopener"><img src="demo/m1.webp" width="1800" height="1125" loading="eager" alt="Screenshot of Practice dashboard: Month at a glance"></a><b class="tour-box" style="left:7.5%;top:11.5%;width:85%;height:29%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m1.webp" target="_blank" rel="noopener"><img src="demo/m1.webp" width="1800" height="1125" loading="eager" alt="Screenshot of Practice dashboard: Month at a glance"></a><b class="tour-box" style="left:7.5%;top:18.7%;width:85%;height:29%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">1 / 12</span><b>Month at a glance</b>Revenue, how far it sits above break-even, and how much of it depends on each payer.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.08 0.467 0.85 0.4">
+      <li class="tour-step" data-box="0.08 0.539 0.85 0.4" data-say="Alerts come in plain sentences. Almost everything here is fine, but the schedule only delivers two thirds of booked appointments, below the 80% target.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice dashboard</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m2.webp" target="_blank" rel="noopener"><img src="demo/m2.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: Alerts in plain words"></a><b class="tour-box" style="left:8%;top:46.7%;width:85%;height:40%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m2.webp" target="_blank" rel="noopener"><img src="demo/m2.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: Alerts in plain words"></a><b class="tour-box" style="left:8%;top:53.9%;width:85%;height:40%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">2 / 12</span><b>Alerts in plain words</b>The dashboard says what is fine and what is not. Here, the schedule delivers fewer of its booked appointments than the 80% target.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.66 0.85 0.25">
+      <li class="tour-step" data-box="0.075 0.732 0.85 0.25" data-say="Why? No-shows and cancellations. Month by month you see how many there were and what the lost appointments cost. That is where the talk with the front desk starts.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice dashboard</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m3.webp" target="_blank" rel="noopener"><img src="demo/m3.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: No-shows and cancellations"></a><b class="tour-box" style="left:7.5%;top:66%;width:85%;height:25%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m3.webp" target="_blank" rel="noopener"><img src="demo/m3.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: No-shows and cancellations"></a><b class="tour-box" style="left:7.5%;top:73.2%;width:85%;height:25%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">3 / 12</span><b>No-shows and cancellations</b>Month by month: booked, seen, cancelled and missed, and what the lost appointments cost.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.52 0.85 0.365">
+      <li class="tour-step" data-box="0.075 0.592 0.85 0.365" data-say="Then actuals against the budget and against the same month last year, with the gap in euros and in percent, line by line.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice dashboard</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m4.webp" target="_blank" rel="noopener"><img src="demo/m4.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: Actual, budget and last year"></a><b class="tour-box" style="left:7.5%;top:52%;width:85%;height:36.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m4.webp" target="_blank" rel="noopener"><img src="demo/m4.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: Actual, budget and last year"></a><b class="tour-box" style="left:7.5%;top:59.2%;width:85%;height:36.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">4 / 12</span><b>Actual, budget and last year</b>Revenue, costs and profit against the budget and the same month last year, with the gap in euros and in percent.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.18 0.85 0.21">
+      <li class="tour-step" data-box="0.075 0.252 0.85 0.21" data-say="How will the year close? Three cases, next to the break-even point. The rule behind each case is written under the table.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice dashboard</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m5.webp" target="_blank" rel="noopener"><img src="demo/m5.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: How the year closes"></a><b class="tour-box" style="left:7.5%;top:18%;width:85%;height:21%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m5.webp" target="_blank" rel="noopener"><img src="demo/m5.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: How the year closes"></a><b class="tour-box" style="left:7.5%;top:25.2%;width:85%;height:21%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">5 / 12</span><b>How the year closes</b>Three cases for the year, next to the break-even point. The rule behind each case is written under the table.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.39 0.85 0.18">
+      <li class="tour-step" data-box="0.075 0.462 0.85 0.18" data-say="And when cash does not follow profit, the dashboard shows the gap and says where to look: investment, debt, VAT or payment terms.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice dashboard</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m6.webp" target="_blank" rel="noopener"><img src="demo/m6.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: Cash against profit"></a><b class="tour-box" style="left:7.5%;top:39%;width:85%;height:18%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m6.webp" target="_blank" rel="noopener"><img src="demo/m6.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice dashboard: Cash against profit"></a><b class="tour-box" style="left:7.5%;top:46.2%;width:85%;height:18%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">6 / 12</span><b>Cash against profit</b>When cash does not follow profit, the dashboard shows the gap and says where to look.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.058 0.235 0.535 0.23">
+      <li class="tour-step" data-box="0.058 0.235 0.535 0.23" data-say="The second tool looks ahead: cash for the next thirteen weeks. It opens with the answer to the question that matters. Can the practice pay everything?">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice cash flow · 13 weeks</span></div>
+          <div class="tour-win">
             <div class="tour-view"><div class="tour-layer"><a href="demo/f1.webp" target="_blank" rel="noopener"><img src="demo/f1.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: The answer first"></a><b class="tour-box" style="left:5.8%;top:23.5%;width:53.5%;height:23%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">7 / 12</span><b>The answer first</b>Can the practice pay everything? The forecast opens with the answer, the lowest balance and the bad case.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.06 0.183 0.88 0.245">
+      <li class="tour-step" data-box="0.06 0.383 0.88 0.245" data-say="The same week runs twenty times, with what can vary. Each dot shows whether the cash held. Here it held in all twenty.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice cash flow · 13 weeks</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f2.webp" target="_blank" rel="noopener"><img src="demo/f2.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: The same week, twenty times"></a><b class="tour-box" style="left:6%;top:18.3%;width:88%;height:24.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f2.webp" target="_blank" rel="noopener"><img src="demo/f2.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: The same week, twenty times"></a><b class="tour-box" style="left:6%;top:38.3%;width:88%;height:24.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">8 / 12</span><b>The same week, twenty times</b>The week is run twenty times with what can vary. Each dot shows whether the cash held.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.06 0.316 0.18 0.178; 0.215 0.775 0.24 0.06">
+      <li class="tour-step" data-box="0.06 0.388 0.18 0.178; 0.215 0.847 0.24 0.06" data-say="What if insurers and health plans pay thirty days later? One tap shows it: the balance drops by about four thousand euros and the practice still pays everything.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice cash flow · 13 weeks</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f3.webp" target="_blank" rel="noopener"><img src="demo/f3.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: What if insurers pay 30 days later?"></a><b class="tour-box" style="left:6%;top:31.6%;width:18%;height:17.8%"></b><b class="tour-box" style="left:21.5%;top:77.5%;width:24%;height:6%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f3.webp" target="_blank" rel="noopener"><img src="demo/f3.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: What if insurers pay 30 days later?"></a><b class="tour-box" style="left:6%;top:38.8%;width:18%;height:17.8%"></b><b class="tour-box" style="left:21.5%;top:84.7%;width:24%;height:6%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">9 / 12</span><b>What if insurers pay 30 days later?</b>One tap tests it. The balance at week 13 drops by €4,053 and the practice still pays everything.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.15 0.85 0.6">
+      <li class="tour-step" data-box="0.075 0.222 0.85 0.6" data-say="Week by week, what comes in, split into already billed, booked and not yet booked. Almost all the uncertainty is the schedule still to fill.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice cash flow · 13 weeks</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f4.webp" target="_blank" rel="noopener"><img src="demo/f4.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: Week by week"></a><b class="tour-box" style="left:7.5%;top:15%;width:85%;height:60%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f4.webp" target="_blank" rel="noopener"><img src="demo/f4.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: Week by week"></a><b class="tour-box" style="left:7.5%;top:22.2%;width:85%;height:60%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">10 / 12</span><b>Week by week</b>What comes in, split into already billed, booked and not yet booked, and what goes out. Most of the uncertainty is the schedule still to fill.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.078 0.16 0.84 0.425">
+      <li class="tour-step" data-box="0.078 0.232 0.84 0.425" data-say="Here is the margin of each insurer or health plan: what it produces, when it pays and what the wait costs. The figure that decides is the contribution per hour.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice cash flow · 13 weeks</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f5.webp" target="_blank" rel="noopener"><img src="demo/f5.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: Where the margin is"></a><b class="tour-box" style="left:7.8%;top:16%;width:84%;height:42.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f5.webp" target="_blank" rel="noopener"><img src="demo/f5.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: Where the margin is"></a><b class="tour-box" style="left:7.8%;top:23.2%;width:84%;height:42.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">11 / 12</span><b>Where the margin is</b>Each insurer or health plan with what it produces, when it pays and what the wait costs. The figure that decides is the contribution per hour.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.078 0.195 0.84 0.295">
+      <li class="tour-step" data-box="0.078 0.267 0.84 0.295" data-say="Every assumption is in plain sight, ready to be swapped for your practice&#x27;s numbers. If you&#x27;d like to see this with your own data, book a call with me.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Practice cash flow · 13 weeks</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f6.webp" target="_blank" rel="noopener"><img src="demo/f6.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: Assumptions in plain sight"></a><b class="tour-box" style="left:7.8%;top:19.5%;width:84%;height:29.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f6.webp" target="_blank" rel="noopener"><img src="demo/f6.webp" width="1800" height="1125" loading="lazy" alt="Screenshot of Practice cash flow · 13 weeks: Assumptions in plain sight"></a><b class="tour-box" style="left:7.8%;top:26.7%;width:84%;height:29.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">12 / 12</span><b>Assumptions in plain sight</b>Until the practice has its own history, the forecast uses reference values. They are all here, ready to be swapped for the real numbers.</figcaption>
         </figure>
       </li>
     </ol>
+    <div class="tour-face" id="tourFace" hidden><video id="tourVid" playsinline preload="none" aria-label="Rui Gomes"></video><span class="tour-face-ph" aria-hidden="true">RG<small>video to record</small></span></div>
+    </div>
+    <p class="tour-sub" id="tourSub" hidden></p>
   </div>
   <p class="tour-note">The data is made up and the insurer names are replaced with letters. The tools are in Portuguese; the captions explain each screen. Tap a screenshot to open it full size.</p>
 </section>
