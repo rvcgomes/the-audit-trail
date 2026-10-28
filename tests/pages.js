@@ -107,8 +107,15 @@ const CHECK = `(async function(){
       document.getElementById("tourPrev").click(); document.getElementById("tourPrev").click(); o.prev = shown().join();
       document.querySelector('[data-chap="6"]').click(); o.chap = shown().join() + ":" + document.querySelector('[data-chap="6"]').getAttribute("aria-pressed");
       document.querySelector('[data-chap="0"]').click();
-      document.getElementById("tourPlay").click(); await wait(7600); o.played = shown().join();
-      document.getElementById("tourPlay").click(); await wait(300);
+      // without the clips: the placeholder face, the script as subtitles, each step as long as its script
+      var face = document.getElementById("tourFace"), sub = document.getElementById("tourSub");
+      o.face = !face.hidden && (face.classList.contains("ph") || !!document.querySelector("#tour[data-video]:not([data-video=''])"));
+      o.sub = !sub.hidden && sub.textContent === document.querySelector(".tour-step").getAttribute("data-say");
+      document.getElementById("tourPlay").click();
+      for (var k = 0; k < 40 && shown().join() === "0"; k++) await wait(500);
+      o.played = shown().join();
+      document.getElementById("tourNext").click(); await wait(300); o.skipPlaying = shown().join() + ":" + document.getElementById("tour").classList.contains("playing");
+      document.getElementById("tourPlay").click(); await wait(900);
       o.zoom = document.querySelector(".tour-step:not([hidden]) .tour-layer").style.transform;
       var imgs = [].slice.call(document.querySelectorAll(".tour-step img"));
       imgs.forEach(function(i){ i.loading = "eager" });
@@ -117,7 +124,8 @@ const CHECK = `(async function(){
       return o })()`);
     ok(d.noindex && !d.canonical, p + ": noindex and no canonical");
     ok(d.steps === 12 && d.first === "0" && d.next === "1" && d.prev === "11" && d.chap === "6:true", p + ": one step at a time; previous, next and parts work", JSON.stringify(d));
-    ok(d.played === "1" && /scale/.test(d.zoom), p + ": play moves on and zooms", d.played + " " + d.zoom);
+    ok(d.face && d.sub, p + ": the face in the corner and the script as subtitles", JSON.stringify([d.face, d.sub]));
+    ok(d.played === "1" && d.skipPlaying === "2:true" && /scale/.test(d.zoom), p + ": play moves on, next skips ahead and keeps playing, it zooms", d.played + " " + d.skipPlaying + " " + d.zoom);
     ok(d.loaded === 12, p + ": all 12 screenshots load", d.loaded + "/12");
     await send("Emulation.setScriptExecutionDisabled", { value: true });
     await send("Page.navigate", { url: BASE + p }); await sleep(900);

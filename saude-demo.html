@@ -185,113 +185,119 @@ window.CONFIG = {
     <h2>Veja como funciona</h2>
   </div>
   <p class="how-lead rev">Uma volta guiada por duas ferramentas que uso com as clínicas: o painel do mês que fechou e a tesouraria das próximas 13 semanas.</p>
-  <div class="tour" id="tour" role="group" aria-label="Demonstração guiada" data-labels='{"play": "▶ Ver a demonstração", "playAria": "Ver a demonstração", "pause": "❚❚ Pausa"}'>
+  <div class="tour" id="tour" role="group" aria-label="Demonstração guiada" data-labels='{"play": "▶ Ver a demonstração", "playAria": "Ver a demonstração", "pause": "❚❚ Pausa", "subs": "Legendas", "sound": "Som", "face": "Rui Gomes", "todo": "vídeo por gravar"}' data-video="" data-ext="">
     <div class="tour-chaps" role="group" aria-label="Partes da demonstração"><button type="button" data-chap="0" aria-pressed="true">1 · O mês que fechou</button><button type="button" data-chap="6" aria-pressed="false">2 · As próximas 13 semanas</button></div>
     <div class="tour-ctl">
       <button type="button" id="tourPrev" aria-label="Passo anterior">◀</button>
       <button type="button" id="tourPlay">▶ Ver a demonstração</button>
-      <button type="button" id="tourNext" aria-label="Passo seguinte">▶</button>
+      <button type="button" id="tourNext" aria-label="Passo seguinte">Seguinte ▶</button>
       <div class="tour-track" aria-hidden="true"><i id="tourBar"></i></div>
       <output id="tourCount">1 / 12</output>
+      <button type="button" class="tour-opt" id="tourSubs" aria-pressed="false">Legendas</button>
+      <button type="button" class="tour-opt" id="tourSound" aria-pressed="true" hidden>Som</button>
     </div>
+    <div class="tour-stage">
     <ol class="tour-steps" aria-live="polite">
-      <li class="tour-step" data-box="0.075 0.115 0.85 0.29">
+      <li class="tour-step" data-box="0.075 0.187 0.85 0.29" data-say="Olá, sou o Rui Gomes. Vou mostrar-lhe duas ferramentas que uso com as clínicas. A primeira é o painel do mês: quanto faturou, a distância ao ponto de equilíbrio e quanto depende de cada pagador.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Painel da clínica</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m1.webp" target="_blank" rel="noopener"><img src="demo/m1.webp" width="1800" height="1125" loading="eager" alt="Captura de Painel da clínica: O mês num relance"></a><b class="tour-box" style="left:7.5%;top:11.5%;width:85%;height:29%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m1.webp" target="_blank" rel="noopener"><img src="demo/m1.webp" width="1800" height="1125" loading="eager" alt="Captura de Painel da clínica: O mês num relance"></a><b class="tour-box" style="left:7.5%;top:18.7%;width:85%;height:29%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">1 / 12</span><b>O mês num relance</b>A receita, a distância ao ponto de equilíbrio e quanto dela depende de cada pagador.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.08 0.467 0.85 0.4">
+      <li class="tour-step" data-box="0.08 0.539 0.85 0.4" data-say="Os alertas vêm escritos em frases. Aqui quase tudo está em ordem, mas a agenda só realiza dois terços das consultas marcadas, abaixo da meta de 80%.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Painel da clínica</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m2.webp" target="_blank" rel="noopener"><img src="demo/m2.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Alertas escritos"></a><b class="tour-box" style="left:8%;top:46.7%;width:85%;height:40%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m2.webp" target="_blank" rel="noopener"><img src="demo/m2.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Alertas escritos"></a><b class="tour-box" style="left:8%;top:53.9%;width:85%;height:40%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">2 / 12</span><b>Alertas escritos</b>O painel diz em frases o que está em ordem e o que não está. Aqui, a agenda realiza menos consultas marcadas do que a meta de 80%.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.66 0.85 0.25">
+      <li class="tour-step" data-box="0.075 0.732 0.85 0.25" data-say="Porquê? Faltas e desmarcações. Mês a mês, vê-se quantas houve e quanto custaram em consultas perdidas. É por aqui que começa a conversa com a receção.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Painel da clínica</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m3.webp" target="_blank" rel="noopener"><img src="demo/m3.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Faltas e desmarcações"></a><b class="tour-box" style="left:7.5%;top:66%;width:85%;height:25%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m3.webp" target="_blank" rel="noopener"><img src="demo/m3.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Faltas e desmarcações"></a><b class="tour-box" style="left:7.5%;top:73.2%;width:85%;height:25%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">3 / 12</span><b>Faltas e desmarcações</b>Mês a mês, as consultas marcadas, realizadas, desmarcadas e faltadas, e quanto custaram as que se perderam.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.52 0.85 0.365">
+      <li class="tour-step" data-box="0.075 0.592 0.85 0.365" data-say="Depois, o real contra o orçamento e contra o mesmo mês do ano passado, com o desvio em euros e em percentagem, linha a linha.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Painel da clínica</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m4.webp" target="_blank" rel="noopener"><img src="demo/m4.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Real, orçamento e ano anterior"></a><b class="tour-box" style="left:7.5%;top:52%;width:85%;height:36.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m4.webp" target="_blank" rel="noopener"><img src="demo/m4.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Real, orçamento e ano anterior"></a><b class="tour-box" style="left:7.5%;top:59.2%;width:85%;height:36.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">4 / 12</span><b>Real, orçamento e ano anterior</b>Receita, custos e resultado contra o orçamento e contra o mesmo mês do ano passado, com o desvio em euros e em percentagem.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.18 0.85 0.21">
+      <li class="tour-step" data-box="0.075 0.252 0.85 0.21" data-say="Como fecha o ano? Três cenários, ao lado do ponto de equilíbrio. A regra de cada cenário está escrita por baixo da tabela.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Painel da clínica</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m5.webp" target="_blank" rel="noopener"><img src="demo/m5.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Como fecha o ano"></a><b class="tour-box" style="left:7.5%;top:18%;width:85%;height:21%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m5.webp" target="_blank" rel="noopener"><img src="demo/m5.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Como fecha o ano"></a><b class="tour-box" style="left:7.5%;top:25.2%;width:85%;height:21%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">5 / 12</span><b>Como fecha o ano</b>Três cenários para o ano, ao lado do ponto de equilíbrio. A regra de cada cenário está escrita por baixo da tabela.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.39 0.85 0.18">
+      <li class="tour-step" data-box="0.075 0.462 0.85 0.18" data-say="E quando a caixa não acompanha o resultado, o painel mostra a diferença e diz onde procurar: investimento, dívida, IVA ou prazos de pagamento.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Painel da clínica</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/m6.webp" target="_blank" rel="noopener"><img src="demo/m6.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Caixa contra resultado"></a><b class="tour-box" style="left:7.5%;top:39%;width:85%;height:18%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/m6.webp" target="_blank" rel="noopener"><img src="demo/m6.webp" width="1800" height="1125" loading="lazy" alt="Captura de Painel da clínica: Caixa contra resultado"></a><b class="tour-box" style="left:7.5%;top:46.2%;width:85%;height:18%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">6 / 12</span><b>Caixa contra resultado</b>Quando a caixa não acompanha o resultado, o painel mostra a diferença e diz onde procurar.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.058 0.235 0.535 0.23">
+      <li class="tour-step" data-box="0.058 0.235 0.535 0.23" data-say="A segunda ferramenta olha para a frente: a tesouraria das próximas treze semanas. Abre com a resposta à pergunta que interessa. Consegue pagar tudo?">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Tesouraria da clínica · 13 semanas</span></div>
+          <div class="tour-win">
             <div class="tour-view"><div class="tour-layer"><a href="demo/f1.webp" target="_blank" rel="noopener"><img src="demo/f1.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: A resposta primeiro"></a><b class="tour-box" style="left:5.8%;top:23.5%;width:53.5%;height:23%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">7 / 12</span><b>A resposta primeiro</b>Consegue pagar tudo? A previsão abre com a resposta, o ponto mais baixo do saldo e o mau cenário.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.06 0.183 0.88 0.245">
+      <li class="tour-step" data-box="0.06 0.383 0.88 0.245" data-say="A mesma semana corre vinte vezes, com o que pode variar. Cada círculo diz se o dinheiro chegou. Aqui chegou nas vinte.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Tesouraria da clínica · 13 semanas</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f2.webp" target="_blank" rel="noopener"><img src="demo/f2.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: A mesma semana, vinte vezes"></a><b class="tour-box" style="left:6%;top:18.3%;width:88%;height:24.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f2.webp" target="_blank" rel="noopener"><img src="demo/f2.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: A mesma semana, vinte vezes"></a><b class="tour-box" style="left:6%;top:38.3%;width:88%;height:24.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">8 / 12</span><b>A mesma semana, vinte vezes</b>A semana corre vinte vezes com o que pode variar. Cada círculo diz se o dinheiro chegou.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.06 0.316 0.18 0.178; 0.215 0.775 0.24 0.06">
+      <li class="tour-step" data-box="0.06 0.388 0.18 0.178; 0.215 0.847 0.24 0.06" data-say="E se as convenções pagarem trinta dias mais tarde? Um toque e vê-se: o saldo desce cerca de quatro mil euros e a clínica continua a pagar tudo.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Tesouraria da clínica · 13 semanas</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f3.webp" target="_blank" rel="noopener"><img src="demo/f3.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: E se as convenções pagarem 30 dias mais tarde?"></a><b class="tour-box" style="left:6%;top:31.6%;width:18%;height:17.8%"></b><b class="tour-box" style="left:21.5%;top:77.5%;width:24%;height:6%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f3.webp" target="_blank" rel="noopener"><img src="demo/f3.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: E se as convenções pagarem 30 dias mais tarde?"></a><b class="tour-box" style="left:6%;top:38.8%;width:18%;height:17.8%"></b><b class="tour-box" style="left:21.5%;top:84.7%;width:24%;height:6%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">9 / 12</span><b>E se as convenções pagarem 30 dias mais tarde?</b>Um toque testa a hipótese. O saldo à semana 13 desce 4.053 € e a clínica continua a pagar tudo.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.075 0.15 0.85 0.6">
+      <li class="tour-step" data-box="0.075 0.222 0.85 0.6" data-say="Semana a semana, o que entra, separado entre já faturado, na agenda e por marcar. Quase toda a incerteza vem da agenda que falta encher.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Tesouraria da clínica · 13 semanas</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f4.webp" target="_blank" rel="noopener"><img src="demo/f4.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: Semana a semana"></a><b class="tour-box" style="left:7.5%;top:15%;width:85%;height:60%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f4.webp" target="_blank" rel="noopener"><img src="demo/f4.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: Semana a semana"></a><b class="tour-box" style="left:7.5%;top:22.2%;width:85%;height:60%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">10 / 12</span><b>Semana a semana</b>O que entra, separado entre já faturado, na agenda e por marcar, e o que sai. Quase toda a incerteza vem da agenda por encher.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.078 0.16 0.84 0.425">
+      <li class="tour-step" data-box="0.078 0.232 0.84 0.425" data-say="Aqui está a margem de cada convenção: o que produz, quando paga e quanto custa esperar. A conta que decide é a contribuição por hora.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Tesouraria da clínica · 13 semanas</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f5.webp" target="_blank" rel="noopener"><img src="demo/f5.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: Onde está a margem"></a><b class="tour-box" style="left:7.8%;top:16%;width:84%;height:42.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f5.webp" target="_blank" rel="noopener"><img src="demo/f5.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: Onde está a margem"></a><b class="tour-box" style="left:7.8%;top:23.2%;width:84%;height:42.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">11 / 12</span><b>Onde está a margem</b>Cada convenção com o que produz, quando paga e quanto custa esperar. A conta que decide é a contribuição por hora.</figcaption>
         </figure>
       </li>
-      <li class="tour-step" data-box="0.078 0.195 0.84 0.295">
+      <li class="tour-step" data-box="0.078 0.267 0.84 0.295" data-say="Os pressupostos estão todos à vista e trocam-se pelos números da sua clínica. Se quiser ver isto com os seus dados, marque uma conversa comigo.">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · Tesouraria da clínica · 13 semanas</span></div>
-            <div class="tour-view"><div class="tour-layer"><a href="demo/f6.webp" target="_blank" rel="noopener"><img src="demo/f6.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: Pressupostos à vista"></a><b class="tour-box" style="left:7.8%;top:19.5%;width:84%;height:29.5%"></b></div></div>
+          <div class="tour-win">
+            <div class="tour-view"><div class="tour-layer"><a href="demo/f6.webp" target="_blank" rel="noopener"><img src="demo/f6.webp" width="1800" height="1125" loading="lazy" alt="Captura de Tesouraria da clínica · 13 semanas: Pressupostos à vista"></a><b class="tour-box" style="left:7.8%;top:26.7%;width:84%;height:29.5%"></b></div></div>
           </div>
           <figcaption><span class="tour-n">12 / 12</span><b>Pressupostos à vista</b>Enquanto a clínica não tem histórico, a previsão usa valores de referência. Estão todos aqui e trocam-se pelos números reais.</figcaption>
         </figure>
       </li>
     </ol>
+    <div class="tour-face" id="tourFace" hidden><video id="tourVid" playsinline preload="none" aria-label="Rui Gomes"></video><span class="tour-face-ph" aria-hidden="true">RG<small>vídeo por gravar</small></span></div>
+    </div>
+    <p class="tour-sub" id="tourSub" hidden></p>
   </div>
   <p class="tour-note">Os dados são fictícios e os nomes das convenções foram trocados por letras. Toque numa captura para a abrir inteira.</p>
 </section>

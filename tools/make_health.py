@@ -519,22 +519,34 @@ window.CONFIG = {
 # Test pages with a guided demo (saude-demo.html, health-demo.html): the same page plus a demo
 # section between "how" and "path". Not in the sitemap, noindex, and nothing links to them.
 # Screenshots in demo/ come from the client builds of two VCLevel tools, with their own made-up
-# data; the insurer names in f5 were replaced by letters before the capture.
+# data; the insurer names in f5 were replaced by letters before the capture, and the VCLevel bar
+# was fixed at the top so the logo shows in every screenshot.
 # Each step: screenshot, highlighted boxes (x y w h, as fractions of the image; ";" between boxes).
 DEMO_STEPS = [
-    ("m1", "0.075 0.115 0.85 0.29"),
-    ("m2", "0.08 0.467 0.85 0.4"),
-    ("m3", "0.075 0.66 0.85 0.25"),
-    ("m4", "0.075 0.52 0.85 0.365"),
-    ("m5", "0.075 0.18 0.85 0.21"),
-    ("m6", "0.075 0.39 0.85 0.18"),
+    ("m1", "0.075 0.187 0.85 0.29"),
+    ("m2", "0.08 0.539 0.85 0.4"),
+    ("m3", "0.075 0.732 0.85 0.25"),
+    ("m4", "0.075 0.592 0.85 0.365"),
+    ("m5", "0.075 0.252 0.85 0.21"),
+    ("m6", "0.075 0.462 0.85 0.18"),
     ("f1", "0.058 0.235 0.535 0.23"),
-    ("f2", "0.06 0.183 0.88 0.245"),
-    ("f3", "0.06 0.316 0.18 0.178; 0.215 0.775 0.24 0.06"),
-    ("f4", "0.075 0.15 0.85 0.6"),
-    ("f5", "0.078 0.16 0.84 0.425"),
-    ("f6", "0.078 0.195 0.84 0.295"),
+    ("f2", "0.06 0.383 0.88 0.245"),
+    ("f3", "0.06 0.388 0.18 0.178; 0.215 0.847 0.24 0.06"),
+    ("f4", "0.075 0.222 0.85 0.6"),
+    ("f5", "0.078 0.232 0.84 0.425"),
+    ("f6", "0.078 0.267 0.84 0.295"),
 ]
+# Rui's face, bottom right of the demo, saying the script of each step ("say" below).
+# One clip per step, recorded with tools/gravador.html: demo/video/<lang>/s01.mp4 … s12.mp4 (or .webm).
+# Until all twelve exist, the page shows a placeholder and the script as subtitles.
+DEMO_VIDEO = "demo/video/%s/"
+
+
+def demo_clips(lang):
+    for ext in ("mp4", "webm"):
+        if all(os.path.exists(os.path.join(ROOT, DEMO_VIDEO % lang, "s%02d.%s" % (i + 1, ext))) for i in range(len(DEMO_STEPS))):
+            return DEMO_VIDEO % lang, ext
+    return "", ""
 DEMO = dict(
     en=dict(
         file="health-demo.html", other="saude-demo.html",
@@ -556,10 +568,25 @@ DEMO = dict(
             ("Where the margin is", "Each insurer or health plan with what it produces, when it pays and what the wait costs. The figure that decides is the contribution per hour."),
             ("Assumptions in plain sight", "Until the practice has its own history, the forecast uses reference values. They are all here, ready to be swapped for the real numbers."),
         ],
+        say=[
+            "Hi, I'm Rui Gomes. I'll show you two tools I use with practices. The first is the monthly dashboard: revenue, how far it sits above break-even, and how much depends on each payer.",
+            "Alerts come in plain sentences. Almost everything here is fine, but the schedule only delivers two thirds of booked appointments, below the 80% target.",
+            "Why? No-shows and cancellations. Month by month you see how many there were and what the lost appointments cost. That is where the talk with the front desk starts.",
+            "Then actuals against the budget and against the same month last year, with the gap in euros and in percent, line by line.",
+            "How will the year close? Three cases, next to the break-even point. The rule behind each case is written under the table.",
+            "And when cash does not follow profit, the dashboard shows the gap and says where to look: investment, debt, VAT or payment terms.",
+            "The second tool looks ahead: cash for the next thirteen weeks. It opens with the answer to the question that matters. Can the practice pay everything?",
+            "The same week runs twenty times, with what can vary. Each dot shows whether the cash held. Here it held in all twenty.",
+            "What if insurers and health plans pay thirty days later? One tap shows it: the balance drops by about four thousand euros and the practice still pays everything.",
+            "Week by week, what comes in, split into already billed, booked and not yet booked. Almost all the uncertainty is the schedule still to fill.",
+            "Here is the margin of each insurer or health plan: what it produces, when it pays and what the wait costs. The figure that decides is the contribution per hour.",
+            "Every assumption is in plain sight, ready to be swapped for your practice's numbers. If you'd like to see this with your own data, book a call with me.",
+        ],
         alt="Screenshot of %s: %s",
         note="The data is made up and the insurer names are replaced with letters. The tools are in Portuguese; the captions explain each screen. Tap a screenshot to open it full size.",
-        labels=dict(play="▶ Play the demo", playAria="Play the demo", pause="❚❚ Pause"),
-        prev="Previous step", next="Next step", chaps_aria="Parts of the demo", tour_aria="Guided demo",
+        labels=dict(play="▶ Play the demo", playAria="Play the demo", pause="❚❚ Pause", subs="Subtitles", sound="Sound",
+                    face="Rui Gomes", todo="video to record"),
+        prev="Previous step", next="Next ▶", next_aria="Next step", chaps_aria="Parts of the demo", tour_aria="Guided demo",
     ),
     pt=dict(
         file="saude-demo.html", other="health-demo.html",
@@ -581,53 +608,76 @@ DEMO = dict(
             ("Onde está a margem", "Cada convenção com o que produz, quando paga e quanto custa esperar. A conta que decide é a contribuição por hora."),
             ("Pressupostos à vista", "Enquanto a clínica não tem histórico, a previsão usa valores de referência. Estão todos aqui e trocam-se pelos números reais."),
         ],
+        say=[
+            "Olá, sou o Rui Gomes. Vou mostrar-lhe duas ferramentas que uso com as clínicas. A primeira é o painel do mês: quanto faturou, a distância ao ponto de equilíbrio e quanto depende de cada pagador.",
+            "Os alertas vêm escritos em frases. Aqui quase tudo está em ordem, mas a agenda só realiza dois terços das consultas marcadas, abaixo da meta de 80%.",
+            "Porquê? Faltas e desmarcações. Mês a mês, vê-se quantas houve e quanto custaram em consultas perdidas. É por aqui que começa a conversa com a receção.",
+            "Depois, o real contra o orçamento e contra o mesmo mês do ano passado, com o desvio em euros e em percentagem, linha a linha.",
+            "Como fecha o ano? Três cenários, ao lado do ponto de equilíbrio. A regra de cada cenário está escrita por baixo da tabela.",
+            "E quando a caixa não acompanha o resultado, o painel mostra a diferença e diz onde procurar: investimento, dívida, IVA ou prazos de pagamento.",
+            "A segunda ferramenta olha para a frente: a tesouraria das próximas treze semanas. Abre com a resposta à pergunta que interessa. Consegue pagar tudo?",
+            "A mesma semana corre vinte vezes, com o que pode variar. Cada círculo diz se o dinheiro chegou. Aqui chegou nas vinte.",
+            "E se as convenções pagarem trinta dias mais tarde? Um toque e vê-se: o saldo desce cerca de quatro mil euros e a clínica continua a pagar tudo.",
+            "Semana a semana, o que entra, separado entre já faturado, na agenda e por marcar. Quase toda a incerteza vem da agenda que falta encher.",
+            "Aqui está a margem de cada convenção: o que produz, quando paga e quanto custa esperar. A conta que decide é a contribuição por hora.",
+            "Os pressupostos estão todos à vista e trocam-se pelos números da sua clínica. Se quiser ver isto com os seus dados, marque uma conversa comigo.",
+        ],
         alt="Captura de %s: %s",
         note="Os dados são fictícios e os nomes das convenções foram trocados por letras. Toque numa captura para a abrir inteira.",
-        labels=dict(play="▶ Ver a demonstração", playAria="Ver a demonstração", pause="❚❚ Pausa"),
-        prev="Passo anterior", next="Passo seguinte", chaps_aria="Partes da demonstração", tour_aria="Demonstração guiada",
+        labels=dict(play="▶ Ver a demonstração", playAria="Ver a demonstração", pause="❚❚ Pausa", subs="Legendas", sound="Som",
+                    face="Rui Gomes", todo="vídeo por gravar"),
+        prev="Passo anterior", next="Seguinte ▶", next_aria="Passo seguinte", chaps_aria="Partes da demonstração", tour_aria="Demonstração guiada",
     ),
 )
 
 
-def demo_section(d):
-    import json
+def demo_section(d, lang):
+    import html, json
+    video, ext = demo_clips(lang)
     items = []
     for i, ((shot, box), (title, text)) in enumerate(zip(DEMO_STEPS, d["steps"])):
         tool = d["tools"][0 if shot[0] == "m" else 1]
         marks = "".join('<b class="tour-box" style="left:%s%%;top:%s%%;width:%s%%;height:%s%%"></b>'
                         % tuple(("%g" % (float(v) * 100)) for v in b.split()) for b in box.split(";"))
-        items.append('''      <li class="tour-step" data-box="%s">
+        items.append('''      <li class="tour-step" data-box="%s" data-say="%s">
         <figure>
-          <div class="tour-win"><div class="tour-bar" aria-hidden="true"><i></i><i></i><i></i><span>VCLevel · %s</span></div>
+          <div class="tour-win">
             <div class="tour-view"><div class="tour-layer"><a href="demo/%s.webp" target="_blank" rel="noopener"><img src="demo/%s.webp" width="1800" height="1125" loading="%s" alt="%s"></a>%s</div></div>
           </div>
           <figcaption><span class="tour-n">%d / %d</span><b>%s</b>%s</figcaption>
         </figure>
-      </li>''' % (box, tool, shot, shot, "eager" if i == 0 else "lazy", d["alt"] % (tool, title), marks, i + 1, len(DEMO_STEPS), title, text))
+      </li>''' % (box, html.escape(d["say"][i]), shot, shot, "eager" if i == 0 else "lazy", d["alt"] % (tool, title), marks, i + 1, len(DEMO_STEPS), title, text))
     return '''<section class="chap wrap" id="demo">
   <div class="chap-head rev">
     <span class="when">%s</span>
     <h2>%s</h2>
   </div>
   <p class="how-lead rev">%s</p>
-  <div class="tour" id="tour" role="group" aria-label="%s" data-labels='%s'>
+  <div class="tour" id="tour" role="group" aria-label="%s" data-labels='%s' data-video="%s" data-ext="%s">
     <div class="tour-chaps" role="group" aria-label="%s"><button type="button" data-chap="0" aria-pressed="true">%s</button><button type="button" data-chap="6" aria-pressed="false">%s</button></div>
     <div class="tour-ctl">
       <button type="button" id="tourPrev" aria-label="%s">◀</button>
       <button type="button" id="tourPlay">%s</button>
-      <button type="button" id="tourNext" aria-label="%s">▶</button>
+      <button type="button" id="tourNext" aria-label="%s">%s</button>
       <div class="tour-track" aria-hidden="true"><i id="tourBar"></i></div>
       <output id="tourCount">1 / %d</output>
+      <button type="button" class="tour-opt" id="tourSubs" aria-pressed="false">%s</button>
+      <button type="button" class="tour-opt" id="tourSound" aria-pressed="true" hidden>%s</button>
     </div>
+    <div class="tour-stage">
     <ol class="tour-steps" aria-live="polite">
 %s
     </ol>
+    <div class="tour-face" id="tourFace" hidden><video id="tourVid" playsinline preload="none" aria-label="%s"></video><span class="tour-face-ph" aria-hidden="true">RG<small>%s</small></span></div>
+    </div>
+    <p class="tour-sub" id="tourSub" hidden></p>
   </div>
   <p class="tour-note">%s</p>
 </section>
 
-''' % (d["when"], d["h"], d["lead"], d["tour_aria"], json.dumps(d["labels"], ensure_ascii=False), d["chaps_aria"], d["chaps"][0], d["chaps"][1],
-       d["prev"], d["labels"]["play"], d["next"], len(DEMO_STEPS), "\n".join(items), d["note"])
+''' % (d["when"], d["h"], d["lead"], d["tour_aria"], json.dumps(d["labels"], ensure_ascii=False), video, ext, d["chaps_aria"], d["chaps"][0], d["chaps"][1],
+       d["prev"], d["labels"]["play"], d["next_aria"], d["next"], len(DEMO_STEPS), d["labels"]["subs"], d["labels"]["sound"],
+       "\n".join(items), d["labels"]["face"], d["labels"]["todo"], d["note"])
 
 
 def build_demo(t, page):
@@ -639,7 +689,7 @@ def build_demo(t, page):
     page = page.replace('href="%s"' % t["other"], 'href="%s"' % d["other"])
     page = page.replace('<link rel="stylesheet" href="styles.css">', '<link rel="stylesheet" href="styles.css">\n<link rel="stylesheet" href="demo/tour.css">', 1)
     page = page.replace('<script src="page.js"></script>', '<script src="page.js"></script>\n<script src="demo/tour.js"></script>', 1)
-    page = page.replace('<section class="chap wrap" id="path">', demo_section(d) + '<section class="chap wrap" id="path">', 1)
+    page = page.replace('<section class="chap wrap" id="path">', demo_section(d, t["lang"]) + '<section class="chap wrap" id="path">', 1)
     return page
 
 

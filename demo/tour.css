@@ -8,9 +8,6 @@
 .tour-step figure{margin:0;display:flex;flex-direction:column}
 .tour-step figcaption{order:-1}
 .tour-win{border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:#F2F2F2;box-shadow:0 10px 30px rgba(12,39,31,.12)}
-.tour-bar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--rule);font-size:.8125rem;color:var(--muted)}
-.tour-bar i{width:9px;height:9px;border-radius:50%;background:var(--rule)}
-.tour-bar span{margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tour-view{position:relative;aspect-ratio:1800/1125;overflow:hidden}
 .tour-layer{position:absolute;inset:0;transform-origin:0 0;transition:transform 1.4s cubic-bezier(.45,0,.2,1)}
 .tour-layer img{display:block;width:100%;height:auto}
@@ -27,10 +24,28 @@
 .tour-track{flex:1 1 120px;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
 .tour-track i{display:block;height:100%;background:var(--pencil);transform-origin:left;transform:scaleX(0)}
 .tour-ctl output{font-size:.9375rem;color:var(--muted);min-width:4.5em;text-align:right;font-variant-numeric:tabular-nums}
+.tour-ctl .tour-opt{font-weight:400;font-size:.9375rem;padding:6px 12px;border-width:1px;border-color:var(--rule)}
+.tour-ctl .tour-opt[aria-pressed="true"]{border-color:var(--ink);background:var(--card)}
+.tour-ctl #tourNext{min-width:auto}
+/* the stage holds the steps, the subtitles and the face in the bottom right corner of the screenshot */
+.tour-stage{position:relative}
+.tour-face{position:absolute;right:14px;bottom:14px;width:clamp(84px,17%,150px);aspect-ratio:1;border-radius:50%;overflow:hidden;
+  border:3px solid #fff;box-shadow:0 6px 20px rgba(12,39,31,.35);background:#0C271F;z-index:2}
+.tour-face.left{right:auto;left:14px}
+.tour-face.top{bottom:auto}
+.tour-face video{width:100%;height:100%;object-fit:cover;display:block}
+.tour-face-ph{display:none}
+.tour-face.ph video{display:none}
+.tour-face.ph .tour-face-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;
+  color:#F2F2F2;font-weight:700;font-size:clamp(1.1rem,2.6vw,1.6rem);letter-spacing:.04em;text-align:center;line-height:1.1}
+.tour-face-ph small{font-size:.6875rem;font-weight:400;letter-spacing:0;margin-top:4px;opacity:.85;padding:0 8px}
+/* subtitles go under the screenshot, so they never cover the part being shown */
+.tour-sub{margin:10px 0 0;background:var(--deep);color:var(--onDeep);padding:9px 13px;border-radius:6px;font-size:.9375rem;line-height:1.45}
+@media (max-width:560px){.tour-face{width:72px;right:10px;bottom:10px;border-width:2px}.tour-sub{font-size:.875rem}}
 .tour-note{font-size:.9375rem;color:var(--muted);max-width:62ch;margin-top:18px}
 @media (prefers-reduced-motion:reduce){.tour-layer,.tour-box{transition:none}}
 @media print{
-  .tour-chaps,.tour-ctl{display:none!important}
+  .tour-chaps,.tour-ctl,.tour-face,.tour-sub{display:none!important}
   .tour-step[hidden]{display:block!important}
   .tour-layer{transform:none!important}
   .tour.on .tour-box{opacity:1}
